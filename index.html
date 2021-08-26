@@ -1,8 +1,10 @@
 <html>
 
 <head>
+  <script>if (window.location.protocol === 'http:') window.location.protocol = 'https:';</script>
 	<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@5fba101050ece59ff57daa9539592ede0adfbf05/dist/aframe-master.min.js"></script>
 	<script src="https://unpkg.com/aframe-environment-component@1.2.0/dist/aframe-environment-component.min.js"></script>
+  <script src="ar-shadow-helper.js"></script>
   <style>
 		body {
 			font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -35,7 +37,7 @@
 	<a-scene
 		webxr="overlayElement:#dom-overlay;"
 		background="directionalLight:#dirlight;"
-		ar-hit-test="target:#my-objects;type:map;"
+		ar-hit-test="target:#my-objects;type:footprint;"
 		shadow="type: pcfsoft"
 		gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
 	>
@@ -47,14 +49,15 @@
 
 		<a-entity hide-on-enter-ar environment="lighting:none;shadow:true;" position="0 0 0"></a-entity>
 
-		<a-entity
-			position="0 0.01 0"
-			geometry="primitive:shadow-plane;"
-			material="shader:shadow"
-			shadow="cast:false"
-			ar-shadow-helper="target:#my-objects;"
-		></a-entity>
+    <a-entity
+      geometry="primitive:shadow-plane;"
+      material="shader:shadow"
+      shadow="cast:false;receive:true;"
+      ar-shadow-helper
+      target="#my-objects"
+    ></a-entity>
     
+    <!-- This is hidden when the user first enters ar but becomes visible when the user can place it -->
     <a-entity shadow id="my-objects" scale="0.2 0.2 0.2">
       <a-cylinder position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"
         material="roughness: 0.1; metalness: 0.2;"></a-cylinder>
