@@ -2,7 +2,7 @@
 
 <head>
   <script>if (window.location.protocol === 'http:') window.location.protocol = 'https:';</script>
-	<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@5fba101050ece59ff57daa9539592ede0adfbf05/dist/aframe-master.min.js"></script>
+	<script src="./aframe-master.min.js"></script>
 	<script src="https://unpkg.com/aframe-environment-component@1.2.0/dist/aframe-environment-component.min.js"></script>
   <script src="ar-shadow-helper.js"></script>
   <style>
@@ -58,7 +58,10 @@
     ></a-entity>
     
     <!-- This is hidden when the user first enters ar but becomes visible when the user can place it -->
-    <a-entity hide-on-enter-ar shadow id="my-objects" scale="0.2 0.2 0.2">
+    <a-entity hide-on-enter-ar shadow id="my-objects" scale="0.2 0.2 0.2" position="0.5 0 0">
+      <a-gltf-model position="-2.2 2.15 -2"
+        src="https://rawcdn.githack.com/krlosflip22/aframe-ar-sample/c91a7a9dd8b1428bc8e68bc1b5d8641d7241fd1b/spinosaurus.glb">
+      </a-gltf-model>
       <a-cylinder position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"
         material="roughness: 0.1; metalness: 0.2;"></a-cylinder>
       <a-box position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9" material="roughness: 0.1; metalness: 0.2;">
