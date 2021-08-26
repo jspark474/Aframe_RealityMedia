@@ -3,31 +3,28 @@
 <head>
 	<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@5fba101050ece59ff57daa9539592ede0adfbf05/dist/aframe-master.min.js"></script>
 	<script src="https://unpkg.com/aframe-environment-component@1.2.0/dist/aframe-environment-component.min.js"></script>
-	<script src="./curve.js"></script>
-	<script src="./roller-coaster.js"></script>
-	<link rel="stylesheet" href="style.css" />
-	<title>RollAR Coaster</title>
-	<meta property="og:title" content="RollAR Coaster" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:site" content="@adarosecannon" />
-	<meta name="twitter:creator" content="@adarosecannon" />
-	<meta property="og:url" content="https://ada.is/rollAR-coaster/" />
-	<meta
-		name="description"
-		content="An augmeted reality roller coaster you can design yourself in your own home."
-	/>
-	<meta
-		property="og:description"
-		content="An augmeted reality roller coaster you can design yourself in your own home."
-	/>
-	<meta
-		property="og:image"
-		content="https://ada.is/rollAR-coaster/preview.png"
-	/>
-	<meta
-		name="twitter:image:src" 
-		content="https://ada.is/rollAR-coaster/preview.png"
-	/>
+  <style>
+    #dom-overlay-message {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      padding: 1em;
+      background: #33333355;
+      border-top: 5px solid #ffffff55;
+      color: white;
+    }
+
+    .a-dom-overlay button {
+      padding: 1em;
+      appearance: none;
+      background: #00000055;
+      border: 3px solid white;
+      border-radius: 1em;
+      margin: 1em 1em 0 0;
+      color: white;
+    }
+  </style>  
 </head>
 
 <body>
@@ -38,14 +35,6 @@
 		shadow="type: pcfsoft"
 		gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
 	>
-		<a-assets>
-			<!-- model by Snooze https://sketchfab.com/3d-models/low-poly-table-b940256ec5994e26a9e71289d1211b19 -->
-			<a-asset-item id="cart-glb" src="./cart.glb"></a-asset-item>
-			<a-asset-item id="flag-glb" src="./flag.glb"></a-asset-item>
-			<a-asset-item id="tracks-glb" src="./tracks.glb"></a-asset-item>
-			<a-asset-item id="station-glb" src="./station.glb"></a-asset-item>
-		</a-assets>
-
 		<a-camera position="0.4 0.2 -0.4"></a-camera>
 
 		<a-light id="dirlight" intensity="0.7" light="castShadow:true;type:directional" position="1 1 1"></a-light>
@@ -53,49 +42,12 @@
 			position="1 1 1"></a-light>
 
 		<a-entity hide-on-enter-ar environment="lighting:none;shadow:true;" position="0 -0.05 0"></a-entity>
-
-		<a-curve draw-curve="tangent:true;length:0.1;spacing:0.1;" hide-on-enter-ar closed="true" tension="0.1" clone-along-curve="spacing: 0.06;scale:0.4 0.4 0.4;" gltf-model="#tracks-glb">
-			<a-entity id="station" position="1 0 -2" scale="0.4 0.4 0.4">
-				<a-gltf-model src="#station-glb" rotation="0 -90 0">
-					<a-curve-point id="end-point" position="0 0 -2" gltf-model="#flag-glb">
-						<a-circle visible="false" radius="0.3" rotation="-90 0 0" scale="2.5 2.5 2.5" material="color:limegreen;opacity:0.4;"></a-circle>
-					</a-curve-point>
-					<a-curve-point position="0 0 -0.75" gltf-model="#flag-glb"></a-curve-point>
-					<a-curve-point position="0 0 0.5" gltf-model="#flag-glb"></a-curve-point>
-				</a-gltf-model>
-			</a-entity>
-			<a-entity scale="0.4 0.4 0.4" class="sample">
-				<a-curve-point position="0 0 -3" gltf-model="#flag-glb"></a-curve-point>
-				<a-curve-point position="-3 0 -3" gltf-model="#flag-glb"></a-curve-point>
-				<a-box position="-3 1.4 -6" scale="0.5 0.33 0.5">
-					<a-curve-point position="0 1 0" scale="2 3 2" gltf-model="#flag-glb"></a-curve-point>
-				</a-box>
-				<a-curve-point position="0 0.3 -7" gltf-model="#flag-glb"></a-curve-point>
-				<a-curve-point position="5 0 -6" gltf-model="#flag-glb"></a-curve-point>
-			</a-entity>
-
-			<a-gltf-model id="cart" hide-on-enter-ar scale="0.8 0.8 0.8" src="#cart-glb" roller-coaster="curve:a-curve;spacing:0.16;"></a-gltf-model>
-		</a-curve>
 	</a-scene>
 
 	<div id="dom-overlay">
-		<svg viewBox="0 0 340 200">
-			<filter id="goo">
-				<feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="5" />
-				<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
-				<feComposite in="SourceGraphic" in2="goo" operator="atop"/>
-			</filter>
-			<path id="curve" d="M6,150C49.63,93,105.79,36.65,156.2,47.55,207.89,58.74,213,131.91,264,150c40.67,14.43,108.57-6.91,229-145" />
-			<use xlink:href="#main" class="bg" />
-			<use xlink:href="#main" class="main" />
-			<text id="main" x="30">
-				<textPath xlink:href="#curve">
-					<tspan style="font-size: 45px;">R</tspan>oll<tspan class="caps">AR</tspan> coaster
-				</textPath>
-				<tspan x="190" y="40" rotate="30">!</tspan>
-				<tspan x="185" y="30" rotate="15">!</tspan>
-			</text>
-		</svg>
+    <h1>
+      Hello World
+    </h1>
 		<div id="dom-overlay-message">Enter AR to start.</div>
 	</div>
 	<script src="main.js"></script>
