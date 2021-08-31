@@ -49,7 +49,7 @@
 	>
 		<a-camera position="0 0.4 1"></a-camera>
 
-		<a-light id="dirlight" intensity="0.7" light="castShadow:true;type:directional" position="10 10 10"></a-light>
+		<a-light id="dirlight" auto-shadow-cam intensity="0.7" light="castShadow:true;type:directional" position="10 10 10"></a-light>
 		<a-light hide-on-enter-ar intensity="0.3" light="type:hemisphere;color:yellow;groundColor:blue;" position="10 10 10"></a-light>
 
 		<a-entity hide-on-enter-ar environment="lighting:none;shadow:true;"></a-entity>
@@ -57,10 +57,10 @@
     <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
     <a-entity
       material="shader:shadow;"
+      visible="false"
       geometry="primitive:shadow-plane;"
       shadow="cast:false;receive:true;"
       ar-shadow-helper="target:#my-objects;light:#dirlight;"
-      visible="false"
     ></a-entity>
     
     <!-- This is hidden when the user first enters ar but becomes visible when the user can place it -->

@@ -60,10 +60,10 @@ AFRAME.registerComponent('auto-shadow-cam', {
     tempMat.invert();
 
     camera.near    = 1;
-    camera.left    = 0;
-    camera.right   = 0;
-    camera.top     = 0;
-    camera.bottom  = 0;
+    camera.left    = 100000;
+    camera.right   = -100000;
+    camera.top     = -100000;
+    camera.bottom  = 100000;
     for (const el of this.data.targets) {
       bbox.setFromObject(el.object3D);
       bbox.getBoundingSphere(sphere);
@@ -99,7 +99,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
       default: false
     },
     border: {
-      default: 0.25
+      default: 0.5
     }
   },
   init: function () {
@@ -123,10 +123,17 @@ AFRAME.registerComponent('ar-shadow-helper', {
     });
   },
   tick: function () {
+
     const obj = this.el.object3D;
-    if (!obj.visible) return;
     const border = this.data.border;
-    obj.scale.set(1,1,1).multiplyScalar(sphere.radius * (1 + border * 2));
+    
+    if (this.data.target) {
+      bbox.setFromObject(this.data.target.object3D);
+      bbox.getSize(obj.scale);
+      obj.scale.multiplyScalar(1 + border*2);
+      obj.position.copy(this.data.target.object3D.position);
+      obj.quaternion.copy(this.data.target.object3D.quaternion);
+    }
     
     if (this.data.light) {
       const light = this.data.light;
@@ -146,18 +153,8 @@ AFRAME.registerComponent('ar-shadow-helper', {
           projectionOfCameraDirectionOnPlane.normalize().multiplyScalar(this.data.border).multiply(obj.scale);
           obj.position.add(projectionOfCameraDirectionOnPlane);
         }
-        
-        this.updateShadowCam();
       }
     }
-    
-    if (this.data.target) {
-      bbox.setFromObject(this.data.target.object3D);
-      bbox.getSize(obj.scale);
-      obj.scale.multiplyScalar(2);
-      obj.position.copy(this.data.target.object3D.position);
-      obj.quaternion.copy(this.data.target.object3D.quaternion);
-    }
   }
-})
+});
 }());
