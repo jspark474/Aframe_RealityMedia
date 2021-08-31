@@ -5,6 +5,8 @@ const normal = new THREE.Vector3();
 const cameraWorldPosition = new THREE.Vector3();
 const tempMat = new THREE.Matrix4();
 const sphere = new THREE.Sphere();
+const zeroVector = new THREE.Vector3();
+const planeVector = new THREE.Vector3();
 
 AFRAME.registerGeometry('shadow-plane', {
   schema: {
@@ -71,17 +73,22 @@ AFRAME.registerComponent('ar-shadow-helper', {
     });
   },
   updateShadowCam() {
+    const el = this.el.object3D;
     if (this.data.light) {
       const light = this.data.light;
       const shadow = light.components.light.light.shadow;
     
       if (shadow) {
         const camera = shadow.camera;
-        camera.getWorldDirection(normal);   
+        camera.getWorldDirection(normal);
+
+        planeVector.set(0,1,0).applyQuaternion(el.quaternion);
+        const projectionOfCameraDirectionOnPlane = nearestPointInPlane(zeroVector, planeVector, normal, planeVector);
+        projectionOfCameraDirectionOnPlane.normalize().multiplyScalar(el.scale);
+        el.position.add(projectionOfCameraDirectionOnPlane);
         
-        const projectionOfCameraDirectionOnPlane = 
         
-        bbox.setFromObject(this.el.object3D);
+        bbox.setFromObject(el);
         bbox.getBoundingSphere(sphere);
         camera.getWorldPosition(cameraWorldPosition);
         const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, sphere.center, normal);
