@@ -54,7 +54,9 @@ AFRAME.registerComponent('ar-shadow-helper', {
   updateShadowCam() {
     bbox.setFromObject(this.el.object3D);
     const lights = Array.from(this.data.lights);
-    
+    for (const light of lights) {
+      console.log(light.components.light);
+    }
   },
   tick: function () {
     this.updateShadowCam();
