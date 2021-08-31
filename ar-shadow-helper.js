@@ -85,7 +85,8 @@ AFRAME.registerComponent('ar-shadow-helper', {
         camera.left    = -sphere.radius + pointInXYPlane.x;
         camera.right   =  sphere.radius + pointInXYPlane.x;
         camera.top     =  sphere.radius + pointInXYPlane.y;
-        camera.bottom  =  -sphere.radius + pointInXYPlane.y;
+        camera.bottom  = -sphere.radius + pointInXYPlane.y;
+        camera.updateProjectionMatrix();
       }
     }
   },

@@ -49,15 +49,13 @@
 	>
 		<a-camera position="0 0.4 1"></a-camera>
 
-		<a-light id="dirlight" intensity="0.7" light="castShadow:true;type:directional" position="1 1 1"></a-light>
-		<a-light hide-on-enter-ar intensity="0.3" light="type:hemisphere;color:yellow;groundColor:blue;"
-			position="1 1 1"></a-light>
+		<a-light id="dirlight" intensity="0.7" light="castShadow:true;type:directional" position="10 10 10"></a-light>
+		<a-light hide-on-enter-ar intensity="0.3" light="type:hemisphere;color:yellow;groundColor:blue;" position="10 10 10"></a-light>
 
 		<a-entity hide-on-enter-ar environment="lighting:none;shadow:true;"></a-entity>
 
     <a-entity
       geometry="primitive:shadow-plane;"
-      material="shader:shadow"
       shadow="cast:false;receive:true;"
       ar-shadow-helper="target:#my-objects;"
     ></a-entity>
