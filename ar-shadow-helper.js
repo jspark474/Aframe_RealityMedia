@@ -52,7 +52,7 @@ AFRAME.registerComponent('auto-shadow-cam', {
   },
   tick() {
     const camera = this.el.components.light?.light?.shadow?.camera;
-    if (!camera) return;
+    if (!camera || !this.data.targets.length) return;
 
     camera.getWorldDirection(normal);
     camera.getWorldPosition(cameraWorldPosition);
@@ -99,7 +99,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
       default: false
     },
     border: {
-      default: 0.5
+      default: 0.33
     }
   },
   init: function () {
@@ -128,15 +128,17 @@ AFRAME.registerComponent('ar-shadow-helper', {
     const border = this.data.border;
     const borderWidth = tempVector.set(0,0,0);
     
+    // Match the size and rotation of the object
     if (this.data.target) {
       bbox.setFromObject(this.data.target.object3D);
       bbox.getSize(obj.scale);
       borderWidth.copy(obj.scale).multiplyScalar(border);
-      obj.scale.multiplyScalar(1 + border);
+      obj.scale.multiplyScalar(1 + border*2);
       obj.position.copy(this.data.target.object3D.position);
       obj.quaternion.copy(this.data.target.object3D.quaternion);
     }
     
+    // Adjust the plane to get the most shadow
     if (this.data.light) {
       const light = this.data.light;
       const shadow = light.components.light.light.shadow;
