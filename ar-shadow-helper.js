@@ -126,11 +126,13 @@ AFRAME.registerComponent('ar-shadow-helper', {
 
     const obj = this.el.object3D;
     const border = this.data.border;
+    const borderWidth = tempVector.set(0,0,0);
     
     if (this.data.target) {
       bbox.setFromObject(this.data.target.object3D);
       bbox.getSize(obj.scale);
-      obj.scale.multiplyScalar(1 + border*2);
+      borderWidth.copy(obj.scale).multiplyScalar(border);
+      obj.scale.multiplyScalar(1 + border);
       obj.position.copy(this.data.target.object3D.position);
       obj.quaternion.copy(this.data.target.object3D.quaternion);
     }
@@ -150,7 +152,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
           Math.abs(projectionOfCameraDirectionOnPlane.y) > 0.01 ||
           Math.abs(projectionOfCameraDirectionOnPlane.z) > 0.01
         ) {
-          projectionOfCameraDirectionOnPlane.normalize().multiplyScalar(this.data.border).multiply(obj.scale);
+          projectionOfCameraDirectionOnPlane.normalize().multiply(borderWidth);
           obj.position.add(projectionOfCameraDirectionOnPlane);
         }
       }
