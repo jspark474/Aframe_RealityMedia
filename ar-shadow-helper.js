@@ -20,20 +20,19 @@ AFRAME.registerGeometry('shadow-plane', {
   }
 });
 
-function distanceOfPointFromPlane(position, normal, p1) {
-	const d = normal.dot(position);
+function distanceOfPointFromPlane(positionOnPlane, planeNormal, p1) {
+  // the d value in the plane equation a*x + b*y + c*z=d
+	const d = planeNormal.dot(positionOnPlane);
 
 	// distance of point from plane
-	const t = (d - normal.dot(p1))/normal.length();
-  
-  return t;
+	return (d - planeNormal.dot(p1))/planeNormal.length();
 }
 
-function nearestPointInPlane(position, normal, p1, out) {
+function nearestPointInPlane(positionOnPlane, planeNormal, p1, out) {
 
-  const t = distanceOfPointFromPlane(position, normal, p1);
+  const t = distanceOfPointFromPlane(positionOnPlane, planeNormal, p1);
 	// closest point on the plane
-	out.copy(normal);
+	out.copy(planeNormal);
 	out.multiplyScalar(t);
 	out.add(p1);
 	return out;
