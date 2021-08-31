@@ -1,6 +1,7 @@
 /* global AFRAME, THREE */
 
 const bbox = this.bbox = new THREE.Box3();
+const tempVector = new THREE.Vector3();
 
 AFRAME.registerGeometry('shadow-plane', {
   schema: {
@@ -13,6 +14,19 @@ AFRAME.registerGeometry('shadow-plane', {
     this.geometry.rotateX(-Math.PI / 2);
   }
 });
+
+function nearestPointInPlane(position, normal, p1, out) {
+	const d = normal.dot(position);
+
+	// distance of point from plane
+	const t = (d - normal.dot(p1))/normal.length();
+
+	// closest point on the plane
+	out.copy(normal);
+	out.multiplyScalar(t);
+	out.add(p1);
+	return out;
+}
 
 /**
 Component to hide the shadow whilst the user is using ar-hit-test because they tend to interact poorly
@@ -58,6 +72,9 @@ AFRAME.registerComponent('ar-shadow-helper', {
       const shadow = light.components.light.light.shadow;
       if (shadow) {
         const camera = shadow.camera;
+			  const normal = tempVector.set(0,1,0).applyQuaternion(camera.quaternion);
+        const pointOnCameraPlane = nearestPointInPlane(tempVector);
+        
         
       }
     }
