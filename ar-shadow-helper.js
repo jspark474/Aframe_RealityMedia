@@ -9,6 +9,7 @@ const tempMat = new THREE.Matrix4();
 const sphere = new THREE.Sphere();
 const zeroVector = new THREE.Vector3();
 const planeVector = new THREE.Vector3();
+const tempVector = new THREE.Vector3();
 
 function distanceOfPointFromPlane(positionOnPlane, planeNormal, p1) {
   // the d value in the plane equation a*x + b*y + c*z=d
@@ -39,6 +40,34 @@ AFRAME.registerGeometry('shadow-plane', {
   }
 });
 
+AFRAME.registerComponent('ar-shadow-helper', {
+  schema: {
+    target: {
+      type: 'selector',
+    },
+  },
+  tick() {
+    
+    bbox.getBoundingSphere(sphere);
+    const targetObjectRadius = sphere.radius;
+
+    bbox.setFromObject(this.el.object3D);
+    bbox.getBoundingSphere(sphere);
+    camera.getWorldPosition(cameraWorldPosition);
+    const distanceToPlane = distanceOfPointFromPlane(cameraWorldPosition, normal, sphere.center);
+    const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, sphere.center, tempVector);
+    tempMat.copy(camera.matrixWorld);
+    tempMat.invert();
+
+    const pointInXYPlane = pointOnCameraPlane.applyMatrix4(tempMat);
+    camera.near    = -distanceToPlane - targetObjectRadius - 1;
+    camera.left    = -sphere.radius + pointInXYPlane.x;
+    camera.right   =  sphere.radius + pointInXYPlane.x;
+    camera.top     =  sphere.radius + pointInXYPlane.y;
+    camera.bottom  = -sphere.radius + pointInXYPlane.y;
+    camera.updateProjectionMatrix();
+  }
+});
 /**
 Component to hide the shadow whilst the user is using ar-hit-test because they tend to interact poorly
 
@@ -80,8 +109,13 @@ AFRAME.registerComponent('ar-shadow-helper', {
       self.el.object3D.visible = true;
     });
   },
-  updateShadowCam() {
-    const el = this.el.object3D;
+  tick: function () {
+    const obj = this.el.object3D;
+    if (!obj.visible) return;
+    const border = this.data.border;
+    obj.scale.set(1,1,1).multiplyScalar(sphere.radius * (1 + border * 2));
+    
+    
     if (this.data.light) {
       const light = this.data.light;
       const shadow = light.components.light.light.shadow;
@@ -89,50 +123,28 @@ AFRAME.registerComponent('ar-shadow-helper', {
       if (shadow) {
         const camera = shadow.camera;
         camera.getWorldDirection(normal);
-        
-        bbox.getBoundingSphere(sphere);
-        const targetObjectRadius = sphere.radius;
-        
-        planeVector.set(0,1,0).applyQuaternion(el.quaternion);
+    
+        planeVector.set(0,1,0).applyQuaternion(obj.quaternion);
         const projectionOfCameraDirectionOnPlane = nearestPointInPlane(zeroVector, planeVector, normal, planeVector);
         if (
           Math.abs(projectionOfCameraDirectionOnPlane.x) > 0.01 ||
           Math.abs(projectionOfCameraDirectionOnPlane.y) > 0.01 ||
           Math.abs(projectionOfCameraDirectionOnPlane.z) > 0.01
         ) {
-          projectionOfCameraDirectionOnPlane.normalize().multiplyScalar(this.data.border).multiply(el.scale);
-          el.position.add(projectionOfCameraDirectionOnPlane);
+          projectionOfCameraDirectionOnPlane.normalize().multiplyScalar(this.data.border).multiply(obj.scale);
+          obj.position.add(projectionOfCameraDirectionOnPlane);
         }
         
-        bbox.setFromObject(el);
-        bbox.getBoundingSphere(sphere);
-        camera.getWorldPosition(cameraWorldPosition);
-        const distanceToPlane = distanceOfPointFromPlane(cameraWorldPosition, normal, sphere.center);
-        const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, sphere.center, normal);
-        tempMat.copy(camera.matrixWorld);
-        tempMat.invert();
-        
-        const pointInXYPlane = pointOnCameraPlane.applyMatrix4(tempMat);
-        camera.near    = -distanceToPlane - targetObjectRadius - 1;
-        camera.left    = -sphere.radius + pointInXYPlane.x;
-        camera.right   =  sphere.radius + pointInXYPlane.x;
-        camera.top     =  sphere.radius + pointInXYPlane.y;
-        camera.bottom  = -sphere.radius + pointInXYPlane.y;
-        camera.updateProjectionMatrix();
+        this.updateShadowCam();
       }
     }
-  },
-  tick: function () {
-    if (!this.el.object3D.visible) return;
-    const border = this.data.border;
-    this.el.object3D.scale.set(1,1,1).multiplyScalar(sphere.radius * (1 + border * 2));
+    
     if (this.data.target) {
       bbox.setFromObject(this.data.target.object3D);
-      bbox.getSize(this.el.object3D.scale);
-      this.el.object3D.scale.multiplyScalar(2);
-      this.el.object3D.position.copy(this.data.target.object3D.position);
-      this.el.object3D.quaternion.copy(this.data.target.object3D.quaternion);
-      this.updateShadowCam();
+      bbox.getSize(obj.scale);
+      obj.scale.multiplyScalar(2);
+      obj.position.copy(this.data.target.object3D.position);
+      obj.quaternion.copy(this.data.target.object3D.quaternion);
     }
   }
 })
