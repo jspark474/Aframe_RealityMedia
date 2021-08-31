@@ -110,6 +110,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
     }
   },
   tick: function () {
+    if (!this.el.object3D.visible) return;
     const border = this.data.border;
     this.el.object3D.scale.set(1,1,1).multiplyScalar(sphere.radius * (1 + border * 2));
     if (this.data.target) {
