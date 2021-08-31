@@ -100,6 +100,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
         tempMat.copy(camera.matrixWorld);
         tempMat.invert();
         const pointInXYPlane = pointOnCameraPlane.applyMatrix4(tempMat);
+        camera.near = -50;
         camera.left    = -sphere.radius + pointInXYPlane.x;
         camera.right   =  sphere.radius + pointInXYPlane.x;
         camera.top     =  sphere.radius + pointInXYPlane.y;
