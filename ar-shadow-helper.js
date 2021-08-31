@@ -87,7 +87,10 @@ AFRAME.registerComponent('ar-shadow-helper', {
       if (shadow) {
         const camera = shadow.camera;
         camera.getWorldDirection(normal);
-
+        
+        bbox.getBoundingSphere(sphere);
+        const targetObjectRadius = sphere.radius;
+        
         planeVector.set(0,1,0).applyQuaternion(el.quaternion);
         const projectionOfCameraDirectionOnPlane = nearestPointInPlane(zeroVector, planeVector, normal, planeVector);
         if (
@@ -108,7 +111,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
         tempMat.invert();
         
         const pointInXYPlane = pointOnCameraPlane.applyMatrix4(tempMat);
-        camera.near    =  distanceToPlane - sphere.radius;
+        camera.near    = -distanceToPlane - targetObjectRadius - 3;
         camera.left    = -sphere.radius + pointInXYPlane.x;
         camera.right   =  sphere.radius + pointInXYPlane.x;
         camera.top     =  sphere.radius + pointInXYPlane.y;
