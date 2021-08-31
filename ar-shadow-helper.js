@@ -40,38 +40,51 @@ AFRAME.registerGeometry('shadow-plane', {
   }
 });
 
-AFRAME.registerComponent('ar-shadow-helper', {
+/**
+  Automatically adjust the view frustum to cover the objects in the scene
+*/
+AFRAME.registerComponent('auto-shadow-cam', {
   schema: {
-    target: {
-      type: 'selector',
+    targets: {
+      type: 'selectorAll',
+      default: "[ar-shadow-helper]"
     },
   },
   tick() {
-    
-    bbox.getBoundingSphere(sphere);
-    const targetObjectRadius = sphere.radius;
+    const camera = this.el.components.light?.light?.shadow?.camera;
+    if (!camera) return;
 
-    bbox.setFromObject(this.el.object3D);
-    bbox.getBoundingSphere(sphere);
+    camera.getWorldDirection(normal);
     camera.getWorldPosition(cameraWorldPosition);
-    const distanceToPlane = distanceOfPointFromPlane(cameraWorldPosition, normal, sphere.center);
-    const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, sphere.center, tempVector);
     tempMat.copy(camera.matrixWorld);
     tempMat.invert();
 
-    const pointInXYPlane = pointOnCameraPlane.applyMatrix4(tempMat);
-    camera.near    = -distanceToPlane - targetObjectRadius - 1;
-    camera.left    = -sphere.radius + pointInXYPlane.x;
-    camera.right   =  sphere.radius + pointInXYPlane.x;
-    camera.top     =  sphere.radius + pointInXYPlane.y;
-    camera.bottom  = -sphere.radius + pointInXYPlane.y;
+    camera.near    = 1;
+    camera.left    = 0;
+    camera.right   = 0;
+    camera.top     = 0;
+    camera.bottom  = 0;
+    for (const el of this.data.targets) {
+      bbox.setFromObject(el.object3D);
+      bbox.getBoundingSphere(sphere);
+      const distanceToPlane = distanceOfPointFromPlane(cameraWorldPosition, normal, sphere.center);
+      const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, sphere.center, tempVector);
+
+      const pointInXYPlane = pointOnCameraPlane.applyMatrix4(tempMat);
+      camera.near    = Math.min(-distanceToPlane - sphere.radius - 1, camera.near);
+      camera.left    = Math.min(-sphere.radius + pointInXYPlane.x, camera.left);
+      camera.right   = Math.max( sphere.radius + pointInXYPlane.x, camera.right);
+      camera.top     = Math.max( sphere.radius + pointInXYPlane.y, camera.top);
+      camera.bottom  = Math.min(-sphere.radius + pointInXYPlane.y, camera.bottom);
+    }
     camera.updateProjectionMatrix();
   }
 });
+  
 /**
 Component to hide the shadow whilst the user is using ar-hit-test because they tend to interact poorly
 
-It also adjusts the view frustrum of Orthogonal Shadow Cameras to encompass itself.
+It also attatches itself to objects and resizes and positions itself to get the most shadow
 */
 AFRAME.registerComponent('ar-shadow-helper', {
   schema: {
@@ -114,7 +127,6 @@ AFRAME.registerComponent('ar-shadow-helper', {
     if (!obj.visible) return;
     const border = this.data.border;
     obj.scale.set(1,1,1).multiplyScalar(sphere.radius * (1 + border * 2));
-    
     
     if (this.data.light) {
       const light = this.data.light;
