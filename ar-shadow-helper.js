@@ -18,7 +18,11 @@ Component to hide the shadow whilst the user is using ar-hit-test because they t
 AFRAME.registerComponent('ar-shadow-helper', {
   schema: {
     target: {
-      type: 'selector'
+      type: 'selector',
+    },
+    lights: {
+      type: 'selector',
+      default: 'a-light'
     },
     startVisibleInAR: {
       default: false
