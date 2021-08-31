@@ -1,12 +1,31 @@
 /* global AFRAME, THREE */
+(function () {
+"use strict";
 
-const bbox = this.bbox = new THREE.Box3();
+const bbox = new THREE.Box3();
 const normal = new THREE.Vector3();
 const cameraWorldPosition = new THREE.Vector3();
 const tempMat = new THREE.Matrix4();
 const sphere = new THREE.Sphere();
 const zeroVector = new THREE.Vector3();
 const planeVector = new THREE.Vector3();
+
+function distanceOfPointFromPlane(positionOnPlane, planeNormal, p1) {
+  // the d value in the plane equation a*x + b*y + c*z=d
+	const d = planeNormal.dot(positionOnPlane);
+
+	// distance of point from plane
+	return (d - planeNormal.dot(p1))/planeNormal.length();
+}
+
+function nearestPointInPlane(positionOnPlane, planeNormal, p1, out) {
+  const t = distanceOfPointFromPlane(positionOnPlane, planeNormal, p1);
+	// closest point on the plane
+	out.copy(planeNormal);
+	out.multiplyScalar(t);
+	out.add(p1);
+	return out;
+}
 
 AFRAME.registerGeometry('shadow-plane', {
   schema: {
@@ -20,26 +39,10 @@ AFRAME.registerGeometry('shadow-plane', {
   }
 });
 
-function distanceOfPointFromPlane(positionOnPlane, planeNormal, p1) {
-  // the d value in the plane equation a*x + b*y + c*z=d
-	const d = planeNormal.dot(positionOnPlane);
-
-	// distance of point from plane
-	return (d - planeNormal.dot(p1))/planeNormal.length();
-}
-
-function nearestPointInPlane(positionOnPlane, planeNormal, p1, out) {
-
-  const t = distanceOfPointFromPlane(positionOnPlane, planeNormal, p1);
-	// closest point on the plane
-	out.copy(planeNormal);
-	out.multiplyScalar(t);
-	out.add(p1);
-	return out;
-}
-
 /**
 Component to hide the shadow whilst the user is using ar-hit-test because they tend to interact poorly
+
+It also adjusts the view frustrum of Orthogonal Shadow Cameras to encompass itself.
 */
 AFRAME.registerComponent('ar-shadow-helper', {
   schema: {
@@ -110,7 +113,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
         tempMat.invert();
         
         const pointInXYPlane = pointOnCameraPlane.applyMatrix4(tempMat);
-        camera.near    = -distanceToPlane - targetObjectRadius - 3;
+        camera.near    = -distanceToPlane - targetObjectRadius - 1;
         camera.left    = -sphere.radius + pointInXYPlane.x;
         camera.right   =  sphere.radius + pointInXYPlane.x;
         camera.top     =  sphere.radius + pointInXYPlane.y;
@@ -132,4 +135,5 @@ AFRAME.registerComponent('ar-shadow-helper', {
       this.updateShadowCam();
     }
   }
-});
+})
+}());
