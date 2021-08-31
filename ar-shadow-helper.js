@@ -84,9 +84,14 @@ AFRAME.registerComponent('ar-shadow-helper', {
 
         planeVector.set(0,1,0).applyQuaternion(el.quaternion);
         const projectionOfCameraDirectionOnPlane = nearestPointInPlane(zeroVector, planeVector, normal, planeVector);
-        projectionOfCameraDirectionOnPlane.normalize().multiplyScalar(el.scale);
-        el.position.add(projectionOfCameraDirectionOnPlane);
-        
+        if (
+          Math.abs(projectionOfCameraDirectionOnPlane.x) > 0.01 ||
+          Math.abs(projectionOfCameraDirectionOnPlane.y) > 0.01 ||
+          Math.abs(projectionOfCameraDirectionOnPlane.z) > 0.01
+        ) {
+          projectionOfCameraDirectionOnPlane.normalize().multiplyScalar(this.data.border).multiply(el.scale);
+          el.position.add(projectionOfCameraDirectionOnPlane);
+        }
         
         bbox.setFromObject(el);
         bbox.getBoundingSphere(sphere);
