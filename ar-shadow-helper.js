@@ -1,5 +1,7 @@
 /* global AFRAME, THREE */
 
+const bbox = this.bbox = new THREE.Box3();
+
 AFRAME.registerGeometry('shadow-plane', {
   schema: {
     width: { default: 5, min: 0 },
@@ -21,7 +23,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
       type: 'selector',
     },
     lights: {
-      type: 'selector',
+      type: 'selectorAll',
       default: 'a-light'
     },
     startVisibleInAR: {
@@ -49,7 +51,13 @@ AFRAME.registerComponent('ar-shadow-helper', {
       self.el.object3D.visible = true;
     });
   },
+  updateShadowCam() {
+    bbox.setFromObject(this.el.object3D);
+    const lights = Array.from(this.data.lights);
+    
+  },
   tick: function () {
+    this.updateShadowCam();
     if (this.data.target) {
       this.el.object3D.position.copy(this.data.target.object3D.position);
       this.el.object3D.quaternion.copy(this.data.target.object3D.quaternion);
