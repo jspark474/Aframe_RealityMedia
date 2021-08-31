@@ -39,8 +39,8 @@ AFRAME.registerComponent('ar-shadow-helper', {
     target: {
       type: 'selector',
     },
-    lights: {
-      type: 'selectorAll',
+    light: {
+      type: 'selector',
       default: 'a-light'
     },
     startVisibleInAR: {
@@ -49,7 +49,6 @@ AFRAME.registerComponent('ar-shadow-helper', {
   },
   init: function () {
     var self = this;
-    this.el.object3D.visible = false;
 
     this.el.sceneEl.addEventListener('enter-vr', function () {
       if (self.el.sceneEl.is('ar-mode')) {
@@ -69,14 +68,14 @@ AFRAME.registerComponent('ar-shadow-helper', {
     });
   },
   updateShadowCam() {
-    bbox.setFromObject(this.el.object3D);
-    bbox.getBoundingSphere(sphere);
-    const lights = Array.from(this.data.lights);
-    for (const light of lights) {
+    if (this.data.light) {
+      const light = this.data.light;
       const shadow = light.components.light.light.shadow;
       if (shadow) {
+        camera.getWorldDirection(normal);
+        bbox.setFromObject(this.el.object3D);
+        bbox.getBoundingSphere(sphere);
         const camera = shadow.camera;
-			  camera.getWorldDirection(normal);
         camera.getWorldPosition(cameraWorldPosition);
         const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, sphere.center, normal);
         tempMat.copy(camera.matrixWorld);
@@ -91,12 +90,13 @@ AFRAME.registerComponent('ar-shadow-helper', {
     }
   },
   tick: function () {
+    this.el.object3D.scale.set(1,1,1).multiplyScalar(sphere.radius * 1.5);
     if (this.data.target) {
       bbox.setFromObject(this.data.target.object3D);
       bbox.getSize(this.el.object3D.scale);
-      this.el.object3D.scale.multiplyScalar(1.5);
-      bbox.getCenter(this.el.object3D.position);
-      this.el.object3D.position.y -= this.el.object3D.scale.y/2;
+      this.el.object3D.scale.multiplyScalar(2);
+      this.el.object3D.position.copy(this.data.target.object3D.position);
+      this.el.object3D.quaternion.copy(this.data.target.object3D.quaternion);
     }
     this.updateShadowCam();
   }
