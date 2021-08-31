@@ -8,8 +8,8 @@ const sphere = new THREE.Sphere();
 
 AFRAME.registerGeometry('shadow-plane', {
   schema: {
-    width: { default: 5, min: 0 },
-    height: { default: 5, min: 0 }
+    width: { default: 1, min: 0 },
+    height: { default: 1, min: 0 }
   },
 
   init: function (data) {
@@ -70,6 +70,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
   },
   updateShadowCam() {
     bbox.setFromObject(this.el.object3D);
+    bbox.getBoundingSphere(sphere);
     const lights = Array.from(this.data.lights);
     for (const light of lights) {
       const shadow = light.components.light.light.shadow;
@@ -77,7 +78,6 @@ AFRAME.registerComponent('ar-shadow-helper', {
         const camera = shadow.camera;
 			  camera.getWorldDirection(normal);
         camera.getWorldPosition(cameraWorldPosition);
-        bbox.getBoundingSphere(sphere);
         const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, sphere.center, normal);
         tempMat.copy(camera.matrixWorld);
         tempMat.invert();
@@ -92,8 +92,11 @@ AFRAME.registerComponent('ar-shadow-helper', {
   },
   tick: function () {
     if (this.data.target) {
-      this.el.object3D.position.copy(this.data.target.object3D.position);
-      this.el.object3D.quaternion.copy(this.data.target.object3D.quaternion);
+      bbox.setFromObject(this.data.target.object3D);
+      bbox.getSize(this.el.object3D.scale);
+      this.el.object3D.scale.multiplyScalar(1.5);
+      bbox.getCenter(this.el.object3D.position);
+      this.el.object3D.position.y -= this.el.object3D.scale.y/2;
     }
     this.updateShadowCam();
   }
