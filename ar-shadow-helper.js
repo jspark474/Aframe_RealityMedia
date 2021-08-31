@@ -1,8 +1,9 @@
 /* global AFRAME, THREE */
 
 const bbox = this.bbox = new THREE.Box3();
-const tempVector = new THREE.Vector3();
-const tempPosition = new THREE.Vector3();
+const normal = new THREE.Vector3();
+const bboxPosition = new THREE.Vector3();
+const cameraWorldPosition = new THREE.Vector3();
 const tempMat = new THREE.Matrix4();
 
 AFRAME.registerGeometry('shadow-plane', {
@@ -74,21 +75,22 @@ AFRAME.registerComponent('ar-shadow-helper', {
       const shadow = light.components.light.light.shadow;
       if (shadow) {
         const camera = shadow.camera;
-			  const normal = tempVector.set(0,0,1).applyQuaternion(camera.quaternion);
-        bbox.getCenter(tempPosition);
-        const pointOnCameraPlane = nearestPointInPlane(camera.position, normal, tempPosition, tempVector);
+			  camera.getWorldDirection(normal);
+        camera.getWorldPosition(cameraWorldPosition);
+        bbox.getCenter(bboxPosition);
+        const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, bboxPosition, normal);
         tempMat.copy(camera.matrixWorld);
         tempMat.invert();
-        const pointInPlane = pointOnCameraPlane.applyMatrix4(tempMat);
-        console.log(pointInPlane);
+        const pointInXZPlane = pointOnCameraPlane.applyMatrix4(tempMat);
+        console.log(pointInXZPlane);
       }
     }
   },
   tick: function () {
-    this.updateShadowCam();
     if (this.data.target) {
       this.el.object3D.position.copy(this.data.target.object3D.position);
       this.el.object3D.quaternion.copy(this.data.target.object3D.quaternion);
     }
+    this.updateShadowCam();
   }
 });
