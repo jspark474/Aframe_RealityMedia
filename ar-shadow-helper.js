@@ -20,12 +20,18 @@ AFRAME.registerGeometry('shadow-plane', {
   }
 });
 
-function nearestPointInPlane(position, normal, p1, out) {
+function distanceOfPointFromPlane(position, normal, p1) {
 	const d = normal.dot(position);
 
 	// distance of point from plane
 	const t = (d - normal.dot(p1))/normal.length();
+  
+  return t;
+}
 
+function nearestPointInPlane(position, normal, p1, out) {
+
+  const t = distanceOfPointFromPlane(position, normal, p1);
 	// closest point on the plane
 	out.copy(normal);
 	out.multiplyScalar(t);
@@ -96,11 +102,13 @@ AFRAME.registerComponent('ar-shadow-helper', {
         bbox.setFromObject(el);
         bbox.getBoundingSphere(sphere);
         camera.getWorldPosition(cameraWorldPosition);
+        const distanceToPlane = distanceOfPointFromPlane(cameraWorldPosition, normal, sphere.center);
         const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, sphere.center, normal);
         tempMat.copy(camera.matrixWorld);
         tempMat.invert();
+        
         const pointInXYPlane = pointOnCameraPlane.applyMatrix4(tempMat);
-        camera.near = -50;
+        camera.near    =  distanceToPlane - sphere.radius;
         camera.left    = -sphere.radius + pointInXYPlane.x;
         camera.right   =  sphere.radius + pointInXYPlane.x;
         camera.top     =  sphere.radius + pointInXYPlane.y;
