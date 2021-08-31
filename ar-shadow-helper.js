@@ -2,9 +2,9 @@
 
 const bbox = this.bbox = new THREE.Box3();
 const normal = new THREE.Vector3();
-const bboxPosition = new THREE.Vector3();
 const cameraWorldPosition = new THREE.Vector3();
 const tempMat = new THREE.Matrix4();
+const sphere = new THREE.Sphere();
 
 AFRAME.registerGeometry('shadow-plane', {
   schema: {
@@ -77,12 +77,15 @@ AFRAME.registerComponent('ar-shadow-helper', {
         const camera = shadow.camera;
 			  camera.getWorldDirection(normal);
         camera.getWorldPosition(cameraWorldPosition);
-        bbox.getCenter(bboxPosition);
-        const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, bboxPosition, normal);
+        bbox.getBoundingSphere(sphere);
+        const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, sphere.center, normal);
         tempMat.copy(camera.matrixWorld);
         tempMat.invert();
-        const pointInXZPlane = pointOnCameraPlane.applyMatrix4(tempMat);
-        console.log(pointInXZPlane);
+        const pointInXYPlane = pointOnCameraPlane.applyMatrix4(tempMat);
+        camera.left    = -sphere.radius + pointInXYPlane.x;
+        camera.right   =  sphere.radius + pointInXYPlane.x;
+        camera.top     =  sphere.radius + pointInXYPlane.y;
+        camera.bottom  =  -sphere.radius + pointInXYPlane.y;
       }
     }
   },
