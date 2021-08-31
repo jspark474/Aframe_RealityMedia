@@ -45,6 +45,9 @@ AFRAME.registerComponent('ar-shadow-helper', {
     },
     startVisibleInAR: {
       default: false
+    },
+    border: {
+      default: 0.25
     }
   },
   init: function () {
@@ -71,11 +74,15 @@ AFRAME.registerComponent('ar-shadow-helper', {
     if (this.data.light) {
       const light = this.data.light;
       const shadow = light.components.light.light.shadow;
+    
       if (shadow) {
-        camera.getWorldDirection(normal);
+        const camera = shadow.camera;
+        camera.getWorldDirection(normal);   
+        
+        const projectionOfCameraDirectionOnPlane = 
+        
         bbox.setFromObject(this.el.object3D);
         bbox.getBoundingSphere(sphere);
-        const camera = shadow.camera;
         camera.getWorldPosition(cameraWorldPosition);
         const pointOnCameraPlane = nearestPointInPlane(cameraWorldPosition, normal, sphere.center, normal);
         tempMat.copy(camera.matrixWorld);
@@ -90,14 +97,15 @@ AFRAME.registerComponent('ar-shadow-helper', {
     }
   },
   tick: function () {
-    this.el.object3D.scale.set(1,1,1).multiplyScalar(sphere.radius * 1.5);
+    const border = this.data.border;
+    this.el.object3D.scale.set(1,1,1).multiplyScalar(sphere.radius * (1 + border * 2));
     if (this.data.target) {
       bbox.setFromObject(this.data.target.object3D);
       bbox.getSize(this.el.object3D.scale);
       this.el.object3D.scale.multiplyScalar(2);
       this.el.object3D.position.copy(this.data.target.object3D.position);
       this.el.object3D.quaternion.copy(this.data.target.object3D.quaternion);
+      this.updateShadowCam();
     }
-    this.updateShadowCam();
   }
 });
