@@ -11,6 +11,7 @@
 	<script src="https://unpkg.com/aframe-environment-component@1.2.0/dist/aframe-environment-component.min.js"></script>
   <!-- this shadow helper ensures that the model has a shadow beneath it -->
   <script src="ar-shadow-helper.js"></script>
+	<script src="main.js"></script>
   <style>
 		body {
 			font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -64,7 +65,7 @@
     ></a-entity>
     
     <!-- This is hidden when the user first enters ar but becomes visible when the user can place it -->
-    <a-entity hide-on-enter-ar shadow id="my-objects" scale="0.2 0.2 0.2" position="0.2 0 -0.4">
+    <a-entity hide-on-hit-test-start shadow id="my-objects" scale="0.2 0.2 0.2" position="0.2 0 -0.4">
       <a-gltf-model position="-2.2 2.15 -2"
         src="https://rawcdn.githack.com/krlosflip22/aframe-ar-sample/c91a7a9dd8b1428bc8e68bc1b5d8641d7241fd1b/spinosaurus.glb">
       </a-gltf-model>
@@ -88,7 +89,6 @@
 		<div id="dom-overlay-message">Enter AR to start.</div>
 	</div>
   
-	<script src="main.js"></script>
   <div class="glitchButton" style="position: absolute; top: 1em; right: 1em;"></div><script src="https://button.glitch.me/button.js"></script>
 </body>
 

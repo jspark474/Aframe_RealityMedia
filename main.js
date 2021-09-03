@@ -1,8 +1,23 @@
 /* jshint esversion: 9 */
-/* For dealing with spline curves */
-/* global THREE */
+/* global THREE, AFRAME */
 (function () {
 	"use strict";
+  
+  AFRAME.registerComponent('hide-on-hit-test-start', {
+    init: function () {
+      var self = this;
+      this.el.sceneEl.addEventListener('ar-hit-test-start', function () {
+        self.el.object3D.visible = false;
+      });
+      this.el.sceneEl.addEventListener('exit-vr', function () {
+        self.el.object3D.visible = true;
+      });
+    }
+  });
+
+}());
+
+window.addEventListener('load', function () {
 
 	const sceneEl = document.querySelector('a-scene');
 	const message = document.getElementById('dom-overlay-message');
@@ -40,5 +55,4 @@
 	sceneEl.addEventListener('exit-vr', function () {
 		message.textContent = 'Exited Immersive Mode';
 	});
-
-}());
+})
