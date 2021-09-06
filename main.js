@@ -69,6 +69,9 @@
           break;
         }
       }
+      
+      // Only do it for the first frame after the select start
+      this.activeInput = false;
     }
   });
 })();
