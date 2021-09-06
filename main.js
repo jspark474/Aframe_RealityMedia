@@ -19,6 +19,8 @@
 window.addEventListener("DOMContentLoaded", function() {
   const sceneEl = document.querySelector("a-scene");
   const message = document.getElementById("dom-overlay-message");
+  const raycaster = new THREE.Raycaster();
+  const direction = new THREE.Vector3();
 
   // If the user taps on any buttons or interactive elements we may add then prevent
   // Any WebXR select events from firing
@@ -33,6 +35,14 @@ window.addEventListener("DOMContentLoaded", function() {
 
       sceneEl.xrSession.addEventListener("selectstart", function(e) {
         const inputSource = e.inputSource;
+        const frame = this.el.sceneEl.frame;
+        const refSpace = this.renderer.xr.getReferenceSpace();
+        const pointerPose = frame.getPose(inputSource.targetRaySpace, refSpace);
+        
+        raycaster.set( origin, direction );
+        
+        
+        e.stopImmediatePropagation();
         e.preventDefault();
       });
 
