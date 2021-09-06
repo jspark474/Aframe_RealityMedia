@@ -39,7 +39,7 @@
       );
       const transform = pointerPose.transform;
 
-      direction.set(0, 0, 1);
+      direction.set(0, 0, -1);
       direction.applyQuaternion(transform.orientation);
       this.el.setAttribute("raycaster", {
         origin: transform.position,
