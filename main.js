@@ -17,7 +17,7 @@
 
 }());
 
-window.addEventListener('load', function () {
+window.addEventListener('DOMContentLoaded', function () {
 
 	const sceneEl = document.querySelector('a-scene');
 	const message = document.getElementById('dom-overlay-message');
@@ -27,6 +27,11 @@ window.addEventListener('load', function () {
   message.addEventListener('beforexrselect', e => {
     e.preventDefault();
   });
+
+  // Hit testing is available
+  this.addEventListener('selectstart', function (e) {
+    console.log(e);
+  }, { once: true });
   
 	sceneEl.addEventListener('enter-vr', function () {
 		if (this.is('ar-mode')) {
