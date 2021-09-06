@@ -47,16 +47,14 @@
 		ar-hit-test="target:#my-objects;type:footprint;footprintDepth:0.2;"
 		shadow="type: pcfsoft"
 		gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
+    ar-cursor
 	>
     <a-assets>
       <a-mixin id="animations"
-        animation__mouseenter="property: components.material.material.color; type: color; to: blue; startEvents: mouseenter; dur: 500";
-        animation__mouseleave="property: components.material.material.color; type: color; to: red; startEvents: mouseleave; dur: 500";
+        animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500";
       ></a-mixin>
     </a-assets>
 		<a-camera position="0 0.4 1"></a-camera>
-    
-    <a-cursor objects="#my-objects" ar-cursor></a-cursor>
 
 		<a-light id="dirlight" auto-shadow-cam intensity="0.7" light="castShadow:true;type:directional" position="10 10 10"></a-light>
 		<a-light hide-on-enter-ar intensity="0.3" light="type:hemisphere;color:yellow;groundColor:blue;" position="10 10 10"></a-light>

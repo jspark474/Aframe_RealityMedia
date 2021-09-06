@@ -2,6 +2,7 @@
 /* global THREE, AFRAME */
 (function() {
   "use strict";
+  const direction = new THREE.Vector3();
 
   AFRAME.registerComponent("hide-on-hit-test-start", {
     init: function() {
@@ -29,8 +30,7 @@
     tick() {
       if (!this.activeInput) return;
       const inputSource = this.activeInput;
-      const sceneEl = this.el.sceneEl;
-      const object3D = this.el.object3D;
+      const sceneEl = this.el;
       const frame = sceneEl.frame;
       const refSpace = sceneEl.renderer.xr.getReferenceSpace();
       const pointerPose = frame.getPose(
@@ -38,8 +38,16 @@
         refSpace
       );
       const transform = pointerPose.transform;
-      object3D.quaternion.set(transform.orientation);
-      object3D.position.set(transform.position);
+
+      direction.set(0, 0, 1);
+      direction.applyQuaternion(transform.orientation);
+      this.el.setAttribute("raycaster", {
+        origin: transform.position,
+        direction
+      });
+      this.el.components.raycaster.checkIntersections();
+      const els = this.el.components.raycaster.intersectedEls;
+      debugger;
     }
   });
 })();
