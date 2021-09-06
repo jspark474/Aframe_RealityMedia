@@ -115,7 +115,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
     });
 
     this.el.sceneEl.addEventListener('ar-hit-test-select-start', function () {
-      self.el.object3D.visible = false;
+      // self.el.object3D.visible = false;
     });
 
     this.el.sceneEl.addEventListener('ar-hit-test-select', function () {
