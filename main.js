@@ -24,6 +24,10 @@
         if (sceneEl.is("ar-mode")) {
           sceneEl.xrSession.addEventListener("selectstart", e => this.activeInput = e.inputSource);
           sceneEl.xrSession.addEventListener("selectend", e => {
+            if (this.hitTestReenable === true) {
+              this.hitTestReenable = null;
+              sceneEl.setAttribute('ar-hit-test', 'enabled', true);
+            }
             this.activeInput = null
           });
         }
@@ -59,6 +63,8 @@
         });
         if (elVisible) {
           const details = this.el.components.raycaster.getIntersection(el);
+          this.hitTestReenable = sceneEl.getAttribute('ar-hit-test').enabled;
+          this.el.components['ar-hit-test'].hitTest = null;
           sceneEl.setAttribute('ar-hit-test', 'enabled', false);
           el.emit('click', details);
           break;
