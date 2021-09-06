@@ -48,9 +48,15 @@
 		shadow="type: pcfsoft"
 		gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
 	>
+    <a-assets>
+      <a-mixin id="animations"
+        animation__mouseenter="property: components.material.material.color; type: color; to: blue; startEvents: mouseenter; dur: 500";
+        animation__mouseleave="property: components.material.material.color; type: color; to: red; startEvents: mouseleave; dur: 500";
+      ></a-mixin>
+    </a-assets>
 		<a-camera position="0 0.4 1"></a-camera>
     
-    <a-cursor ar-cursor></a-cursor>
+    <a-cursor objects="#my-objects" ar-cursor></a-cursor>
 
 		<a-light id="dirlight" auto-shadow-cam intensity="0.7" light="castShadow:true;type:directional" position="10 10 10"></a-light>
 		<a-light hide-on-enter-ar intensity="0.3" light="type:hemisphere;color:yellow;groundColor:blue;" position="10 10 10"></a-light>
@@ -71,12 +77,10 @@
       <a-gltf-model position="-2.2 2.15 -2"
         src="https://rawcdn.githack.com/krlosflip22/aframe-ar-sample/c91a7a9dd8b1428bc8e68bc1b5d8641d7241fd1b/spinosaurus.glb">
       </a-gltf-model>
-      <a-cylinder position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"
+      <a-cylinder mixin="animations" position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"
         material="roughness: 0.1; metalness: 0.2;"></a-cylinder>
-      <a-box position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9" material="roughness: 0.1; metalness: 0.2;">
-      </a-box>
-      <a-sphere position="0 1.25 -1" radius="1.25" color="#FFFFFF" material="roughness: 0; metalness: 0;">
-      </a-sphere>
+      <a-box mixin="animations" position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9" material="roughness: 0.1; metalness: 0.2;"></a-box>
+      <a-sphere mixin="animations" position="0 1.25 -1" radius="1.25" color="#FFFFFF" material="roughness: 0; metalness: 0;"></a-sphere>
       <a-torus-knot position="0 3 0" material="metalness: 1; roughness: 0.17"
         geometry="radius: 0.45; radiusTubular: 0.09"
         animation__rotate="easing: linear; from: 0 0 0; loop: true; property: rotation; to: 0 0 360; dur: 3000;">

@@ -29,7 +29,8 @@
     tick() {
       if (!this.activeInput) return;
       const inputSource = this.activeInput;
-      const sceneEl = this.el;
+      const sceneEl = this.el.sceneEl;
+      const object3D = this.el.object3D;
       const frame = sceneEl.frame;
       const refSpace = sceneEl.renderer.xr.getReferenceSpace();
       const pointerPose = frame.getPose(
@@ -37,15 +38,8 @@
         refSpace
       );
       const transform = pointerPose.transform;
-      const this.el.
-      direction.set(0, 0, 1);
-      direction.applyQuaternion(transform.orientation);
-      this.el.setAttribute("raycaster", {
-        origin: transform.position,
-        direction
-      });
-      this.el.components.raycaster.checkIntersections();
-      console.log(this.el.components.raycaster.intersectedEls);
+      object3D.quaternion.set(transform.orientation);
+      object3D.position.set(transform.position);
     }
   });
 })();
