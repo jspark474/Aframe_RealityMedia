@@ -23,7 +23,9 @@
       sceneEl.addEventListener("enter-vr", () => {
         if (sceneEl.is("ar-mode")) {
           sceneEl.xrSession.addEventListener("selectstart", e => this.activeInput = e.inputSource);
-          sceneEl.xrSession.addEventListener("selectend", e => this.activeInput = null);
+          sceneEl.xrSession.addEventListener("selectend", e => {
+            this.activeInput = null
+          });
         }
       });
     },
@@ -48,8 +50,8 @@
       this.el.components.raycaster.checkIntersections();
       const els = this.el.components.raycaster.intersectedEls;
       for (const el of els) {
-        let elVisible = el.visible;
         const obj = el.object3D;
+        let elVisible = obj.visible;
         obj.traverseAncestors(parent => {
           if (parent.visible === false ) {
             elVisible = false
@@ -57,8 +59,8 @@
         });
         if (elVisible) {
           const details = this.el.components.raycaster.getIntersection(el);
-          console.log(details);
-          elVisible.emit('click', details);
+          sceneEl.setAttribute('ar-hit-test', 'enabled', false);
+          el.emit('click', details);
           break;
         }
       }
