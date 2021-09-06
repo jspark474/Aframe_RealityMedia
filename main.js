@@ -47,7 +47,6 @@
       });
       this.el.components.raycaster.checkIntersections();
       const els = this.el.components.raycaster.intersectedEls;
-      debugger;
     }
   });
 })();
