@@ -47,6 +47,21 @@
       });
       this.el.components.raycaster.checkIntersections();
       const els = this.el.components.raycaster.intersectedEls;
+      for (const el of els) {
+        let elVisible = el.visible;
+        const obj = el.object3D;
+        obj.traverseAncestors(parent => {
+          if (parent.visible === false ) {
+            elVisible = false
+          }
+        });
+        if (elVisible) {
+          const details = this.el.components.raycaster.getIntersection(el);
+          console.log(details);
+          elVisible.emit('click', details);
+          break;
+        }
+      }
     }
   });
 })();
