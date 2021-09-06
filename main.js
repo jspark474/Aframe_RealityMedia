@@ -2,7 +2,6 @@
 /* global THREE, AFRAME */
 (function() {
   "use strict";
-  const direction = new THREE.Vector3();
 
   AFRAME.registerComponent("hide-on-hit-test-start", {
     init: function() {
@@ -20,9 +19,8 @@
     dependencies: ["raycaster"],
     init() {
       const sceneEl = this.el;
-
-      sceneEl.addEventListener("enter-vr", function() {
-        if (this.is("ar-mode")) {
+      sceneEl.addEventListener("enter-vr", () => {
+        if (sceneEl.is("ar-mode")) {
           sceneEl.xrSession.addEventListener("selectstart", e => this.activeInput = e.inputSource);
           sceneEl.xrSession.addEventListener("selectend", e => this.activeInput = null);
         }
@@ -39,7 +37,7 @@
         refSpace
       );
       const transform = pointerPose.transform;
-
+      const this.el.
       direction.set(0, 0, 1);
       direction.applyQuaternion(transform.orientation);
       this.el.setAttribute("raycaster", {

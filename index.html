@@ -47,9 +47,10 @@
 		ar-hit-test="target:#my-objects;type:footprint;footprintDepth:0.2;"
 		shadow="type: pcfsoft"
 		gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
-    ar-cursor
 	>
 		<a-camera position="0 0.4 1"></a-camera>
+    
+    <a-cursor ar-cursor></a-cursor>
 
 		<a-light id="dirlight" auto-shadow-cam intensity="0.7" light="castShadow:true;type:directional" position="10 10 10"></a-light>
 		<a-light hide-on-enter-ar intensity="0.3" light="type:hemisphere;color:yellow;groundColor:blue;" position="10 10 10"></a-light>
