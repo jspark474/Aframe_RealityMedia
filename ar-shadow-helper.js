@@ -104,6 +104,8 @@ AFRAME.registerComponent('ar-shadow-helper', {
   },
   init: function () {
     var self = this;
+    
+    this.el.object3D.renderOrder = -1;
 
     this.el.sceneEl.addEventListener('enter-vr', function () {
       if (self.el.sceneEl.is('ar-mode')) {

@@ -64,7 +64,7 @@
 
     <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
     <a-entity
-      material="shader:shadow;"
+      material="shader:shadow;depthWrite:false;opacity: 0.7;"
       visible="false"
       geometry="primitive:shadow-plane;"
       shadow="cast:false;receive:true;"
