@@ -18,25 +18,27 @@
 
   AFRAME.registerComponent("ar-cursor", {
     dependencies: ['raycaster'],
-    init: function() {
+    init() {
       const sceneEl = this.el;
+      
       sceneEl.addEventListener("enter-vr", function() {
         if (this.is("ar-mode")) {
 
           sceneEl.xrSession.addEventListener("selectstart", function(e) {
             const inputSource = e.inputSource;
-            const frame = this.el.sceneEl.frame;
-            const refSpace = this.renderer.xr.getReferenceSpace();
+            const frame = sceneEl.frame;
+            const refSpace = sceneEl.renderer.xr.getReferenceSpace();
             const pointerPose = frame.getPose(inputSource.targetRaySpace, refSpace);
             const transform = pointerPose.transform;
 
             direction.set(0,0,1);
             direction.applyQuaternion(transform.orientation);
             this.el.setAttribute('raycaster', {
-              
+              origin: transform.position,
+              direction 
             });
-
-            
+            this.el.components.raycaster.checkIntersections();
+            console.log(this.el.components.raycaster.intersectedEls);
 
             e.stopImmediatePropagation();
             e.preventDefault();
