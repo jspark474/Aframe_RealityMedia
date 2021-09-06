@@ -96,7 +96,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
       default: 'a-light'
     },
     startVisibleInAR: {
-      default: false
+      default: true
     },
     border: {
       default: 0.33
@@ -121,7 +121,7 @@ AFRAME.registerComponent('ar-shadow-helper', {
     });
 
     this.el.sceneEl.addEventListener('ar-hit-test-select', function () {
-      self.el.object3D.visible = true;
+      // self.el.object3D.visible = true;
     });
   },
   tick: function () {
