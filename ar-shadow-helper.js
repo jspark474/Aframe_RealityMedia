@@ -82,8 +82,6 @@ AFRAME.registerComponent('auto-shadow-cam', {
 });
   
 /**
-Component to hide the shadow whilst the user is using ar-hit-test because they tend to interact poorly
-
 It also attatches itself to objects and resizes and positions itself to get the most shadow
 */
 AFRAME.registerComponent('ar-shadow-helper', {

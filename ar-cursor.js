@@ -1,0 +1,65 @@
+/* jshint esversion: 9 */
+/* global THREE, AFRAME */
+(function() {
+  "use strict";
+  const direction = new THREE.Vector3();
+
+  AFRAME.registerComponent("ar-cursor", {
+    dependencies: ["raycaster"],
+    init() {
+      const sceneEl = this.el;
+      sceneEl.addEventListener("enter-vr", () => {
+        if (sceneEl.is("ar-mode")) {
+          sceneEl.xrSession.addEventListener("selectstart", e => this.activeInput = e.inputSource);
+          sceneEl.xrSession.addEventListener("selectend", e => this.activeInput = null);
+        }
+      });
+    },
+    tick() {
+      if (!this.activeInput) return;
+      const inputSource = this.activeInput;
+      const sceneEl = this.el;
+      const frame = sceneEl.frame;
+      const refSpace = sceneEl.renderer.xr.getReferenceSpace();
+      const pointerPose = frame.getPose(
+        inputSource.targetRaySpace,
+        refSpace
+      );
+      const transform = pointerPose.transform;
+
+      direction.set(0, 0, -1);
+      direction.applyQuaternion(transform.orientation);
+      this.el.setAttribute("raycaster", {
+        origin: transform.position,
+        direction
+      });
+      this.el.components.raycaster.checkIntersections();
+      const els = this.el.components.raycaster.intersectedEls;
+      for (const el of els) {
+        const obj = el.object3D;
+        let elVisible = obj.visible;
+        obj.traverseAncestors(parent => {
+          if (parent.visible === false ) {
+            elVisible = false
+          }
+        });
+        if (elVisible) {
+          
+          // Cancel the ar-hit-test behaviours
+          this.el.components['ar-hit-test'].hitTest = null;
+          this.el.components['ar-hit-test'].bboxMesh.visible = false;
+          
+          // Emit click on the element for events
+          const details = this.el.components.raycaster.getIntersection(el);
+          el.emit('click', details);
+          
+          // Don't go to the next element
+          break;
+        }
+      }
+      
+      // Only do it for the first frame after the select start
+      this.activeInput = false;
+    }
+  });
+})();
