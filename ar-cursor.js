@@ -10,23 +10,17 @@
       const sceneEl = this.el;
       sceneEl.addEventListener("enter-vr", () => {
         if (sceneEl.is("ar-mode")) {
-          sceneEl.xrSession.addEventListener("selectstart", e => this.activeInput = e.inputSource);
-          sceneEl.xrSession.addEventListener("selectend", e => this.activeInput = null);
+          sceneEl.xrSession.addEventListener("select", this.onselect.bind(this));
         }
       });
     },
-    tick() {
-      if (!this.activeInput) return;
-      const inputSource = this.activeInput;
-      const sceneEl = this.el;
-      const frame = sceneEl.frame;
-      const refSpace = sceneEl.renderer.xr.getReferenceSpace();
-      const pointerPose = frame.getPose(
-        inputSource.targetRaySpace,
-        refSpace
-      );
-      const transform = pointerPose.transform;
-
+    onselect(e) {
+      const frame = e.frame;
+      const inputSource = e.inputSource;
+      const referenceSpace = this.el.renderer.xr.getReferenceSpace();
+      const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
+      const transform = pose.transform;
+      
       direction.set(0, 0, -1);
       direction.applyQuaternion(transform.orientation);
       this.el.setAttribute("raycaster", {
@@ -57,9 +51,6 @@
           break;
         }
       }
-      
-      // Only do it for the first frame after the select start
-      this.activeInput = false;
     }
   });
 })();
