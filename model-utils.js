@@ -7,6 +7,7 @@ AFRAME.registerComponent('lightmap', {
   init() {
     this.el.addEventListener('object3dset', this.update.bind(this));
 	  this.texture = new THREE.TextureLoader().load( typeof this.data === 'string' ? this.data : this.data.src );
+    this.texture.flipY = false;
   },
   update() {
     this.el.object3D.traverse(function (o) {
@@ -49,3 +50,15 @@ AFRAME.registerComponent('hideparts', {
     }.bind(this));
   }
 });
+
+AFRAME.registerSystem('exposure', {
+  init () {
+    const renderer = this.el.renderer;
+    renderer.physicallyCorrectLights = true;
+    renderer.logarithmicDepthBuffer = true;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.5;
+    renderer.shadowMap.enabled = true;
+  }
+})
