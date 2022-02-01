@@ -17,8 +17,15 @@ AFRAME.registerComponent('lightmap', {
   update() {
     this.el.object3D.traverse(function (o) {
       if (o.material) {
-        o.material.lightMap = this.texture;
-        o.material.lightMapIntensity = this.data.intensity;
+        // o.material.lightMap = this.texture;
+        // o.material.lightMapIntensity = this.data.intensity;
+        const m = o.material;
+        o.material = new THREE.MeshPhongMaterial({
+          lightMap: this.texture,
+          lightMapIntensity: this.data.intensity,
+          // map: m.map,
+          
+        })
       }
     }.bind(this));
   }

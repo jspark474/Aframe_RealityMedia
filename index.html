@@ -54,14 +54,13 @@
     exposure=""
 	>
     <a-assets>
-      <a-asset-item id="building" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1643732217887"></a-asset-item>
-      <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500";></a-mixin>
-      <img src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake.png?v=1643727306237" id="bake" />
+      <a-asset-item id="building" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1643738865600"></a-asset-item>
+      <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
+      <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake.webp?v=1643738757200"/>
     </a-assets>
 		<a-camera position="0 1.68 1"></a-camera>
 
 		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
-		<a-light hide-on-enter-ar intensity="0.1" light="type:hemisphere;color:yellow;groundColor:blue;"></a-light>
 
 		<a-entity position="0 -0.2 0" hide-on-enter-ar environment="lighting:none;shadow:true;"></a-entity>
 
@@ -74,7 +73,7 @@
       ar-shadow-helper="target:#my-objects;light:#dirlight;"
     ></a-entity>
     
-    <a-gltf-model src="#building" lightmap="src:#bake; intensity: 20;" depthwrite="true" hideparts="navmesh"></a-gltf-model>
+    <a-gltf-model src="#building" lightmap="src:#bake; intensity: 5;" depthwrite="true" hideparts="navmesh"></a-gltf-model>
 	</a-scene>
 
 	<div id="dom-overlay">
