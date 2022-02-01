@@ -7,6 +7,13 @@ AFRAME.registerComponent('lightmap', {
     },
     intensity: {
       default: 1
+    },
+    filter: {
+      default: ''
+    },
+    color: {
+      type: "color",
+      default: '#888888'
     }
   },
   init() {
@@ -15,17 +22,21 @@ AFRAME.registerComponent('lightmap', {
     this.texture.flipY = false;
   },
   update() {
+    const filter = this.data.filter.trim();
     this.el.object3D.traverse(function (o) {
       if (o.material) {
         // o.material.lightMap = this.texture;
         // o.material.lightMapIntensity = this.data.intensity;
-        const m = o.material;
-        o.material = new THREE.MeshPhongMaterial({
-          lightMap: this.texture,
-          lightMapIntensity: this.data.intensity,
-          // map: m.map,
-          
-        })
+        if (o.name.includes(filter)) {
+          const m = o.material;
+          o.material = new THREE.MeshPhongMaterial({
+            lightMap: this.texture,
+            lightMapIntensity: this.data.intensity,
+            color: this.data.color,
+            map: m.map,
+            transparent: m.transparent
+          });
+        }
       }
     }.bind(this));
   }
