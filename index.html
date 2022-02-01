@@ -54,15 +54,14 @@
     exposure=""
 	>
     <a-assets>
-      <a-asset-item id="building" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1643741206100"></a-asset-item>
+      <a-asset-item id="building" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1643742310500"></a-asset-item>
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
-      <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake.webp?v=1643741157200"/>
+      <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake.webp?v=1643742292200"/>
     </a-assets>
 		<a-camera position="0 1.68 1"></a-camera>
 
 		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
-
-		<a-entity position="0 -0.2 0" hide-on-enter-ar environment="lighting:none;shadow:true;"></a-entity>
+		<a-entity position="0 -0.2 0" hide-on-enter-ar environment="lighting:none;shadow:true;lightPosition:1 0 0;"></a-entity>
 
     <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
     <a-entity
@@ -73,7 +72,7 @@
       ar-shadow-helper="target:#my-objects;light:#dirlight;"
     ></a-entity>
     
-    <a-gltf-model src="#building" lightmap="src:#bake; intensity: 10; filter:venue;" depthwrite="true" hideparts="navmesh"></a-gltf-model>
+    <a-gltf-model hide-on-enter-ar src="#building" lightmap="src:#bake; intensity: 10; filter:venue;" depthwrite="true" hideparts="navmesh"></a-gltf-model>
 	</a-scene>
 
 	<div id="dom-overlay">

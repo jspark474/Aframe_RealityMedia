@@ -27,7 +27,6 @@ AFRAME.registerComponent('lightmap', {
       if (o.material) {
         // o.material.lightMap = this.texture;
         // o.material.lightMapIntensity = this.data.intensity;
-        console.log(o.name, filter, o.name.includes(filter));
         if (o.name.includes(filter)) {
           const m = o.material;
           o.material = new THREE.MeshPhongMaterial({
