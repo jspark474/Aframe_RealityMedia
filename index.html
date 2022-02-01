@@ -52,7 +52,7 @@
     ar-cursor raycaster="objects: #my-objects *"
 	>
     <a-assets>
-      <a-asset-item id="building" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1643727020223"></a-asset-item>
+      <a-asset-item id="building" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1643727604177"></a-asset-item>
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500";></a-mixin>
       <img src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake.png?v=1643727306237" id="bake" />
     </a-assets>
@@ -72,7 +72,7 @@
       ar-shadow-helper="target:#my-objects;light:#dirlight;"
     ></a-entity>
     
-    <a-gltf-model src="#building" lightmap="#bake"></a-gltf-model>
+    <a-gltf-model src="#building" lightmap="#bake" depthwrite="true"></a-gltf-model>
 	</a-scene>
 
 	<div id="dom-overlay">
