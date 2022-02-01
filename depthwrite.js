@@ -1,5 +1,4 @@
 /* global AFRAME */
-const p = 2;
 AFRAME.registerComponent('depthwrite', {
   schema: {
     default: true

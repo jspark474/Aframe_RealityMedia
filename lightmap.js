@@ -1,8 +1,7 @@
 /* global AFRAME */
-const p = 2;
-AFRAME.registerComponent('depthwrite', {
+AFRAME.registerComponent('lightmap', {
   schema: {
-    default: true
+    type: "asset"
   },
   init() {
     this.el.addEventListener('object3dset', this.update.bind(this));
@@ -10,7 +9,7 @@ AFRAME.registerComponent('depthwrite', {
   update() {
     this.el.object3D.traverse(function (o) {
       if (o.material) {
-        o.material.depthWrite = this.data;
+        o.material.lightMap = this.data;
       }
     }.bind(this));
   }
