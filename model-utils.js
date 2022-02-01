@@ -2,17 +2,23 @@
 
 AFRAME.registerComponent('lightmap', {
   schema: {
-    type: "map"
+    src: {
+      type: "map"
+    },
+    intensity: {
+      default: 1
+    }
   },
   init() {
     this.el.addEventListener('object3dset', this.update.bind(this));
-	  this.texture = new THREE.TextureLoader().load( typeof this.data === 'string' ? this.data : this.data.src );
+	  this.texture = new THREE.TextureLoader().load( typeof this.data.src === 'string' ? this.data.src : this.data.src.src );
     this.texture.flipY = false;
   },
   update() {
     this.el.object3D.traverse(function (o) {
       if (o.material) {
         o.material.lightMap = this.texture;
+        o.material.lightMapIntensity = this.data.intensity;
       }
     }.bind(this));
   }

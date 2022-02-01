@@ -60,8 +60,8 @@
     </a-assets>
 		<a-camera position="0 1.68 1"></a-camera>
 
-		<a-light id="dirlight" auto-shadow-cam intensity="0.7" light="castShadow:true;type:directional" position="10 10 10"></a-light>
-		<a-light hide-on-enter-ar intensity="0.3" light="type:hemisphere;color:yellow;groundColor:blue;" position="10 10 10"></a-light>
+		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
+		<a-light hide-on-enter-ar intensity="0.1" light="type:hemisphere;color:yellow;groundColor:blue;"></a-light>
 
 		<a-entity position="0 -0.2 0" hide-on-enter-ar environment="lighting:none;shadow:true;"></a-entity>
 
@@ -74,7 +74,7 @@
       ar-shadow-helper="target:#my-objects;light:#dirlight;"
     ></a-entity>
     
-    <a-gltf-model src="#building" lightmap="#bake" depthwrite="true" hideparts="navmesh"></a-gltf-model>
+    <a-gltf-model src="#building" lightmap="src:#bake; intensity: 20;" depthwrite="true" hideparts="navmesh"></a-gltf-model>
 	</a-scene>
 
 	<div id="dom-overlay">
