@@ -1,7 +1,7 @@
 /* global AFRAME */
 AFRAME.registerComponent('lightmap', {
   schema: {
-    type: "asset"
+    type: "map"
   },
   init() {
     this.el.addEventListener('object3dset', this.update.bind(this));
