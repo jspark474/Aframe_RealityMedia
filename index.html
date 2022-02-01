@@ -61,7 +61,7 @@
 		<a-camera position="0 1.68 1"></a-camera>
 
 		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
-		<a-entity position="0 -0.2 0" hide-on-enter-ar environment="lighting:none;shadow:true;lightPosition:1 0 0;"></a-entity>
+		<a-entity position="0 -0.2 0" hide-on-enter-ar environment="lighting:none;shadow:true;preset: osiris;"></a-entity>
 
     <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
     <a-entity
@@ -72,7 +72,7 @@
       ar-shadow-helper="target:#my-objects;light:#dirlight;"
     ></a-entity>
     
-    <a-gltf-model hide-on-enter-ar src="#building" lightmap="src:#bake; intensity: 10; filter:venue;" depthwrite="true" hideparts="navmesh"></a-gltf-model>
+    <a-gltf-model rotation="0 -30 0" hide-on-enter-ar src="#building" lightmap="src:#bake; intensity: 10; filter:venue;" depthwrite="true" hideparts="navmesh"></a-gltf-model>
 	</a-scene>
 
 	<div id="dom-overlay">
