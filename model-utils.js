@@ -17,14 +17,12 @@ AFRAME.registerComponent('lightmap', {
   init() {
     
     const src = typeof this.data.src === 'string' ? this.data.src : this.data.src.src;
-    
-    const ktx2Loader = new THREE.KTX2Loader();
-    ktx2Loader.setTranscoderPath( 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@342946c8392639028da439b6dc0597e58209c696/examples/js/libs/basis/' );
-    ktx2Loader.detectSupport( this.el.sceneEl.renderer );
     this.texturePromise = new Promise (function (resolve, reject) {
-      
       if (this.data.basis) {
-        ktx2Loader.load( src, function ( texture ) {
+        const ktxLoader = new THREE.KTX2Loader();
+        ktxLoader.setTranscoderPath( 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@342946c8392639028da439b6dc0597e58209c696/examples/js/libs/basis/' );
+        ktxLoader.detectSupport( this.el.sceneEl.renderer );
+        ktxLoader.load( src, function ( texture ) {
           texture.flipY = false;
           console.log(texture);
           resolve(texture);
