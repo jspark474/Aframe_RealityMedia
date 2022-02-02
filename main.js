@@ -77,7 +77,9 @@ AFRAME.registerComponent('window-replace', {
     this.el.object3D.traverse(function (o) {
       if (o.material) {
         if (filters.find(filter => o.material.name.includes(filter))) {
+          o.renderOrder = 100;
           const m = o.material;
+          const sceneEl = this.el.sceneEl;
           o.material = this.materials.has(m) ?
             this.materials.get(m) :
             new THREE.MeshPhongMaterial({
@@ -85,12 +87,17 @@ AFRAME.registerComponent('window-replace', {
               lightMap: m.lightmap,
               lightMapIntensity: m.lightMapIntensity,
               shininess: 100,
-              color: '#ffffff', 
+              color: '#ffffff',
+              emissive: '#333333',
+              emissiveMap: m.map,
+              transparent: true,
+              depthWrite: true,
               map: m.map,
               transparent: true,
               side: THREE.DoubleSide,
-              get envMap () => this.el.sceneEl.object3D.environment,
+              get envMap() {return sceneEl.object3D.environment},
               combine: THREE.MixOperation,
+              reflectivity: 0,
               blending: THREE.CustomBlending,
               blendEquation: THREE.MaxEquation
             });

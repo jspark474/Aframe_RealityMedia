@@ -32,7 +32,8 @@ AFRAME.registerComponent('lightmap', {
             color: m.color,
             map: m.map,
             transparent: m.transparent,
-            side: m.side
+            side: m.side,
+            depthWrite: true,
           });
           
           this.materials.set(m, o.material);
