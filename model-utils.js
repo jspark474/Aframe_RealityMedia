@@ -17,44 +17,23 @@ AFRAME.registerComponent('lightmap', {
   init() {
     
     const src = typeof this.data.src === 'string' ? this.data.src : this.data.src.src;
-    this.texturePromise = new Promise (function (resolve, reject) {
-      if (this.data.basis) {
-        const ktxLoader = new THREE.KTX2Loader();
-        ktxLoader.setTranscoderPath( 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@342946c8392639028da439b6dc0597e58209c696/examples/js/libs/basis/' );
-        ktxLoader.detectSupport( this.el.sceneEl.renderer );
-        ktxLoader.load( src, function ( texture ) {
-          texture.flipY = false;
-          console.log(texture);
-          resolve(texture);
-        }, function () {
-          console.log( 'Loading Basis: ' + src );
-        }, function (e) {
-          reject(e);
-        });
-      } else {
-        const texture = new THREE.TextureLoader().load( typeof this.data.src === 'string' ? this.data.src : this.data.src.src );
-        texture.flipY = false;
-        resolve(texture);
-      }
-    }.bind(this))
-    .catch(e => {
-      console.error(e);
-      throw(e);
-    });
+    const texture = new THREE.TextureLoader().load(src);
+    texture.flipY = false;
+    this.texture = texture;
 
     this.el.addEventListener('object3dset', this.update.bind(this));
     this.materials = new Map();
   },
   update() {
     const filters = this.data.filter.trim().split(',');
-    this.el.object3D.traverse(async function (o) {
+    this.el.object3D.traverse(function (o) {
       if (o.material) {
         if (filters.some(filter => o.material.name.includes(filter))) {
           const sceneEl = this.el.sceneEl;
           const m = o.material;
           o.material = this.materials.has(m) ? this.materials.get(m) : new THREE.MeshPhongMaterial({
             name: 'phong_' + m.name,
-            lightMap: await this.texturePromise,
+            lightMap: this.texture,
             lightMapIntensity: this.data.intensity,
             color: m.color,
             map: m.map,
