@@ -1,6 +1,4 @@
 /* global AFRAME, THREE */
-import { KTX2Loader } from "https://cdn.skypack.dev/three@0.136.0/examples/jsm/loaders/KTX2Loader.js";
-
 AFRAME.registerComponent('lightmap', {
   schema: {
     src: {
@@ -20,8 +18,8 @@ AFRAME.registerComponent('lightmap', {
     
     const src = typeof this.data.src === 'string' ? this.data.src : this.data.src.src;
     
-    const ktx2Loader = new KTX2Loader();
-    ktx2Loader.setTranscoderPath( 'https://cdn.jsdelivr.net/npm/three@0.136.0/examples/js/libs/basis/' );
+    const ktx2Loader = new THREE.KTX2Loader();
+    ktx2Loader.setTranscoderPath( 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@342946c8392639028da439b6dc0597e58209c696/examples/js/libs/basis/' );
     ktx2Loader.detectSupport( this.el.sceneEl.renderer );
     this.texturePromise = new Promise (function (resolve, reject) {
       
@@ -40,7 +38,11 @@ AFRAME.registerComponent('lightmap', {
         texture.flipY = false;
         resolve(texture);
       }
-    }.bind(this));
+    }.bind(this))
+    .catch(e => {
+      console.error(e);
+      throw(e);
+    });
 
     this.el.addEventListener('object3dset', this.update.bind(this));
     this.materials = new Map();
