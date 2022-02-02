@@ -19,12 +19,10 @@ AFRAME.registerComponent('lightmap', {
     this.materials = new Map();
   },
   update() {
-    const filter = this.data.filter.trim();
+    const filters = this.data.filter.trim().split(',');
     this.el.object3D.traverse(function (o) {
       if (o.material) {
-        // o.material.lightMap = this.texture;
-        // o.material.lightMapIntensity = this.data.intensity;
-        if (o.name.includes(filter)) {
+        if (filters.find(filter => o.material.name.includes(filter))) {
           
           const m = o.material;
           o.material = this.materials.has(m) ? this.materials.get(m) : new THREE.MeshPhongMaterial({

@@ -73,22 +73,21 @@ AFRAME.registerComponent('window-replace', {
     this.materials = new Map();
   },
   update() {
-    const filter = this.data.trim();
+    const filters = this.data.trim().split(',');
     this.el.object3D.traverse(function (o) {
       if (o.material) {
-        console.log(o.material.name);
-        if (o.material.name.includes(filter)) {
+        if (filters.find(filter => o.material.name.includes(filter))) {
           const m = o.material;
           o.material = this.materials.has(m) ?
             this.materials.get(m) :
             new THREE.MeshPhongMaterial({
-              name
-              lightMap: this.texture,
-              lightMapIntensity: this.data.intensity,
-              color: m.color,
+              name: 'window_' + m.name,
+              lightMap: m.lightmap,
+              lightMapIntensity: m.lightMapIntensity,
+              color: '#000000',
               map: m.map,
               transparent: false,
-              side: m.side,
+              side: THREE.DoubleSide,
               combine: THREE.MixOperation,
               blending: THREE.CustomBlending,
               blendEquation: THREE.MaxEquation
