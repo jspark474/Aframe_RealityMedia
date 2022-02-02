@@ -54,8 +54,8 @@
     exposure=""
 	>
     <a-assets>
-      <a-asset-item id="building" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1643799974000"></a-asset-item>
-      <a-asset-item id="navmesh" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/navmesh.glb?v=1643813180146"></a-asset-item>
+      <a-asset-item id="building" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1643822286500"></a-asset-item>
+      <a-asset-item id="navmesh" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/navmesh.glb?v=1643822637100"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(1).jpg?v=1643805356500">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin ></a-mixin>
@@ -72,7 +72,12 @@
 		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
 		<a-entity rotation="0 -45 0" position="0 -0.2 0" hide-on-enter-ar environment="lighting:none;shadow:true;preset: osiris;">
       <a-gltf-model src="#navmesh" position="0 0.2 0" visible="false"></a-gltf-model>
-      <a-gltf-model src="#building" position="0 0.2 0" lightmap="src:#bake;intensity: 10; filter:Window,Ceiling,floor;" depthwrite="true" window-replace="Glass" hideparts="navmesh" no-tonemapping="Light"></a-gltf-model>
+      <a-gltf-model src="#building" position="0 0.2 0"
+        lightmap="src:#bake;intensity: 10; filter:Window,Ceiling,floor;"
+        depthwrite="true"
+        window-replace="Glass"
+        no-tonemapping="Light"
+      ></a-gltf-model>
     </a-entity>
 
     <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
