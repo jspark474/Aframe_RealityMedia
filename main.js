@@ -85,9 +85,9 @@ AFRAME.registerComponent('window-replace', {
               name: 'window_' + m.name,
               lightMap: m.lightmap || null,
               lightMapIntensity: m.lightMapIntensity,
-              shininess: 100,
+              shininess: 90,
               color: '#ffffff',
-              emissive: '#333333',
+              emissive: '#999999',
               emissiveMap: m.map,
               transparent: true,
               depthWrite: false,
@@ -96,13 +96,13 @@ AFRAME.registerComponent('window-replace', {
               side: THREE.DoubleSide,
               get envMap() {return sceneEl.object3D.environment},
               combine: THREE.MixOperation,
-              reflectivity: 0,
+              reflectivity: 1,
               blending: THREE.CustomBlending,
               blendEquation: THREE.MaxEquation,
               toneMapped: m.toneMapped
             });
           ;
-          
+          window.mat = o.material;
           this.materials.set(m, o.material);
         }
       }
