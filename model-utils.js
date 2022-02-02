@@ -22,7 +22,7 @@ AFRAME.registerComponent('lightmap', {
     const filters = this.data.filter.trim().split(',');
     this.el.object3D.traverse(function (o) {
       if (o.material) {
-        if (filters.find(filter => o.material.name.includes(filter))) {
+        if (filters.some(filter => o.material.name.includes(filter))) {
           const sceneEl = this.el.sceneEl;
           const m = o.material;
           o.material = this.materials.has(m) ? this.materials.get(m) : new THREE.MeshPhongMaterial({
@@ -80,13 +80,34 @@ AFRAME.registerComponent('hideparts', {
 });
 
 AFRAME.registerSystem('exposure', {
+  schema: {
+    default: 0.5
+  },
   init () {
     const renderer = this.el.renderer;
     renderer.physicallyCorrectLights = true;
     renderer.logarithmicDepthBuffer = true;
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.5;
-    renderer.shadowMap.enabled = true;
+    renderer.toneMappingExposure = this.data;
   }
 })
+
+AFRAME.registerComponent('no-tonemapping', {
+  schema: {
+    default: ''
+  },
+  init() {
+    this.el.addEventListener('object3dset', this.update.bind(this));
+  },
+  update() {
+    const filters = this.data.trim().split(',');
+    this.el.object3D.traverse(function (o) {
+      if (o.material) {
+        if (filters.some(filter => o.material.name.includes(filter))) {
+          o.material.toneMapped = false;
+        }
+      }
+    }.bind(this));
+  }
+});

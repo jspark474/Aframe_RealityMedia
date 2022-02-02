@@ -63,25 +63,6 @@ window.addEventListener("DOMContentLoaded", function() {
   });
 });
 
-AFRAME.registerComponent('no-tonemapping', {
-  schema: {
-    default: ''
-  },
-  init() {
-    this.el.addEventListener('object3dset', this.update.bind(this));
-  },
-  update() {
-    const filters = this.data.trim().split(',');
-    this.el.object3D.traverse(function (o) {
-      if (o.material) {
-        if (filters.find(filter => o.material.name.includes(filter))) {
-          o.material.toneMapped = false;
-        }
-      }
-    }.bind(this));
-  }
-});
-
 AFRAME.registerComponent('window-replace', {
   schema: {
     default: ''
@@ -94,7 +75,7 @@ AFRAME.registerComponent('window-replace', {
     const filters = this.data.trim().split(',');
     this.el.object3D.traverse(function (o) {
       if (o.material) {
-        if (filters.find(filter => o.material.name.includes(filter))) {
+        if (filters.some(filter => o.material.name.includes(filter))) {
           o.renderOrder = 1;
           const m = o.material;
           const sceneEl = this.el.sceneEl;
@@ -102,7 +83,7 @@ AFRAME.registerComponent('window-replace', {
             this.materials.get(m) :
             new THREE.MeshPhongMaterial({
               name: 'window_' + m.name,
-              lightMap: m.lightmap,
+              lightMap: m.lightmap || null,
               lightMapIntensity: m.lightMapIntensity,
               shininess: 100,
               color: '#ffffff',
