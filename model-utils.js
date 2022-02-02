@@ -20,9 +20,42 @@ AFRAME.registerComponent('lightmap', {
     this.el.addEventListener('object3dset', this.update.bind(this));
 	  this.texture = new THREE.TextureLoader().load( typeof this.data.src === 'string' ? this.data.src : this.data.src.src );
     this.texture.flipY = false;
+    this.materials = new Map();
   },
   update() {
     const filter = this.data.filter.trim();
+    this.el.object3D.traverse(function (o) {
+      if (o.material) {
+        // o.material.lightMap = this.texture;
+        // o.material.lightMapIntensity = this.data.intensity;
+        if (o.name.includes(filter)) {
+          const hasMat
+          
+          
+          const m = o.material;
+          o.material = new THREE.MeshPhongMaterial({
+            lightMap: this.texture,
+            lightMapIntensity: this.data.intensity,
+            color: this.data.color,
+            map: m.map,
+            transparent: m.transparent,
+            side: m.side
+          });
+        }
+      }
+    }.bind(this));
+  }
+});
+
+AFRAME.registerComponent('phong-replace', {
+  schema: {
+    default: ''
+  },
+  init() {
+    this.el.addEventListener('object3dset', this.update.bind(this));
+  },
+  update() {
+    const filter = this.data.trim();
     this.el.object3D.traverse(function (o) {
       if (o.material) {
         // o.material.lightMap = this.texture;
@@ -34,7 +67,8 @@ AFRAME.registerComponent('lightmap', {
             lightMapIntensity: this.data.intensity,
             color: this.data.color,
             map: m.map,
-            transparent: m.transparent
+            transparent: m.transparent,
+            side: m.side
           });
         }
       }
