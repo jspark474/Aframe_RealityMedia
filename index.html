@@ -55,10 +55,19 @@
 	>
     <a-assets>
       <a-asset-item id="building" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1643799974000"></a-asset-item>
+      <a-asset-item id="navmesh" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/navmesh.glb?v=1643813180146"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(1).jpg?v=1643805356500">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
+      <a-mixin ></a-mixin>
     </a-assets>
-		<a-camera position="0 1.68 1"></a-camera>
+
+    <a-entity id="cameraRig">
+      <!-- camera -->
+      <a-entity id="head" camera wasd-controls look-controls position="0 1.65 0"></a-entity>
+      <!-- hand controls -->
+      <a-entity id="left-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-entity>
+      <a-entity id="right-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-entity>
+    </a-entity>
 
 		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
 		<a-entity position="0 -0.2 0" hide-on-enter-ar environment="lighting:none;shadow:true;preset: osiris;"></a-entity>
@@ -72,7 +81,9 @@
       ar-shadow-helper="target:#my-objects;light:#dirlight;"
     ></a-entity>
     
-    <a-gltf-model rotation="0 -45 0" hide-on-enter-ar src="#building" lightmap="src:#bake;intensity: 10; filter:Window,Ceiling,floor;" depthwrite="true" window-replace="Glass" hideparts="navmesh" no-tonemapping="Light"></a-gltf-model>
+    <a-gltf-model rotation="0 -45 0" hide-on-enter-ar src="#building" lightmap="src:#bake;intensity: 10; filter:Window,Ceiling,floor;" depthwrite="true" window-replace="Glass" hideparts="navmesh" no-tonemapping="Light">
+      <a-gltf-model src="#navmesh"></a-gltf-model>
+    </a-gltf-model>
 	</a-scene>
 
 	<div id="dom-overlay">
