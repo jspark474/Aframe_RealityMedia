@@ -63,6 +63,24 @@ window.addEventListener("DOMContentLoaded", function() {
   });
 });
 
+AFRAME.registerComponent('no-tonemapping', {
+  schema: {
+    default: ''
+  },
+  init() {
+    this.el.addEventListener('object3dset', this.update.bind(this));
+  },
+  update() {
+    const filters = this.data.trim().split(',');
+    this.el.object3D.traverse(function (o) {
+      if (o.material) {
+        if (filters.find(filter => o.material.name.includes(filter))) {
+          o.material.toneMapped = false;
+        }
+      }
+    }.bind(this));
+  }
+});
 
 AFRAME.registerComponent('window-replace', {
   schema: {
@@ -77,7 +95,7 @@ AFRAME.registerComponent('window-replace', {
     this.el.object3D.traverse(function (o) {
       if (o.material) {
         if (filters.find(filter => o.material.name.includes(filter))) {
-          o.renderOrder = 100;
+          o.renderOrder = 1;
           const m = o.material;
           const sceneEl = this.el.sceneEl;
           o.material = this.materials.has(m) ?
@@ -91,7 +109,7 @@ AFRAME.registerComponent('window-replace', {
               emissive: '#333333',
               emissiveMap: m.map,
               transparent: true,
-              depthWrite: true,
+              depthWrite: false,
               map: m.map,
               transparent: true,
               side: THREE.DoubleSide,
@@ -99,7 +117,8 @@ AFRAME.registerComponent('window-replace', {
               combine: THREE.MixOperation,
               reflectivity: 0,
               blending: THREE.CustomBlending,
-              blendEquation: THREE.MaxEquation
+              blendEquation: THREE.MaxEquation,
+              toneMapped: m.toneMapped
             });
           ;
           

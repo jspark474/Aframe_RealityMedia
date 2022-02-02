@@ -23,7 +23,7 @@ AFRAME.registerComponent('lightmap', {
     this.el.object3D.traverse(function (o) {
       if (o.material) {
         if (filters.find(filter => o.material.name.includes(filter))) {
-          
+          const sceneEl = this.el.sceneEl;
           const m = o.material;
           o.material = this.materials.has(m) ? this.materials.get(m) : new THREE.MeshPhongMaterial({
             name: 'phong_' + m.name,
@@ -33,7 +33,10 @@ AFRAME.registerComponent('lightmap', {
             map: m.map,
             transparent: m.transparent,
             side: m.side,
-            depthWrite: true,
+            depthWrite: m.depthWrite,
+            reflectivity: m.metalness,
+            toneMapped: m.toneMapped,
+            get envMap() {return sceneEl.object3D.environment}
           });
           
           this.materials.set(m, o.material);
