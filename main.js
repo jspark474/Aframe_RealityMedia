@@ -18,7 +18,7 @@ window.addEventListener("DOMContentLoaded", function() {
   const message = document.getElementById("dom-overlay-message");
   
   sceneEl.addEventListener('object3dset', function () {
-    this.components.reflection.needsVREnvironmentUpdate = true;
+    if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
   });
 
   // If the user taps on any buttons or interactive elements we may add then prevent
@@ -97,7 +97,7 @@ AFRAME.registerComponent('window-replace', {
               depthWrite: false,
               map: m.map,
               transparent: true,
-              side: THREE.DoubleSide,
+              // side: THREE.DoubleSide,
               get envMap() {return sceneEl.object3D.environment},
               combine: THREE.MixOperation,
               reflectivity: 0.6,
