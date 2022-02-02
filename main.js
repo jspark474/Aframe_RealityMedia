@@ -62,3 +62,42 @@ window.addEventListener("DOMContentLoaded", function() {
     message.textContent = "Exited Immersive Mode";
   });
 });
+
+
+AFRAME.registerComponent('window-replace', {
+  schema: {
+    default: ''
+  },
+  init() {
+    this.el.addEventListener('object3dset', this.update.bind(this));
+    this.materials = new Map();
+  },
+  update() {
+    const filter = this.data.trim();
+    this.el.object3D.traverse(function (o) {
+      if (o.material) {
+        console.log(o.material.name);
+        if (o.material.name.includes(filter)) {
+          const m = o.material;
+          o.material = this.materials.has(m) ?
+            this.materials.get(m) :
+            new THREE.MeshPhongMaterial({
+              name
+              lightMap: this.texture,
+              lightMapIntensity: this.data.intensity,
+              color: m.color,
+              map: m.map,
+              transparent: false,
+              side: m.side,
+              combine: THREE.MixOperation,
+              blending: THREE.CustomBlending,
+              blendEquation: THREE.MaxEquation
+            });
+          ;
+          
+          this.materials.set(m, o.material);
+        }
+      }
+    }.bind(this));
+  }
+});

@@ -10,10 +10,6 @@ AFRAME.registerComponent('lightmap', {
     },
     filter: {
       default: ''
-    },
-    color: {
-      type: "color",
-      default: '#888888'
     }
   },
   init() {
@@ -29,47 +25,19 @@ AFRAME.registerComponent('lightmap', {
         // o.material.lightMap = this.texture;
         // o.material.lightMapIntensity = this.data.intensity;
         if (o.name.includes(filter)) {
-          const hasMat
-          
           
           const m = o.material;
-          o.material = new THREE.MeshPhongMaterial({
+          o.material = this.materials.has(m) ? this.materials.get(m) : new THREE.MeshPhongMaterial({
+            name: 'phong_' + m.name,
             lightMap: this.texture,
             lightMapIntensity: this.data.intensity,
-            color: this.data.color,
+            color: m.color,
             map: m.map,
             transparent: m.transparent,
             side: m.side
           });
-        }
-      }
-    }.bind(this));
-  }
-});
-
-AFRAME.registerComponent('phong-replace', {
-  schema: {
-    default: ''
-  },
-  init() {
-    this.el.addEventListener('object3dset', this.update.bind(this));
-  },
-  update() {
-    const filter = this.data.trim();
-    this.el.object3D.traverse(function (o) {
-      if (o.material) {
-        // o.material.lightMap = this.texture;
-        // o.material.lightMapIntensity = this.data.intensity;
-        if (o.name.includes(filter)) {
-          const m = o.material;
-          o.material = new THREE.MeshPhongMaterial({
-            lightMap: this.texture,
-            lightMapIntensity: this.data.intensity,
-            color: this.data.color,
-            map: m.map,
-            transparent: m.transparent,
-            side: m.side
-          });
+          
+          this.materials.set(m, o.material);
         }
       }
     }.bind(this));
