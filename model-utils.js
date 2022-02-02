@@ -1,4 +1,5 @@
 /* global AFRAME, THREE */
+import { KTX2Loader } from "https://cdn.skypack.dev/three@0.136.0/examples/jsm/loaders/KTX2Loader.js";
 
 AFRAME.registerComponent('lightmap', {
   schema: {
@@ -13,6 +14,13 @@ AFRAME.registerComponent('lightmap', {
     }
   },
   init() {
+    
+    const ktx2Loader = new KTX2Loader();
+    ktx2Loader.setTranscoderPath( 'https://cdn.jsdelivr.net/npm/three@0.136.0/examples/js/libs/basis/' );
+    ktx2Loader.detectSupport( this.el.sceneEl.renderer );
+    loader.setDRACOLoader(draco);
+    loader.setKTX2Loader (ktx2Loader);
+
     this.el.addEventListener('object3dset', this.update.bind(this));
 	  this.texture = new THREE.TextureLoader().load( typeof this.data.src === 'string' ? this.data.src : this.data.src.src );
     this.texture.flipY = false;

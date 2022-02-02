@@ -12,7 +12,7 @@
   <!-- this shadow helper ensures that the model has a shadow beneath it -->
   <script src="ar-shadow-helper.js"></script>
   <script src="ar-cursor.js"></script>
-  <script src="model-utils.js"></script>
+  <script src="model-utils.js" type="module"></script>
 	<script src="main.js"></script>
   <style>
 		body {
@@ -55,8 +55,8 @@
 	>
     <a-assets>
       <a-asset-item id="building" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1643799974000"></a-asset-item>
+      <a-asset-item id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/image.basis?v=1643802797157"></a-asset-item>
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
-      <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake.webp?v=1643742292200"/>
     </a-assets>
 		<a-camera position="0 1.68 1"></a-camera>
 
