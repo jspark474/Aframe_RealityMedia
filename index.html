@@ -9,6 +9,8 @@
 	<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
   <!-- include a default environemnt which makes VR  look nice, https://github.com/feiss/aframe-environment-component -->
 	<script src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
+	<script src="https://unpkg.com/browse/aframe-extras@6.1.1/dist/aframe-extras.controls.min.js"></script>
+	<script src="https://unpkg.com/browse/aframe-extras@6.1.1/dist/aframe-extras.pathfinding.min.js"></script>
   <!-- this shadow helper ensures that the model has a shadow beneath it -->
   <script src="ar-shadow-helper.js"></script>
   <script src="ar-cursor.js"></script>
@@ -61,9 +63,9 @@
       <a-mixin ></a-mixin>
     </a-assets>
 
-    <a-entity id="cameraRig">
+    <a-entity id="cameraRig" movement-controls="constrainToNavMesh: true">
       <!-- camera -->
-      <a-entity id="head" camera wasd-controls look-controls position="0 1.65 0"></a-entity>
+      <a-entity id="head" camera look-controls="pointerLockEnabled: false" position="0 1.65 0"></a-entity>
       <!-- hand controls -->
       <a-entity id="left-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-entity>
       <a-entity id="right-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-entity>
@@ -72,7 +74,7 @@
 		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
     <a-entity hide-on-enter-ar environment="lighting:none;shadow:true;preset: osiris;"></a-entity>
 		<a-entity rotation="0 -45 0" position="0 0.2 0" hide-on-enter-ar>
-      <a-gltf-model src="#navmesh" visible="false"></a-gltf-model>
+      <a-gltf-model src="#navmesh" nav-mesh visible="false"></a-gltf-model>
       <a-gltf-model src="#building"
         lightmap="src:#bake;intensity: 10; filter:Window,Ceiling,floor;"
         depthwrite="true"
