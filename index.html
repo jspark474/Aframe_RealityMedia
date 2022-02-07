@@ -63,7 +63,7 @@
 
     <a-entity wasd-controls navmesh-physics="navmesh:#navmesh-el;fall:0.5;" position="-1 0 1" look-controls="pointerLockEnabled: false" id="cameraRig">
       <!-- camera -->
-      <a-entity id="head" camera position="0 1.65 0"></a-entity>
+      <a-entity id="head" camera="near:0.01;" position="0 1.65 0.15"></a-entity>
       <!-- hand controls -->
       <a-entity id="left-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-entity>
       <a-entity id="right-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-entity>

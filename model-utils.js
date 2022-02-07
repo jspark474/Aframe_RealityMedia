@@ -30,11 +30,22 @@ AFRAME.registerComponent('navmesh-physics', {
 
   tick: (function () {
     var nextPosition = new THREE.Vector3();
+    var tempVec = new THREE.Vector3();
+    var scanPattern = [
+      [0,1], // Default the next location
+      [0,1], // A little to the side shorter range
+      [0,1], // A little to the side shorter range
+      [0,1], // A little to the side shorter range
+      [0,1], // A little to the side shorter range
+      [0,1], // Perpendicular very short range
+      [0,1], // Perpendicular very short range
+    ];
     var down = new THREE.Vector3(0,-1,0);
     var raycaster = new THREE.Raycaster();
     var gravity = -1;
     var maxYVelocity = 0.5;
     var yVel = 0;
+    var results = [];
     
     return function (time, delta) {
       var el = this.el;
@@ -47,7 +58,7 @@ AFRAME.registerComponent('navmesh-physics', {
       raycaster.set (nextPosition, down);
       
       raycaster.far = this.data.fall > 0 ? this.data.fall + maxYVelocity : Infinity;
-      var intersects = raycaster.intersectObjects(this.objects);
+      var intersects = raycaster.intersectObjects(this.objects, true, results);
       if (intersects.length) {
         if (el.object3D.position.y - (intersects[0].point.y - yVel*2) > 0.01) {
           yVel += Math.max(gravity * delta * 0.001, -maxYVelocity);
@@ -58,6 +69,7 @@ AFRAME.registerComponent('navmesh-physics', {
           yVel = 0;
         }
         this.lastPosition.copy(this.el.object3D.position);
+        results.splice(0);
       } else {
         this.el.object3D.position.copy(this.lastPosition);
       }
