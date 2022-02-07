@@ -11,7 +11,6 @@ AFRAME.registerComponent('navmesh-controls', {
   init: function () {
     this.el.removeAttribute('wasd-controls');
     this.el.setAttribute('navmesh-physics', `navmesh:${this.data}`);
-    this.el.setAttribute('wasd-controls', "");
   }
 });
 
@@ -20,36 +19,29 @@ AFRAME.registerComponent('navmesh-controls', {
  */
 AFRAME.registerComponent('navmesh-physics', {
   schema: {
-    navmesh: {
-      type: 'selectorAll'
-    }
+    default: '#navmesh'
   },
 
   init: function () {
     this.lastPosition = new THREE.Vector3();
     this.lastPosition.copy(this.el.object3D.position);
-  },
-  
-  update: function () {
-    if (this.data.navmesh === null) {
-      console.warn('navmesh-physics: Did not match any elements');
-      this.objects = [];
-    } else {
-      this.objects = this.data.navmesh.map(el => el.object3D);
-    }
-  },
+    
+    this.el.setAttribute('wasd-controls', "");
+    const oldFn = this.el.components['wasd-controls'].tick;
+    
 
-  tick: (function () {
     var nextPosition = new THREE.Vector3();
     var down = new THREE.Vector3(0,-1,0);
     var raycaster = new THREE.Raycaster();
     var gravity = -1;
     var maxYVelocity = 0.5;
-    var yVel = 0;
+    var yVel = 0;    
     
-    return function (time, delta) {
+    this.el.components['wasd-controls'].tick = function (time, delta) {
+      this.lastPosition.copy(this.el.object3D.position);
+      oldFn.call(this.el.components['wasd-controls']);
       var el = this.el;
-      if (!this.data) return;
+      if (!this.objects.length) return;
 
       // Get movement vector and translate position.
       nextPosition.copy(this.lastPosition);
@@ -66,10 +58,16 @@ AFRAME.registerComponent('navmesh-physics', {
           yVel = 0;
         }
       }
-    }
-  }()),
+    }.bind(this);
+  },
   
-  tock: function () {
-    this.lastPosition.copy(this.el.object3D.position);
+  update: function () {
+    const els = Array.from(document.querySelectorAll(this.data));
+    if (els === null) {
+      console.warn('navmesh-physics: Did not match any elements');
+      this.objects = [];
+    } else {
+      this.objects = els.map(el => el.object3D);
+    }
   }
 });
