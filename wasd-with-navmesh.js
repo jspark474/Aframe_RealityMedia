@@ -62,14 +62,14 @@ AFRAME.registerComponent('wasd-navmesh', {
     var nextPosition = new THREE.Vector3();
     var down = new THREE.Vector3(0,-1,0);
     var raycaster = new THREE.Raycaster();
-    var gravity = -9.8;
+    var gravity = -1;
+    var maxYVelocity = 0.5;
     var yVel = 0;
     
     return function (time, delta) {
       var data = this.data;
       var el = this.el;
       var velocity = this.velocity;
-      var maxYVelocity = 0.3;
 
       if (!velocity[data.adAxis] && !velocity[data.wsAxis] &&
           isEmptyObject(this.keys)) { return; }
@@ -87,7 +87,7 @@ AFRAME.registerComponent('wasd-navmesh', {
       raycaster.set (nextPosition, down);
       var intersects = raycaster.intersectObjects( this.data.navmesh.map(el => el.object3D) );
       if (intersects.length) {
-        if (el.object3D.position.y >= intersects[0].point.y - yVel) {
+        if (el.object3D.position.y > intersects[0].point.y - yVel*2) {
           yVel += Math.max(gravity * delta, -maxYVelocity);
           intersects[0].point.y = el.object3D.position.y + yVel;
           el.object3D.position.copy(intersects[0].point);
