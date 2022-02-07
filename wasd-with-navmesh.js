@@ -1,42 +1,36 @@
 /* global AFRAME, THREE */
-var KEYCODE_TO_CODE = {
-  // Tiny KeyboardEvent.code polyfill.
-  KEYCODE_TO_CODE: {
-    '38': 'ArrowUp',
-    '37': 'ArrowLeft',
-    '40': 'ArrowDown',
-    '39': 'ArrowRight',
-    '87': 'KeyW',
-    '65': 'KeyA',
-    '83': 'KeyS',
-    '68': 'KeyD'
-  }
-};
-var utils = AFRAME.utils;
 
-var bind = utils.bind;
-var shouldCaptureKeyEvent = utils.shouldCaptureKeyEvent;
-
-var CLAMP_VELOCITY = 0.00001;
-var MAX_DELTA = 0.2;
-var KEYS = [
-  'KeyW', 'KeyA', 'KeyS', 'KeyD',
-  'ArrowUp', 'ArrowLeft', 'ArrowRight', 'ArrowDown'
-];
 
 /**
- * WASD component to control entities using WASD keys.
+ * Ensure that the navmesh physics is added before the controls
  */
 AFRAME.registerComponent('navmesh-controls', {
+  schema: {
+    default: ''
+  },
+  init: function () {
+    this.el.removeAttribute('wasm-controls');
+    this.el.setAttribute('wasm-controls');
+    this.el.setAttribute('navmesh-physics', this.data);
+  }
+});
+
+/**
+ * This needs to run after the movement controls
+ */
+AFRAME.registerComponent('navmesh-physics', {
   schema: {
     type: 'selectorAll'
   },
 
   init: function () {
-    
+    this.lastPosition = new THREE.Vector3();
+    this.lastPosition.copy(this.el.object3D.position);
   },
 
   tick: (function () {
+    console.log('tick');
+    
     var nextPosition = new THREE.Vector3();
     var down = new THREE.Vector3(0,-1,0);
     var raycaster = new THREE.Raycaster();
@@ -46,13 +40,13 @@ AFRAME.registerComponent('navmesh-controls', {
     
     return function (time, delta) {
       var el = this.el;
+      if (!this.data) return;
 
       // Get movement vector and translate position.
-      el.object3D.getWorldPosition(nextPosition); 
-      nextPosition.add(this.getMovementVector(delta));
+      nextPosition.copy(this.lastPosition);
       nextPosition.y += maxYVelocity;
       raycaster.set (nextPosition, down);
-      var intersects = raycaster.intersectObjects( this.data.navmesh.map(el => el.object3D) );
+      var intersects = raycaster.intersectObjects( this.data.map(el => el.object3D) );
       if (intersects.length) {
         if (el.object3D.position.y - (intersects[0].point.y - yVel*2) > 0.01) {
           yVel += Math.max(gravity * delta, -maxYVelocity);
@@ -64,5 +58,9 @@ AFRAME.registerComponent('navmesh-controls', {
         }
       }
     }
-  }())
+  }()),
+  
+  tock () {
+    this.lastPosition.copy(this.el.object3D.position);
+  }
 });
