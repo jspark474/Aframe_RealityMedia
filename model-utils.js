@@ -5,7 +5,12 @@
 */
 AFRAME.registerComponent('navmesh-physics', {
   schema: {
-    default: ''
+    navmesh: {
+      default: ''
+    },
+    fall: {
+      default: 0.5
+    }
   },
 
   init: function () {
@@ -14,7 +19,7 @@ AFRAME.registerComponent('navmesh-physics', {
   },
   
   update: function () {
-    const els = Array.from(document.querySelectorAll(this.data));
+    const els = Array.from(document.querySelectorAll(this.data.navmesh));
     if (els === null) {
       console.warn('navmesh-physics: Did not match any elements');
       this.objects = [];
@@ -40,6 +45,8 @@ AFRAME.registerComponent('navmesh-physics', {
       if (nextPosition.distanceTo(this.lastPosition) === 0) return;
       nextPosition.y += maxYVelocity;
       raycaster.set (nextPosition, down);
+      
+      raycaster.far = this.data.fall > 0 ? this.data.fall + maxYVelocity : Infinity;
       var intersects = raycaster.intersectObjects(this.objects);
       if (intersects.length) {
         if (el.object3D.position.y - (intersects[0].point.y - yVel*2) > 0.01) {
