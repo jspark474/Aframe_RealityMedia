@@ -87,7 +87,7 @@ AFRAME.registerComponent('wasd-navmesh', {
       raycaster.set (nextPosition, down);
       var intersects = raycaster.intersectObjects( this.data.navmesh.map(el => el.object3D) );
       if (intersects.length) {
-        if (el.object3D.position.y > intersects[0].point.y - yVel*2) {
+        if (el.object3D.position.y - (intersects[0].point.y - yVel*2) > 0.01) {
           yVel += Math.max(gravity * delta, -maxYVelocity);
           intersects[0].point.y = el.object3D.position.y + yVel;
           el.object3D.position.copy(intersects[0].point);
