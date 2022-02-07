@@ -27,13 +27,14 @@ var KEYS = [
 /**
  * WASD component to control entities using WASD keys.
  */
-AFRAME.registerComponent('wasd-controls', {
+AFRAME.registerComponent('wasd-navmesh', {
   schema: {
     acceleration: {default: 65},
     adAxis: {default: 'x', oneOf: ['x', 'y', 'z']},
     adEnabled: {default: true},
     adInverted: {default: false},
     enabled: {default: true},
+    navmesh: {type: 'selectorAll'},
     fly: {default: false},
     wsAxis: {default: 'z', oneOf: ['x', 'y', 'z']},
     wsEnabled: {default: true},
@@ -59,6 +60,8 @@ AFRAME.registerComponent('wasd-controls', {
 
   tick: (function () {
     var nextPosition = new THREE.Vector3();
+    var down = new THREE.Vector3(0,-1,0);
+    var raycaster = new THREE.Raycaster();
     return function (time, delta) {
       var data = this.data;
       var el = this.el;
@@ -76,8 +79,12 @@ AFRAME.registerComponent('wasd-controls', {
       // Get movement vector and translate position.
       el.object3D.getWorldPosition(nextPosition); 
       nextPosition.add(this.getMovementVector(delta));
-      
-      el.object3D.position.copy(nextPosition);
+      nextPosition.y += 0.3;
+      raycaster.set (nextPosition, down);
+      var intersects = raycaster.intersectObjects( this.data.navmesh.map(el => el.object3D) );
+      if (intersects.length) {
+        el.object3D.position.copy(intersects[0].point);
+      }
     }
   }()),
 
