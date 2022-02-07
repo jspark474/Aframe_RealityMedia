@@ -57,23 +57,29 @@ AFRAME.registerComponent('wasd-controls', {
     this.attachVisibilityEventListeners();
   },
 
-  tick: function (time, delta) {
-    var data = this.data;
-    var el = this.el;
-    var velocity = this.velocity;
+  tick: (function () {
+    var nextPosition = new THREE.Vector3();
+    return function (time, delta) {
+      var data = this.data;
+      var el = this.el;
+      var velocity = this.velocity;
 
-    if (!velocity[data.adAxis] && !velocity[data.wsAxis] &&
-        isEmptyObject(this.keys)) { return; }
+      if (!velocity[data.adAxis] && !velocity[data.wsAxis] &&
+          isEmptyObject(this.keys)) { return; }
 
-    // Update velocity.
-    delta = delta / 1000;
-    this.updateVelocity(delta);
+      // Update velocity.
+      delta = delta / 1000;
+      this.updateVelocity(delta);
 
-    if (!velocity[data.adAxis] && !velocity[data.wsAxis]) { return; }
+      if (!velocity[data.adAxis] && !velocity[data.wsAxis]) { return; }
 
-    // Get movement vector and translate position.
-    el.object3D.position.add(this.getMovementVector(delta));
-  },
+      // Get movement vector and translate position.
+      el.object3D.getWorldPosition(nextPosition); 
+      nextPosition.add(this.getMovementVector(delta));
+      
+      el.object3D.position.copy(nextPosition);
+    }
+  }()),
 
   remove: function () {
     this.removeKeyEventListeners();
