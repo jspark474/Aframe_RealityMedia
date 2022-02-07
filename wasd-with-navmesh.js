@@ -10,8 +10,8 @@ AFRAME.registerComponent('navmesh-controls', {
   },
   init: function () {
     this.el.removeAttribute('wasd-controls');
-    this.el.setAttribute('wasd-controls');
     this.el.setAttribute('navmesh-physics', `navmesh:${this.data}`);
+    this.el.setAttribute('wasd-controls', "");
   }
 });
 
