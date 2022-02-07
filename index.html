@@ -61,7 +61,7 @@
       <a-mixin ></a-mixin>
     </a-assets>
 
-    <a-entity wasd-controls navmesh-physics="navmesh:#navmesh-el;fall:0.5;" position="-1 0 1" look-controls="pointerLockEnabled: false" id="cameraRig">
+    <a-entity wasd-controls="acceleration:20;" navmesh-physics="navmesh:#navmesh-el;fall:0.5;" position="-1 0 1" look-controls="pointerLockEnabled: false" id="cameraRig">
       <!-- camera -->
       <a-entity id="head" camera="near:0.01;" position="0 1.65 0.15"></a-entity>
       <!-- hand controls -->

@@ -19,6 +19,7 @@
       const inputSource = e.inputSource;
       const referenceSpace = this.el.renderer.xr.getReferenceSpace();
       const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
+      if (!pose) return;
       const transform = pose.transform;
       
       direction.set(0, 0, -1);
