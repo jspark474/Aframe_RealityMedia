@@ -27,6 +27,15 @@ AFRAME.registerComponent('navmesh-physics', {
     this.lastPosition = new THREE.Vector3();
     this.lastPosition.copy(this.el.object3D.position);
   },
+  
+  update: function () {
+    if (this.data === null) {
+      console.warn('navmesh-physics: Did not match any elements');
+      this.objects = [];
+    } else {
+      this.objects = this.data.map(el => el.object3D);
+    }
+  },
 
   tick: (function () {
     console.log('tick');
@@ -46,7 +55,7 @@ AFRAME.registerComponent('navmesh-physics', {
       nextPosition.copy(this.lastPosition);
       nextPosition.y += maxYVelocity;
       raycaster.set (nextPosition, down);
-      var intersects = raycaster.intersectObjects( this.data.map(el => el.object3D) );
+      var intersects = raycaster.intersectObjects(this.objects);
       if (intersects.length) {
         if (el.object3D.position.y - (intersects[0].point.y - yVel*2) > 0.01) {
           yVel += Math.max(gravity * delta, -maxYVelocity);
@@ -60,7 +69,7 @@ AFRAME.registerComponent('navmesh-physics', {
     }
   }()),
   
-  tock () {
+  tock: function () {
     this.lastPosition.copy(this.el.object3D.position);
   }
 });
