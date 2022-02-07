@@ -1,4 +1,8 @@
 /* global AFRAME, THREE */
+
+/* Constrain wasd-controls to a navmesh, place this element after wasd-controls like so:
+`wasd-controls navmesh-physics="#navmesh-el"`
+*/
 AFRAME.registerComponent('navmesh-physics', {
   schema: {
     default: ''
