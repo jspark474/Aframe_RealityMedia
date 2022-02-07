@@ -62,7 +62,7 @@
       <a-mixin ></a-mixin>
     </a-assets>
 
-    <a-entity navmesh-physics="[navmesh]" wasm-controls position="0 1 1" look-controls="pointerLockEnabled: false" id="cameraRig">
+    <a-entity wasd-controls navmesh-controls="#navmesh-el" position="0 1 1" look-controls="pointerLockEnabled: false" id="cameraRig">
       <!-- camera -->
       <a-entity id="head" camera position="0 1.65 0"></a-entity>
       <!-- hand controls -->
@@ -73,7 +73,7 @@
 		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
     <a-entity hide-on-enter-ar environment="lighting:none;shadow:true;preset: osiris;"></a-entity>
 		<a-entity rotation="0 -45 0" position="0 0.2 0" hide-on-enter-ar>
-      <a-gltf-model src="#navmesh" navmesh visible="false"></a-gltf-model>
+      <a-gltf-model id="navmesh-el" src="#navmesh" visible="false"></a-gltf-model>
       <a-gltf-model src="#building"
         lightmap="src:#bake;intensity: 10; filter:Window,Ceiling,floor;"
         depthwrite="true"

@@ -9,9 +9,9 @@ AFRAME.registerComponent('navmesh-controls', {
     default: ''
   },
   init: function () {
-    this.el.removeAttribute('wasm-controls');
-    this.el.setAttribute('wasm-controls');
-    this.el.setAttribute('navmesh-physics', this.data);
+    this.el.removeAttribute('wasd-controls');
+    this.el.setAttribute('wasd-controls');
+    this.el.setAttribute('navmesh-physics', `navmesh:${this.data}`);
   }
 });
 
@@ -20,7 +20,9 @@ AFRAME.registerComponent('navmesh-controls', {
  */
 AFRAME.registerComponent('navmesh-physics', {
   schema: {
-    type: 'selectorAll'
+    navmesh: {
+      type: 'selectorAll'
+    }
   },
 
   init: function () {
@@ -29,17 +31,15 @@ AFRAME.registerComponent('navmesh-physics', {
   },
   
   update: function () {
-    if (this.data === null) {
+    if (this.data.navmesh === null) {
       console.warn('navmesh-physics: Did not match any elements');
       this.objects = [];
     } else {
-      this.objects = this.data.map(el => el.object3D);
+      this.objects = this.data.navmesh.map(el => el.object3D);
     }
   },
 
   tick: (function () {
-    console.log('tick');
-    
     var nextPosition = new THREE.Vector3();
     var down = new THREE.Vector3(0,-1,0);
     var raycaster = new THREE.Raycaster();
