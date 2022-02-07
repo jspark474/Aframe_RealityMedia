@@ -10,6 +10,7 @@ AFRAME.registerComponent('navmesh-controls', {
   },
   init: function () {
     this.el.removeAttribute('wasd-controls');
+    this.el.setAttribute('wasd-controls', "");
     this.el.setAttribute('navmesh-physics', `navmesh:${this.data}`);
   }
 });
@@ -19,32 +20,39 @@ AFRAME.registerComponent('navmesh-controls', {
  */
 AFRAME.registerComponent('navmesh-physics', {
   schema: {
-    default: '#navmesh'
+    default: ''
   },
 
   init: function () {
     this.lastPosition = new THREE.Vector3();
     this.lastPosition.copy(this.el.object3D.position);
-    
-    this.el.setAttribute('wasd-controls', "");
-    const oldFn = this.el.components['wasd-controls'].tick;
-    
+  },
+  
+  update: function () {
+    const els = Array.from(document.querySelectorAll(this.data));
+    if (els === null) {
+      console.warn('navmesh-physics: Did not match any elements');
+      this.objects = [];
+    } else {
+      this.objects = els.map(el => el.object3D);
+    }
+  },
 
+  tick: (function () {
     var nextPosition = new THREE.Vector3();
     var down = new THREE.Vector3(0,-1,0);
     var raycaster = new THREE.Raycaster();
     var gravity = -1;
     var maxYVelocity = 0.5;
-    var yVel = 0;    
+    var yVel = 0;
     
-    this.el.components['wasd-controls'].tick = function (time, delta) {
-      this.lastPosition.copy(this.el.object3D.position);
-      oldFn.call(this.el.components['wasd-controls']);
+    return function (time, delta) {
       var el = this.el;
-      if (!this.objects.length) return;
+      if (this.objects.length === 0) return;
 
       // Get movement vector and translate position.
-      nextPosition.copy(this.lastPosition);
+      nextPosition.copy(this.el.object3D.position);
+      if (nextPosition.distanceTo(this.lastPosition) === 0) return;
       nextPosition.y += maxYVelocity;
       raycaster.set (nextPosition, down);
       var intersects = raycaster.intersectObjects(this.objects);
@@ -58,16 +66,10 @@ AFRAME.registerComponent('navmesh-physics', {
           yVel = 0;
         }
       }
-    }.bind(this);
-  },
-  
-  update: function () {
-    const els = Array.from(document.querySelectorAll(this.data));
-    if (els === null) {
-      console.warn('navmesh-physics: Did not match any elements');
-      this.objects = [];
-    } else {
-      this.objects = els.map(el => el.object3D);
+      this.lastPosition.copy(this.el.object3D.position);
     }
+  }()),
+  
+  tock: function () {
   }
 });
