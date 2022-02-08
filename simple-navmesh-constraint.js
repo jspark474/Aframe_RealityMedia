@@ -10,6 +10,9 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     },
     fall: {
       default: 0.5
+    },
+    height: {
+      default: 0
     }
   },
 
@@ -64,16 +67,19 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         tempVec.multiplyScalar(distance);
         tempVec.add(this.lastPosition);
         tempVec.y += maxYVelocity;
+        tempVec.y -= this.data.height;
         raycaster.set(tempVec, down);
         raycaster.far = this.data.fall > 0 ? this.data.fall + maxYVelocity : Infinity;
         var intersects = raycaster.intersectObjects(this.objects, true, results);
         if (intersects.length) {
-          if (el.object3D.position.y - (intersects[0].point.y - yVel*2) > 0.01) {
+          const hitPos = intersects[0].point;
+          hitPos.y += this.data.height;
+          if (el.object3D.position.y - (hitPos.y - yVel*2) > 0.01) {
             yVel += Math.max(gravity * delta * 0.001, -maxYVelocity);
-            intersects[0].point.y = el.object3D.position.y + yVel;
-            el.object3D.position.copy(intersects[0].point);
+            hitPos.y = el.object3D.position.y + yVel;
+            el.object3D.position.copy(hitPos);
           } else {
-            el.object3D.position.copy(intersects[0].point);
+            el.object3D.position.copy(hitPos);
             yVel = 0;
           }
           this.lastPosition.copy(this.el.object3D.position);
