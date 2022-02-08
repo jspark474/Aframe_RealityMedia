@@ -50,6 +50,17 @@ This file provides utilities for modifying 3D models and how they are displayed.
 
 * `exposure="0.5"`, add this to `<a-scene>` to change the exposure of the scene to make it brighter or darker
 * `no-tonemapping`, this opts an object out of tone mapping which is useful for using flat materials to look like light sources
-* `lightmap="src:#bake;intensity: 10; filter:Window,Ceiling,floor;"`, this lets you use a lightmap on a gltf model, provide the lightmap and 
-* `depthwrite`
-* `hideparts`
+* `lightmap="src:#bake;intensity: 10; filter:Window,Ceiling,floor;"`, this lets you use a lightmap on a gltf model, to use it provide the lightmap and optionally constrain the lightmap to certain elements
+* `depthwrite`, this lets you overwrite a materials depthwrite property useful in case of weird depth issues on materials with transparency
+* `hideparts`, this lets you make certain elements of a gltf object invisible, the better thing to do is to edit the object to remove those parts 
+
+### simple-navmesh-constraint.js
+
+This provides `simple-navmesh-constraint` which allows you to constrain an object to another object,
+if you set the `fall` property the object won't fall unless the floor underneath it is within that distance.
+
+You should place this com
+
+```
+<a-entity wasd-controls="acceleration:20;" simple-navmesh-constraint="navmesh:#navmesh-el;fall:0.5;" look-controls>
+```
