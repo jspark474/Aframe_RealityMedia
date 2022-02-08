@@ -54,7 +54,6 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
       const el = this.el;
       if (this.objects.length === 0) return;
 
-      // Get movement vector and translate position.
       this.el.object3D.getWorldPosition(nextPosition);
       if (nextPosition.distanceTo(this.lastPosition) === 0) return;
       
@@ -75,22 +74,25 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
           const hitPos = results[0].point;
           hitPos.y += this.data.height;
           this.el.object3D.parent.worldToLocal(hitPos);
-          if (el.object3D.position.y - (hitPos.y - yVel*2) > 0.01) {
+          if (nextPosition.y - (hitPos.y - yVel*2) > 0.01) {
             yVel += Math.max(gravity * delta * 0.001, -maxYVelocity);
-            hitPos.y = el.object3D.position.y + yVel;
-            el.object3D.position.copy(hitPos);
+            hitPos.y = nextPosition.y + yVel;
           } else {
-            el.object3D.position.copy(hitPos);
             yVel = 0;
           }
-          this.el.object3D.getWorldPosition(this.l);
+          el.object3D.position.copy(hitPos);
+          this.el.object3D.parent.worldToLocal(this.el.object3D.position);
+          this.lastPosition.copy(hitPos);
           results.splice(0);
           didHit = true;
           break;
         }
       }
       
-      if (!didHit) this.el.object3D.position.copy(this.lastPosition);
+      if (!didHit) {
+        this.el.object3D.position.copy(this.lastPosition);
+        this.el.object3D.parent.worldToLocal(this.el.object3D.position);
+      }
     }
   }())
 });
