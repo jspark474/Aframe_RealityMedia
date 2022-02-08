@@ -73,7 +73,6 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         if (results.length) {
           const hitPos = results[0].point;
           hitPos.y += this.data.height;
-          this.el.object3D.parent.worldToLocal(hitPos);
           if (nextPosition.y - (hitPos.y - yVel*2) > 0.01) {
             yVel += Math.max(gravity * delta * 0.001, -maxYVelocity);
             hitPos.y = nextPosition.y + yVel;
