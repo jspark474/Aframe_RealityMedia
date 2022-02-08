@@ -32,9 +32,9 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
   },
 
   tick: (function () {
-    var nextPosition = new THREE.Vector3();
-    var tempVec = new THREE.Vector3();
-    var scanPattern = [
+    const nextPosition = new THREE.Vector3();
+    const tempVec = new THREE.Vector3();
+    const scanPattern = [
       [0,1], // Default the next location
       [30,0.4], // A little to the side shorter range
       [-30,0.4], // A little to the side shorter range
@@ -43,22 +43,22 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
       [80,0.06], // Perpendicular very short range
       [-80,0.06], // Perpendicular very short range
     ];
-    var down = new THREE.Vector3(0,-1,0);
-    var raycaster = new THREE.Raycaster();
-    var gravity = -1;
-    var maxYVelocity = 0.5;
-    var yVel = 0;
-    var results = [];
+    const down = new THREE.Vector3(0,-1,0);
+    const raycaster = new THREE.Raycaster();
+    const gravity = -1;
+    const maxYVelocity = 0.5;
+    const results = [];
+    let yVel = 0;
     
     return function (time, delta) {
-      var el = this.el;
+      const el = this.el;
       if (this.objects.length === 0) return;
 
       // Get movement vector and translate position.
       this.el.object3D.getWorldPosition(nextPosition);
       if (nextPosition.distanceTo(this.lastPosition) === 0) return;
       
-      var didHit = false;
+      let didHit = false;
       
       // So that it does not get stuck it takes as few samples around the user and finds the most appropriate
       for (const [angle, distance] of scanPattern) {
@@ -70,9 +70,9 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         tempVec.y -= this.data.height;
         raycaster.set(tempVec, down);
         raycaster.far = this.data.fall > 0 ? this.data.fall + maxYVelocity : Infinity;
-        var intersects = raycaster.intersectObjects(this.objects, true, results);
-        if (intersects.length) {
-          const hitPos = intersects[0].point;
+        raycaster.intersectObjects(this.objects, true, results);
+        if (results.length) {
+          const hitPos = results[0].point;
           hitPos.y += this.data.height;
           this.el.object3D.parent.worldToLocal(hitPos);
           if (el.object3D.position.y - (hitPos.y - yVel*2) > 0.01) {
@@ -83,7 +83,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
             el.object3D.position.copy(hitPos);
             yVel = 0;
           }
-          this.lastPosition.copy(this.el.object3D.position);
+          this.el.object3D.getWorldPosition(this.l);
           results.splice(0);
           didHit = true;
           break;
