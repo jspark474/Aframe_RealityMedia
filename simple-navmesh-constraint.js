@@ -18,7 +18,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
 
   init: function () {
     this.lastPosition = new THREE.Vector3();
-    this.lastPosition.copy(this.el.object3D.position);
+    this.el.object3D.getWorldPosition(this.lastPosition);
   },
   
   update: function () {
@@ -55,7 +55,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
       if (this.objects.length === 0) return;
 
       // Get movement vector and translate position.
-      nextPosition.copy(this.el.object3D.position);
+      this.el.object3D.getWorldPosition(nextPosition);
       if (nextPosition.distanceTo(this.lastPosition) === 0) return;
       
       var didHit = false;
@@ -74,6 +74,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         if (intersects.length) {
           const hitPos = intersects[0].point;
           hitPos.y += this.data.height;
+          this.el.object3D.parent.worldToLocal(hitPos);
           if (el.object3D.position.y - (hitPos.y - yVel*2) > 0.01) {
             yVel += Math.max(gravity * delta * 0.001, -maxYVelocity);
             hitPos.y = el.object3D.position.y + yVel;
