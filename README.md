@@ -59,8 +59,9 @@ This file provides utilities for modifying 3D models and how they are displayed.
 This provides `simple-navmesh-constraint` which allows you to constrain an object to another object,
 if you set the `fall` property the object won't fall unless the floor underneath it is within that distance.
 
-You should place this com
+This component works by comparing the objects position between frames. Ideally this would run after any movement happen but before it is rendered.
+To enable this you should place this component after any components which move the object such as `wasd-controls`.
 
-```
+```html
 <a-entity wasd-controls="acceleration:20;" simple-navmesh-constraint="navmesh:#navmesh-el;fall:0.5;" look-controls>
 ```
