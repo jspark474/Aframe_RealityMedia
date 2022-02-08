@@ -46,4 +46,10 @@ so that the camera covers the minimal area required to fully light an object.
 
 ### model-utils.js
 
-This file provides utilities for modifying 
+This file provides utilities for modifying 3D models and how they are displayed.
+
+* `exposure="0.5"`, add this to `<a-scene>` to change the exposure of the scene to make it brighter or darker
+* `no-tonemapping`, this opts an object out of tone mapping which is useful for using flat materials to look like light sources
+* `lightmap="src:#bake;intensity: 10; filter:Window,Ceiling,floor;"`, this lets you use a lightmap on a gltf model, provide the lightmap and 
+* `depthwrite`
+* `hideparts`
