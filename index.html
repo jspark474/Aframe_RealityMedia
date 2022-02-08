@@ -65,8 +65,16 @@
       <!-- camera -->
       <a-entity id="head" camera="near:0.01;" position="0 1.65 0.15"></a-entity>
       <!-- hand controls -->
-      <a-entity id="left-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-entity>
-      <a-entity id="right-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-entity>
+      <a-entity 
+                hand-controls="hand:left"
+                id="left-hand"
+                teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"
+      ></a-entity>
+      <a-entity 
+                hand-controls="hand:right"
+                id="right-hand"
+                teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"
+      ></a-entity>
     </a-entity>
 
 		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
