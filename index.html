@@ -47,10 +47,10 @@
 		webxr="overlayElement:#dom-overlay;"
 		background="color:skyblue;"
 		reflection="directionalLight:#dirlight;"
-		ar-hit-test="target:#my-objects;type:footprint;footprintDepth:0.2;"
+		ar-hit-test="target:#my-ar-objects;type:footprint;footprintDepth:0.2;"
 		shadow="type: pcfsoft"
 		gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
-    ar-cursor raycaster="objects: #my-objects *"
+    ar-cursor raycaster="objects: #my-ar-objects a-sphere"
     exposure="2"
 	>
     <a-assets>
@@ -58,7 +58,6 @@
       <a-asset-item id="navmesh-glb" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/navmesh.glb?v=1644329586500"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
-      <a-mixin ></a-mixin>
     </a-assets>
 
     <a-entity position="-1 0 1" id="cameraRig">
@@ -82,7 +81,19 @@
                 blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"
       ></a-entity>
       
-      <a-entity id="my-ar-objects"></a-entity>
+      <a-entity id="my-ar-objects">
+        <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
+        <a-gltf-model id="piano" position="-6 0 1" rotation="0 100 0" shadow="recieve:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
+      </a-entity>
+      <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
+      <a-entity
+        material="shader:shadow; depthWrite:false; opacity:0.9;"
+        geometry="primitive:shadow-plane;"
+        visible="false"
+        shadow="cast:false;receive:true;"
+        ar-shadow-helper="target:#my-ar-objects;light:#dirlight;"
+        position="0 0.25 0"
+      ></a-entity>
     </a-entity>
 
 
@@ -99,18 +110,6 @@
     </a-entity>
 
 		<a-light id="dirlight" auto-shadow-cam intensity="0.8" light="castShadow:true;type:directional" position="0 3 -6"></a-light>
-    <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
-    <a-entity
-      material="shader:shadow; depthWrite:false; opacity:0.9;"
-      geometry="primitive:shadow-plane;"
-      visible="false"
-      shadow="cast:false;receive:true;"
-      ar-shadow-helper="target:#my-objects;light:#dirlight;"
-      position="0 0.25 0"
-    ></a-entity>
-
-    <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
-    <a-gltf-model id="piano" position="-6 0 1" rotation="0 100 0" shadow="recieve:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
 
 	</a-scene>
 

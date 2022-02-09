@@ -16,8 +16,8 @@ AFRAME.registerComponent("hide-on-hit-test-start", {
 window.addEventListener("DOMContentLoaded", function() {
   const sceneEl = document.querySelector("a-scene");
   const message = document.getElementById("dom-overlay-message");
-  
   const arContainerEl = document.getElementById("my-ar-objects");
+  const piano = document.getElementById("piano");
   
   sceneEl.addEventListener('object3dset', function () {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
@@ -33,6 +33,9 @@ window.addEventListener("DOMContentLoaded", function() {
     if (this.is("ar-mode")) {
       // Entered AR
       message.textContent = "";
+      
+      arContainerEl.appendChild(piano);
+      this.components['ar-hit-test'].bboxNeedsUpdate = true;
 
       // Hit testing is available
       this.addEventListener(
