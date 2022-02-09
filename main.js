@@ -13,11 +13,24 @@ AFRAME.registerComponent("hide-on-hit-test-start", {
   }
 });
 
+AFRAME.registerComponent("origin-on-ar-start", {
+  init: function() {
+    var self = this.el;
+
+    this.el.sceneEl.addEventListener("enter-vr", function() {
+      if (this.is("ar-mode")) {
+        self.setAttribute('position', {x:0,y:0,z:0});
+        self.setAttribute('rotation', {x:0,y:0,z:0});
+      }
+    });
+  }
+});
+
 window.addEventListener("DOMContentLoaded", function() {
   const sceneEl = document.querySelector("a-scene");
   const message = document.getElementById("dom-overlay-message");
   const arContainerEl = document.getElementById("my-ar-objects");
-  const piano = document.getElementById("piano");
+  const cameraRig = document.getElementById("cameraRig");
   
   sceneEl.addEventListener('object3dset', function () {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
@@ -33,9 +46,6 @@ window.addEventListener("DOMContentLoaded", function() {
     if (this.is("ar-mode")) {
       // Entered AR
       message.textContent = "";
-      
-      arContainerEl.appendChild(piano);
-      this.components['ar-hit-test'].bboxNeedsUpdate = true;
 
       // Hit testing is available
       this.addEventListener(

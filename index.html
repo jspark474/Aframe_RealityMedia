@@ -60,7 +60,7 @@
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
     </a-assets>
 
-    <a-entity position="-1 0 1" id="cameraRig">
+    <a-entity position="-1 0 1" origin-on-ar-start id="cameraRig">
       <!-- camera -->
       <a-entity id="head"
         camera="near:0.01;"
@@ -80,21 +80,22 @@
                 id="right-hand"
                 blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"
       ></a-entity>
-      
-      <a-entity id="my-ar-objects">
-        <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
-        <a-gltf-model id="piano" position="-6 0 1" rotation="0 100 0" shadow="recieve:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
-      </a-entity>
-      <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
-      <a-entity
-        material="shader:shadow; depthWrite:false; opacity:0.9;"
-        geometry="primitive:shadow-plane;"
-        visible="false"
-        shadow="cast:false;receive:true;"
-        ar-shadow-helper="target:#my-ar-objects;light:#dirlight;"
-        position="0 0.25 0"
-      ></a-entity>
     </a-entity>
+      
+    <a-entity id="my-ar-objects" position="-6 0 1">
+      <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
+      <a-gltf-model id="piano" rotation="0 100 0" shadow="recieve:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
+    </a-entity>
+
+    <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
+    <a-entity
+      material="shader:shadow; depthWrite:false; opacity:0.9;"
+      geometry="primitive:shadow-plane;"
+      visible="false"
+      shadow="cast:false;receive:true;"
+      ar-shadow-helper="target:#my-ar-objects;light:#dirlight;"
+      position="0 0.25 0"
+    ></a-entity>
 
 
     <a-entity hide-on-enter-ar position="0 -0.2 0" environment="lighting:none;shadow:true;preset: osiris;"></a-entity>
