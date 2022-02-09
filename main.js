@@ -17,6 +17,8 @@ window.addEventListener("DOMContentLoaded", function() {
   const sceneEl = document.querySelector("a-scene");
   const message = document.getElementById("dom-overlay-message");
   
+  const arContainerEl = document.getElementById("my-ar-objects");
+  
   sceneEl.addEventListener('object3dset', function () {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
   });

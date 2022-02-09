@@ -81,6 +81,8 @@
                 id="right-hand"
                 blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"
       ></a-entity>
+      
+      <a-entity id="my-ar-objects"></a-entity>
     </a-entity>
 
 
@@ -106,11 +108,10 @@
       ar-shadow-helper="target:#my-objects;light:#dirlight;"
       position="0 0.25 0"
     ></a-entity>
-    
-    <a-entity id="my-objects">
-      <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
-      <a-gltf-model shadow="recieve:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
-    </a-entity>
+
+    <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
+    <a-gltf-model id="piano" position="-6 0 1" rotation="0 100 0" shadow="recieve:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
+
 	</a-scene>
 
 	<div id="dom-overlay">
