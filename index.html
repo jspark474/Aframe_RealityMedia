@@ -51,7 +51,7 @@
 		shadow="type: pcfsoft"
 		gltf-model="dracoDecoderPath: https://cdn.jsdelivr.net/npm/three@0.129.0/examples/js/libs/draco/gltf/;"
     ar-cursor raycaster="objects: #my-objects *"
-    exposure=""
+    exposure="2"
 	>
     <a-assets>
       <a-asset-item id="building-glb" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1644331843500"></a-asset-item>
@@ -88,7 +88,7 @@
 		<a-entity rotation="0 -45 0" position="0 0.2 0" hide-on-enter-ar>
       <a-gltf-model id="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
       <a-gltf-model src="#building-glb"
-        lightmap="src:#bake;intensity: 10; filter:Window,Ceiling,floor;"
+        lightmap="src:#bake;intensity: 1.5; filter:Window,Ceiling,floor;"
         depthwrite="true"
         window-replace="Glass"
         no-tonemapping="Light"
@@ -96,7 +96,7 @@
       ></a-gltf-model>
     </a-entity>
 
-		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
+		<a-light id="dirlight" auto-shadow-cam intensity="0.8" light="castShadow:true;type:directional" position="0 3 -6"></a-light>
     <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
     <a-entity
       material="shader:flat; color:pink; depthWrite:false; opacity:0.9;"
@@ -108,7 +108,7 @@
     
     <a-entity id="my-objects" position="-3 0 1">
       <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
-      <a-gltf-model position="0 0.5 0" shadow="recieve:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
+      <a-gltf-model position="0 0.2 0" shadow="recieve:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
     </a-entity>
 	</a-scene>
 
