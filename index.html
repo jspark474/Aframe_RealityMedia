@@ -83,7 +83,7 @@
       ></a-entity>
     </a-entity>
 
-		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
+
     <a-entity hide-on-enter-ar environment="lighting:none;shadow:true;preset: osiris;"></a-entity>
 		<a-entity rotation="0 -45 0" position="0 0.2 0" hide-on-enter-ar>
       <a-gltf-model id="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
@@ -92,17 +92,24 @@
         depthwrite="true"
         window-replace="Glass"
         no-tonemapping="Light"
+        shadow="cast:false;receive:true;"
       ></a-gltf-model>
     </a-entity>
 
+		<a-light id="dirlight" auto-shadow-cam intensity="0.4" light="castShadow:true;type:directional" position="10 10 10"></a-light>
     <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
     <a-entity
-      material="shader:shadow; depthWrite:false; opacity:0.9;"
-      visible="false"
+      material="shader:flat; color:pink; depthWrite:false; opacity:0.9;"
       geometry="primitive:shadow-plane;"
       shadow="cast:false;receive:true;"
       ar-shadow-helper="target:#my-objects;light:#dirlight;"
+      position="0 0.25 0"
     ></a-entity>
+    
+    <a-entity id="my-objects" position="-3 0 1">
+      <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
+      <a-gltf-model position="0 0.5 0" shadow="recieve:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
+    </a-entity>
 	</a-scene>
 
 	<div id="dom-overlay">
