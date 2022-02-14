@@ -41,8 +41,8 @@ AFRAME.registerComponent("handy-controls", {
   },
   init() {
     const self = this;
-    const dracoLoader = this.system.getDRACOLoader();
-    const meshoptDecoder = this.system.getMeshoptDecoder();
+    const dracoLoader = this.el.sceneEl.systems['gltf-model'].getDRACOLoader();
+    const meshoptDecoder = this.el.sceneEl.systems['gltf-model'].getMeshoptDecoder();
     this.model = null;
     this.loader = new THREE.GLTFLoader();
     if (dracoLoader) {
@@ -105,17 +105,14 @@ AFRAME.registerComponent("handy-controls", {
 
     this.remove();
     try {
-    } catch (err) {
-      
-          const message =
-            error && error.message
-              ? error.message
-              : "Failed to load glTF model";
-          console.warn(message);
-          el.emit("model-error", { format: "gltf", src: srcLeft });
+      this.bonesRight = await this.gltfToJoints(srcRight);
+      this.bonesLeft = await this.gltfToJoints(srcLeft);
+    } catch (error) {
+      const message =
+        error && error.message ? error.message : "Failed to load glTF model";
+      console.warn(message);
+      el.emit("hand-model-error", { message });
     }
-    this.bonesRight = await this.gltfToJoints(srcRight);
-    this.bonesLeft = await this.gltfToJoints(srcLeft);
   },
   tick() {
     if (!this.session) return;
