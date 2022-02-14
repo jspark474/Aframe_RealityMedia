@@ -15,6 +15,30 @@
   <script src="simple-navmesh-constraint.js"></script>
   <script src="model-utils.js"></script>
 	<script src="main.js"></script>
+  
+  <script>
+    const DEFAULT_HAND_PROFILE_PATH = 'https://cdn.jsdelivr.net/npm/@webxr-input-profiles/assets@1.0/dist/profiles/generic-hand/';
+    
+    AFRAME.registerComponent('handy-controls', {
+      schema: {
+        left: {
+          default: DEFAULT_HAND_PROFILE_PATH + "left.glb"
+        },
+        right: {
+          default: DEFAULT_HAND_PROFILE_PATH + "right.glb"
+        }
+      },
+      init () {
+        
+      },
+      update () {
+        
+      },
+      tick () {
+        
+      }
+    })
+  </script>
 
 	<script type="module">
 		import {
