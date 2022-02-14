@@ -18,6 +18,33 @@
   
   <script>
     const DEFAULT_HAND_PROFILE_PATH = 'https://cdn.jsdelivr.net/npm/@webxr-input-profiles/assets@1.0/dist/profiles/generic-hand/';
+    const joints = [
+      'wrist',
+      'thumb-metacarpal',
+      'thumb-phalanx-proximal',
+      'thumb-phalanx-distal',
+      'thumb-tip',
+      'index-finger-metacarpal',
+      'index-finger-phalanx-proximal',
+      'index-finger-phalanx-intermediate',
+      'index-finger-phalanx-distal',
+      'index-finger-tip',
+      'middle-finger-metacarpal',
+      'middle-finger-phalanx-proximal',
+      'middle-finger-phalanx-intermediate',
+      'middle-finger-phalanx-distal',
+      'middle-finger-tip',
+      'ring-finger-metacarpal',
+      'ring-finger-phalanx-proximal',
+      'ring-finger-phalanx-intermediate',
+      'ring-finger-phalanx-distal',
+      'ring-finger-tip',
+      'pinky-finger-metacarpal',
+      'pinky-finger-phalanx-proximal',
+      'pinky-finger-phalanx-intermediate',
+      'pinky-finger-phalanx-distal',
+      'pinky-finger-tip',
+    ];
     
     AFRAME.registerComponent('handy-controls', {
       schema: {
@@ -57,10 +84,23 @@
           
           
           self.loader.load(srcRight, function gltfLoaded (gltfModel) {
-            self.modelRight = gltfModel.scene || gltfModel.scenes[0];
-            self.modelRight.animations = gltfModel.animations;
-            el.setObject3D('mesh-right', self.modelRight);
-            el.emit('model-loaded', {format: 'gltf', model: self.modelRight});
+            const object = gltf.scene.children[0];
+            const mesh = object.getObjectByProperty( 'type', 'SkinnedMesh' );
+            mesh.frustumCulled = false;
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            joints.forEach( jointName => {
+              const bone = object.getObjectByName( jointName );
+              if ( bone !== undefined ) {
+                bone.jointName = jointName;
+              } else {
+                console.warn( `Couldn't find ${jointName} in ${handedness} hand mesh` );
+              }
+              this.bones.push( bone );
+            });
+
+            el.setObject3D('mesh-right', mesh);
+            el.emit('model-loaded', {format: 'gltf', model: mesh});
           }, undefined /* onProgress */, function gltfFailed (error) {
             const message = (error && error.message) ? error.message : 'Failed to load glTF model';
             warn(message);
@@ -95,11 +135,15 @@
 
           const model = (this.handedness === 'right' && this.modelRight) || (this.handedness === 'left' && this.modelLeft);
           if (!model) continue;
-          if (window.handyWorkUpdate)  {
-            window.handyWorkUpdate([controller], referenceSpace, frame, this.handyWorkCallback.bind(this));
-          }
+          
+          // Update the model animations to the pose from the API
+          
         }
-        if (toUpdate.length && )
+        
+        // perform hand tracking
+        if (toUpdate.length && window.handyWorkUpdate) {
+          window.handyWorkUpdate([controller], referenceSpace, frame, this.handyWorkCallback.bind(this));
+        }
       }
     })
   </script>
