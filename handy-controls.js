@@ -59,105 +59,79 @@ AFRAME.registerComponent("handy-controls", {
     const sceneEl = this.el.sceneEl;
     sceneEl.addEventListener(
       "enter-vr",
-      () => (this.session = sceneEl.renderer.xr.getSession())
+      () => {
+        this.session = sceneEl.renderer.xr.getSession();
+        this.referenceSpace = sceneEl.renderer.xr.getReferenceSpace();
+      }
     );
     sceneEl.addEventListener("exit-vr", () => (this.session = null));
   },
-  update() {
+
+  async gltfToJoints(src) {
+    const el = this.el;
+    await this.ready;
+    const gltf = await new Promise(function (resolve, reject) {
+      this.loader.load(src, resolve, undefined, reject);
+    }.bind(this));
+
+    const object = gltf.scene.children[0];
+    const mesh = object.getObjectByProperty("type", "SkinnedMesh");
+    mesh.frustumCulled = false;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    const bones = [];
+    for (const jointName of joints) {
+      const bone = object.getObjectByName(jointName);
+      if (bone !== undefined) {
+        bone.jointName = jointName;
+        bones.push(bone);
+      } else {
+        console.warn(
+          `Couldn't find ${jointName} in ${src} hand mesh`
+        );
+        bones.push(undefined); // add an empty slot
+      }
+    }
+    el.setObject3D("mesh-right", mesh);
+    el.emit("model-loaded", { format: "gltf", model: mesh });
+    return bones;
+  },
+
+  async update() {
     const self = this;
     const el = this.el;
     const srcLeft = this.data.left;
     const srcRight = this.data.right;
 
     this.remove();
-
-    this.ready.then(function () {
-      self.loader.load(
-        srcRight,
-        function gltfLoaded(gltf) {
-          const object = gltf.scene.children[0];
-          const mesh = object.getObjectByProperty("type", "SkinnedMesh");
-          mesh.frustumCulled = false;
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
-          self.bonesRight = [];
-          for (const jointName of joints) {
-            const bone = object.getObjectByName(jointName);
-            if (bone !== undefined) {
-              bone.jointName = jointName;
-              self.bonesRight.push(bone);
-            } else {
-              console.warn(
-                `Couldn't find ${jointName} in ${handedness} hand mesh`
-              );
-              self.bonesRight.push(undefined); // add an empty slot
-            }
-          }
-          el.setObject3D("mesh-right", mesh);
-          el.emit("model-loaded", { format: "gltf", model: mesh });
-        },
-        undefined /* onProgress */,
-        function gltfFailed(error) {
+    try {
+    } catch (err) {
+      
           const message =
             error && error.message
               ? error.message
               : "Failed to load glTF model";
-          console warn(message);
-          el.emit("model-error", { format: "gltf", src: srcRight });
-        }
-      );
-
-      self.loader.load(
-        srcLeft,
-        function gltfLoaded(gltf) {
-          const object = gltf.scene.children[0];
-          const mesh = object.getObjectByProperty("type", "SkinnedMesh");
-          mesh.frustumCulled = false;
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
-          self.bonesLeft = [];
-          for (const jointName of joints) {
-            const bone = object.getObjectByName(jointName);
-            if (bone !== undefined) {
-              bone.jointName = jointName;
-              self.bonesLeft.push(bone);
-            } else {
-              console.warn(
-                `Couldn't find ${jointName} in ${handedness} hand mesh`
-              );
-              self.bonesLeft.push(undefined); // add an empty slot
-            }
-          }
-          el.setObject3D("mesh-left", mesh);
-          el.emit("model-loaded", { format: "gltf", model: mesh });
-        },
-        undefined /* onProgress */,
-        function gltfFailed(error) {
-          const message =
-            error && error.message
-              ? error.message
-              : "Failed to load glTF model";
-          warn(message);
+          console.warn(message);
           el.emit("model-error", { format: "gltf", src: srcLeft });
-        }
-      );
-    });
+    }
+    this.bonesRight = await this.gltfToJoints(srcRight);
+    this.bonesLeft = await this.gltfToJoints(srcLeft);
   },
   tick() {
     if (!this.session) return;
-
+    
     const toUpdate = [];
     const frame = this.el.sceneEl.frame;
-    for (const source of session.inputSources) {
-      if (!source.hand) continue;
-      toUpdate.push(source);
+    for (const inputSource of this.session.inputSources) {
+      if (!inputSource.hand) continue;
+      toUpdate.push(inputSource);
 
       const bones =
         (this.handedness === "right" && this.bonesRight) ||
         (this.handedness === "left" && this.bonesLeft);
       if (!bones) continue;
-      for (const jointName of joints) {
-        const joint = inputSource.hand.get(jointName);
+      for (const bone of bones) {
+        const joint = inputSource.hand.get(bone.jointName);
         if (joint) {
           const pose = frame.getJointPose(joint, this.referenceSpace);
           bone.position.copy(pose.position);
@@ -169,7 +143,7 @@ AFRAME.registerComponent("handy-controls", {
     // perform hand tracking
     if (toUpdate.length && window.handyWorkUpdate) {
       window.handyWorkUpdate(
-        [controller],
+        toUpdate,
         this.referenceSpace,
         frame,
         this.handyWorkCallback.bind(this)
