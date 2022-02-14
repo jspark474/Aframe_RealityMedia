@@ -89,16 +89,17 @@
             mesh.frustumCulled = false;
             mesh.castShadow = true;
             mesh.receiveShadow = true;
-            joints.forEach( jointName => {
+            self.bonesRight = [];
+            for (const jointName of joints) {
               const bone = object.getObjectByName( jointName );
               if ( bone !== undefined ) {
                 bone.jointName = jointName;
+                self.bonesRight.push( bone );
               } else {
                 console.warn( `Couldn't find ${jointName} in ${handedness} hand mesh` );
+                self.bonesRight.push( undefined ); // add an empty slot
               }
-              this.bones.push( bone );
-            });
-
+            }
             el.setObject3D('mesh-right', mesh);
             el.emit('model-loaded', {format: 'gltf', model: mesh});
           }, undefined /* onProgress */, function gltfFailed (error) {
@@ -108,10 +109,24 @@
           });
           
           self.loader.load(srcLeft, function gltfLoaded (gltfModel) {
-            self.modelLeft = gltfModel.scene || gltfModel.scenes[0];
-            self.modelLeft.animations = gltfModel.animations;
-            el.setObject3D('mesh-right', self.modelLeft);
-            el.emit('model-loaded', {format: 'gltf', model: self.modelLeft});
+            const object = gltf.scene.children[0];
+            const mesh = object.getObjectByProperty( 'type', 'SkinnedMesh' );
+            mesh.frustumCulled = false;
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            self.bonesLeft = [];
+            for (const jointName of joints) {
+              const bone = object.getObjectByName( jointName );
+              if ( bone !== undefined ) {
+                bone.jointName = jointName;
+                self.bonesLeft.push( bone );
+              } else {
+                console.warn( `Couldn't find ${jointName} in ${handedness} hand mesh` );
+                self.bonesLeft.push( undefined ); // add an empty slot
+              }
+            }
+            el.setObject3D('mesh-right', mesh);
+            el.emit('model-loaded', {format: 'gltf', model: mesh});
           }, undefined /* onProgress */, function gltfFailed (error) {
             const message = (error && error.message) ? error.message : 'Failed to load glTF model';
             warn(message);
@@ -133,10 +148,12 @@
           if (!source.hand) continue;
           toUpdate.push(source);
 
-          const model = (this.handedness === 'right' && this.modelRight) || (this.handedness === 'left' && this.modelLeft);
-          if (!model) continue;
-          
-          // Update the model animations to the pose from the API
+          const bones = (this.handedness === 'right' && this.bonesRight) || (this.handedness === 'left' && this.bonesLeft);
+          if (!bones) continue;
+          for (const joint of source.hand) {
+            frame.getJointPose(joint, referenceSpace);
+            
+          }
           
         }
         
