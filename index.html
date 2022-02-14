@@ -9,12 +9,33 @@
   <!-- the AFrame library -->
 	<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls/dist/aframe-blink-controls.min.js"></script>
-	<script src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
   <script src="ar-shadow-helper.js"></script>
   <script src="ar-cursor.js"></script>
   <script src="simple-navmesh-constraint.js"></script>
   <script src="model-utils.js"></script>
 	<script src="main.js"></script>
+
+	<script type="module">
+		import {
+			update as handyWorkUpdate,
+			loadPose,
+			dumpHands
+		} from "https://cdn.jsdelivr.net/gh/AdaRoseCannon/handy-work@main/build/handy-work.js";
+				
+		window.handyWorkUpdate = handyWorkUpdate;
+
+		loadPose('relax', 'https://cdn.jsdelivr.net/gh/AdaRoseCannon/handy-work@main/poses/relax.handpose');
+		loadPose('fist', 'https://cdn.jsdelivr.net/gh/AdaRoseCannon/handy-work@main/poses/fist.handpose');
+		loadPose('flat', 'https://cdn.jsdelivr.net/gh/AdaRoseCannon/handy-work@main/poses/flat.handpose');
+		loadPose('point', 'https://cdn.jsdelivr.net/gh/AdaRoseCannon/handy-work@main/poses/point.handpose');
+		loadPose('horns', 'https://cdn.jsdelivr.net/gh/AdaRoseCannon/handy-work@main/poses/horns.handpose');
+		loadPose('shaka', 'https://cdn.jsdelivr.net/gh/AdaRoseCannon/handy-work@main/poses/shaka.handpose');
+		loadPose('vulcan', 'https://cdn.jsdelivr.net/gh/AdaRoseCannon/handy-work@main/poses/vulcan.handpose');
+
+		//setTimeout(dumpHands, 10000);
+	</script>
+  
   <style>
 		body {
 			font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
