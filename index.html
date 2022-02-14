@@ -29,13 +29,62 @@
         }
       },
       init () {
-        
+        const self = this;
+        const dracoLoader = this.system.getDRACOLoader();
+        const meshoptDecoder = this.system.getMeshoptDecoder();
+        this.model = null;
+        this.loader = new THREE.GLTFLoader();
+        if (dracoLoader) {
+          this.loader.setDRACOLoader(dracoLoader);
+        }
+        if (meshoptDecoder) {
+          this.ready = meshoptDecoder.then(function (meshoptDecoder) {
+            self.loader.setMeshoptDecoder(meshoptDecoder);
+          });
+        } else {
+          this.ready = Promise.resolve();
+        }
       },
       update () {
-        
+        const self = this;
+        const el = this.el;
+        const srcLeft = this.data.left;
+        const srcRight = this.data.right;
+
+        this.remove();
+
+        this.ready.then(function () {
+          
+          
+          self.loader.load(srcRight, function gltfLoaded (gltfModel) {
+            self.modelRight = gltfModel.scene || gltfModel.scenes[0];
+            self.modelRight.animations = gltfModel.animations;
+            el.setObject3D('mesh-right', self.modelRight);
+            el.emit('model-loaded', {format: 'gltf', model: self.modelRight});
+          }, undefined /* onProgress */, function gltfFailed (error) {
+            const message = (error && error.message) ? error.message : 'Failed to load glTF model';
+            warn(message);
+            el.emit('model-error', {format: 'gltf', src: srcRight});
+          });
+          
+          self.loader.load(srcLeft, function gltfLoaded (gltfModel) {
+            self.modelLeft = gltfModel.scene || gltfModel.scenes[0];
+            self.modelLeft.animations = gltfModel.animations;
+            el.setObject3D('mesh-right', self.modelLeft);
+            el.emit('model-loaded', {format: 'gltf', model: self.modelLeft});
+          }, undefined /* onProgress */, function gltfFailed (error) {
+            const message = (error && error.message) ? error.message : 'Failed to load glTF model';
+            warn(message);
+            el.emit('model-error', {format: 'gltf', src: srcLeft});
+          });
+
+        });
       },
       tick () {
-        
+        for (const model of [this.modelLeft, this.modelRight]) {
+          if (!model) continue;
+          
+        }
       }
     })
   </script>
