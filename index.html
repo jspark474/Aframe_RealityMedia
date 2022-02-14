@@ -79,11 +79,56 @@
           });
 
         });
+        
+        const sceneEl = this.el.sceneEl;
+        sceneEl.addEventListener("enter-vr", () => this.session = renderer.xr.getSession() );
+        sceneEl.addEventListener("exit-vr", () => this.session = null );
       },
       tick () {
-        for (const model of [this.modelLeft, this.modelRight]) {
-          if (!model) continue;
+        if (!this.session) return;
+
+        const frame = this.el.sceneEl.frame;
+        for (const index of [0,1]) {
+ for (const source of session.inputSources) {
+    if (!source.gamepad) continue;
+    const controller = renderer.xr.getController(i++);
+    const old = prevGamePads.get(source);
+    const data = {
+      buttons: source.gamepad.buttons.map(b => b.value),
+      axes: source.gamepad.axes.slice(0)
+    };
+    if (old) {
+      data.buttons.forEach((value,i)=>{
+        if (value !== old.buttons[i]) {
+          if (value === 1) {
+            dispatchEvent(`button${i}Down`, {value, source, controller,data});
+          } else {
+            dispatchEvent(`button${i}Up`, {value, source, controller,data});
+          }
+        }
+      });
+      data.axes.forEach((value,i)=>{
+        if (value !== old.axes[i]) {
+          dispatchEvent(`axes${i}Move`, {value, source, controller,data});
+          if (old.axes[i] === 0) {
+            dispatchEvent(`axes${i}MoveStart`, {value, source, controller,data});
+          }
+          if (Math.abs(old.axes[i]) < 0.5 && Math.abs(value) > 0.5) {
+            dispatchEvent(`axes${i}MoveMiddle`, {value, source, controller,data});
+          }
+          if (value === 0) {
+            dispatchEvent(`axes${i}MoveEnd`, {value, source, controller,data});
+          }
+        }
+      });
+    }
+    prevGamePads.set(source, data);
+  }
           
+          if (!model) continue;
+          if (window.handyWorkUpdate)  {
+            window.handyWorkUpdate([controller], referenceSpace, frame, this.handyWorkCallback.bind(this));
+          }
         }
       }
     })
