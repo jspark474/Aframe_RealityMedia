@@ -40,6 +40,8 @@ AFRAME.registerComponent("handy-controls", {
     },
   },
   init() {
+    this.handyWorkCallback = this.handyWorkCallback.bind(this);
+    
     const self = this;
     const dracoLoader = this.el.sceneEl.systems['gltf-model'].getDRACOLoader();
     const meshoptDecoder = this.el.sceneEl.systems['gltf-model'].getMeshoptDecoder();
@@ -143,10 +145,16 @@ AFRAME.registerComponent("handy-controls", {
         toUpdate,
         this.referenceSpace,
         frame,
-        this.handyWorkCallback.bind(this)
+        this.handyWorkCallback
       );
     }
   },
+  handyWorkCallback: function ({
+		distances
+	}) {
+		this.el.emit('pose_' + distances[0][0]);
+		this.el.emit('pose', distances[0][0]);
+	},
   remove() {
     if (this.bonesLeft) {
       this.bonesLeft = null;
