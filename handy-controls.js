@@ -42,6 +42,13 @@ AFRAME.registerComponent("handy-controls", {
   init() {
     this.handyWorkCallback = this.handyWorkCallback.bind(this);
     
+    const webxrData = this.el.sceneEl.getAttribute('webxr');
+    const optionalFeaturesArray = webxrData.optionalFeatures;
+    if (!optionalFeaturesArray.includes('hand-tracking')) {
+      optionalFeaturesArray.push('hand-tracking');
+      this.el.setAttribute('webxr', webxrData);
+    }
+    
     const self = this;
     const dracoLoader = this.el.sceneEl.systems['gltf-model'].getDRACOLoader();
     const meshoptDecoder = this.el.sceneEl.systems['gltf-model'].getMeshoptDecoder();
