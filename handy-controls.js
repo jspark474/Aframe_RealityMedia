@@ -78,12 +78,16 @@ AFRAME.registerComponent("handy-controls", {
     mesh.frustumCulled = false;
     mesh.castShadow = true;
     mesh.receiveShadow = true;
+    mesh.skeleton.pose();
+    
     const bones = [];
     for (const jointName of joints) {
       const bone = object.getObjectByName(jointName);
       if (bone !== undefined) {
         bone.jointName = jointName;
         bones.push(bone);
+        bone.applyMatrix4(this.el.object3D.matrixWorld);
+        bone.updateMatrixWorld();
       } else {
         console.warn(`Couldn't find ${jointName} in ${src} hand mesh`);
         bones.push(undefined); // add an empty slot
@@ -131,8 +135,13 @@ AFRAME.registerComponent("handy-controls", {
         if (joint) {
           const pose = frame.getJointPose(joint, referenceSpace);
           if (pose) {
+            if (bone.jointName) {
+              console.log(inputSource.handedness + ': ' + pose.transform.position);
+            }
             bone.position.copy(pose.transform.position);
             bone.quaternion.copy(pose.transform.orientation);
+            bone.applyMatrix4(this.el.object3D.matrixWorld);
+            bone.updateMatrixWorld();
           }
         }
       }
