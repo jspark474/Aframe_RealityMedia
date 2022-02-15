@@ -123,15 +123,17 @@ AFRAME.registerComponent("handy-controls", {
       toUpdate.push(inputSource);
 
       const bones =
-        (this.handedness === "right" && this.bonesRight) ||
-        (this.handedness === "left" && this.bonesLeft);
+        (inputSource.handedness === "right" && this.bonesRight) ||
+        (inputSource.handedness === "left" && this.bonesLeft);
       if (!bones) continue;
       for (const bone of bones) {
         const joint = inputSource.hand.get(bone.jointName);
         if (joint) {
           const pose = frame.getJointPose(joint, referenceSpace);
-          bone.position.copy(pose.position);
-          bone.quaternion.copy(pose.quaternion);
+          if (pose) {
+            bone.position.copy(pose.transform.position);
+            bone.quaternion.copy(pose.transform.orientation);
+          }
         }
       }
     }
