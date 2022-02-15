@@ -64,16 +64,6 @@ AFRAME.registerComponent("handy-controls", {
     } else {
       this.ready = Promise.resolve();
     }
-
-    const sceneEl = this.el.sceneEl;
-    sceneEl.addEventListener(
-      "enter-vr",
-      () => {
-        this.session = sceneEl.renderer.xr.getSession();
-        this.referenceSpace = sceneEl.renderer.xr.getReferenceSpace();
-      }
-    );
-    sceneEl.addEventListener("exit-vr", () => (this.session = null));
   },
 
   async gltfToJoints(src) {
@@ -95,9 +85,7 @@ AFRAME.registerComponent("handy-controls", {
         bone.jointName = jointName;
         bones.push(bone);
       } else {
-        console.warn(
-          `Couldn't find ${jointName} in ${src} hand mesh`
-        );
+        console.warn(`Couldn't find ${jointName} in ${src} hand mesh`);
         bones.push(undefined); // add an empty slot
       }
     }
@@ -117,18 +105,20 @@ AFRAME.registerComponent("handy-controls", {
       this.bonesRight = await this.gltfToJoints(srcRight);
       this.bonesLeft = await this.gltfToJoints(srcLeft);
     } catch (error) {
-      const message =
-        error && error.message ? error.message : "Failed to load glTF model";
+      const message = error && error.message ? error.message : "Failed to load glTF model";
       console.warn(message);
       el.emit("hand-model-error", { message });
     }
   },
   tick() {
-    if (!this.session) return;
+    
+    const session = this.el.sceneEl.xrSession;
+    if (!session) return;
+    const referenceSpace = this.el.sceneEl.renderer.xr.getReferenceSpace();
     
     const toUpdate = [];
     const frame = this.el.sceneEl.frame;
-    for (const inputSource of this.session.inputSources) {
+    for (const inputSource of session.inputSources) {
       if (!inputSource.hand) continue;
       toUpdate.push(inputSource);
 
@@ -139,7 +129,7 @@ AFRAME.registerComponent("handy-controls", {
       for (const bone of bones) {
         const joint = inputSource.hand.get(bone.jointName);
         if (joint) {
-          const pose = frame.getJointPose(joint, this.referenceSpace);
+          const pose = frame.getJointPose(joint, referenceSpace);
           bone.position.copy(pose.position);
           bone.quaternion.copy(pose.quaternion);
         }
@@ -150,7 +140,7 @@ AFRAME.registerComponent("handy-controls", {
     if (toUpdate.length && window.handyWorkUpdate) {
       window.handyWorkUpdate(
         toUpdate,
-        this.referenceSpace,
+        referenceSpace,
         frame,
         this.handyWorkCallback
       );
