@@ -46,7 +46,7 @@ AFRAME.registerComponent("handy-controls", {
     const optionalFeaturesArray = webxrData.optionalFeatures;
     if (!optionalFeaturesArray.includes('hand-tracking')) {
       optionalFeaturesArray.push('hand-tracking');
-      this.el.setAttribute('webxr', webxrData);
+      this.el.sceneEl.setAttribute('webxr', webxrData);
     }
     
     const self = this;
@@ -66,7 +66,7 @@ AFRAME.registerComponent("handy-controls", {
     }
   },
 
-  async gltfToJoints(src) {
+  async gltfToJoints(src, name) {
     const el = this.el;
     await this.ready;
     const gltf = await new Promise(function (resolve, reject) {
@@ -89,7 +89,7 @@ AFRAME.registerComponent("handy-controls", {
         bones.push(undefined); // add an empty slot
       }
     }
-    el.setObject3D("mesh-right", mesh);
+    el.setObject3D(name, mesh);
     el.emit("model-loaded", { format: "gltf", model: mesh });
     return bones;
   },
@@ -102,8 +102,8 @@ AFRAME.registerComponent("handy-controls", {
 
     this.remove();
     try {
-      this.bonesRight = await this.gltfToJoints(srcRight);
-      this.bonesLeft = await this.gltfToJoints(srcLeft);
+      this.bonesRight = await this.gltfToJoints(srcRight, "mesh-right");
+      this.bonesLeft = await this.gltfToJoints(srcLeft, "mesh-left");
     } catch (error) {
       const message = error && error.message ? error.message : "Failed to load glTF model";
       console.warn(message);
