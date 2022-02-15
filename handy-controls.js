@@ -148,7 +148,13 @@ AFRAME.registerComponent("handy-controls", {
     }
   },
   remove() {
-    this.el.removeObject3D("mesh-left");
-    this.el.removeObject3D("mesh-right");
+    if (this.bonesLeft) {
+      this.bonesLeft = null;
+      this.el.removeObject3D("mesh-left");
+    }
+    if (this.bonesRight) {
+      this.bonesRight = null;
+      this.el.removeObject3D("mesh-right")
+    };
   },
 });
