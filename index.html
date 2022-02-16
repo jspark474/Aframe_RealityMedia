@@ -81,6 +81,7 @@
       <a-asset-item id="navmesh-glb" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/navmesh.glb?v=1644329586500"></a-asset-item>
       <a-asset-item id="right-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-right-hand-webxr/model.gltf"></a-asset-item>
       <a-asset-item id="left-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-left-hand-webxr/model.gltf"></a-asset-item>
+      <a-asset-item id="watch" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watch.glb?v=1645016979219"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <!-- "Samsung Galaxy Watch (Laid Flat)" (https://skfb.ly/6Vvoy) by Kylie Stockberger is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
@@ -106,7 +107,9 @@
                 id="right-hand"
                 blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"
       ></a-entity>
-      <a-entity handy-controls="right:#right-gltf;materialOverride:right;" material="color:gold;metalness:1;roughness:0;"></a-entity>
+      <a-entity handy-controls="right:#right-gltf;materialOverride:right;" material="color:gold;metalness:1;roughness:0;">
+        <a-gltf-model src="#watch" data-left="wrist"></a-gltf-model>
+      </a-entity>
     </a-entity>
       
     <a-entity id="my-ar-objects" position="-6 0 1">

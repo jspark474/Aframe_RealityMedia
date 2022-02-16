@@ -130,7 +130,6 @@ AFRAME.registerComponent("handy-controls", {
     }
   },
   tick() {
-    
     const session = this.el.sceneEl.xrSession;
     if (!session) return;
     const referenceSpace = this.el.sceneEl.renderer.xr.getReferenceSpace();
@@ -141,7 +140,11 @@ AFRAME.registerComponent("handy-controls", {
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
       if (!currentMesh) return;
+      
+      const els = Array.from(this.el.querySelectorAll(`[data-${inputSource.handedness}]`)); 
+
       if (!inputSource.hand) {
+        
         currentMesh.visible = false;
         continue;
       }
