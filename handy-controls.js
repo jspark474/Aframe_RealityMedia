@@ -40,6 +40,10 @@ AFRAME.registerComponent("handy-controls", {
       type: 'model',
       default: DEFAULT_HAND_PROFILE_PATH + "right.glb",
     },
+    materialOverride: {
+      oneOf: ['both', 'left', 'right', 'none'],
+      default: 'both'
+    }
   },
   init() {
     this.handyWorkCallback = this.handyWorkCallback.bind(this);
@@ -71,12 +75,20 @@ AFRAME.registerComponent("handy-controls", {
   async gltfToJoints(src, name) {
     const el = this.el;
     await this.ready;
+
     const gltf = await new Promise(function (resolve, reject) {
       this.loader.load(src, resolve, undefined, reject);
     }.bind(this));
 
     const object = gltf.scene.children[0];
     const mesh = object.getObjectByProperty("type", "SkinnedMesh");
+    
+    if (this.el.components.material) {
+      if (this.data.materialOverride === 'both' || this.data.materialOverride === name) {
+        mesh.material = this.el.components.material.material;
+      }
+    }
+    
     mesh.frustumCulled = false;
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -95,7 +107,7 @@ AFRAME.registerComponent("handy-controls", {
         bones.push(undefined); // add an empty slot
       }
     }
-    el.setObject3D(name, mesh);
+    el.setObject3D('hand-mesh-' + name, mesh);
     el.emit("model-loaded", { format: "gltf", model: mesh });
     return bones;
   },
@@ -108,8 +120,8 @@ AFRAME.registerComponent("handy-controls", {
 
     this.remove();
     try {
-      this.bonesRight = await this.gltfToJoints(srcRight, "mesh-right");
-      this.bonesLeft = await this.gltfToJoints(srcLeft, "mesh-left");
+      this.bonesRight = await this.gltfToJoints(srcRight, "right");
+      this.bonesLeft = await this.gltfToJoints(srcLeft, "left");
     } catch (error) {
       const message = error && error.message ? error.message : "Failed to load glTF model";
       console.warn(message);
@@ -144,6 +156,9 @@ AFRAME.registerComponent("handy-controls", {
             bone.quaternion.copy(pose.transform.orientation);
             bone.applyMatrix4(this.el.object3D.matrixWorld);
             bone.updateMatrixWorld();
+          } else {
+            this.el.removeObject3D("mesh-");
+            break;
           }
         }
       }
