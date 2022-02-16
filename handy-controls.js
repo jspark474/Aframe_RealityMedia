@@ -89,6 +89,7 @@ AFRAME.registerComponent("handy-controls", {
       }
     }
     
+    mesh.visible = false;
     mesh.frustumCulled = false;
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -137,7 +138,13 @@ AFRAME.registerComponent("handy-controls", {
     const toUpdate = [];
     const frame = this.el.sceneEl.frame;
     for (const inputSource of session.inputSources) {
-      if (!inputSource.hand) continue;
+      
+      const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
+      if (!currentMesh) return;
+      if (!inputSource.hand) {
+        currentMesh.visible = false;
+        continue;
+      }
       toUpdate.push(inputSource);
 
       const bones =
@@ -149,6 +156,7 @@ AFRAME.registerComponent("handy-controls", {
         if (joint) {
           const pose = frame.getJointPose(joint, referenceSpace);
           if (pose) {
+            currentMesh.visible = true;
             if (bone.jointName) {
               console.log(inputSource.handedness + ': ' + pose.transform.position);
             }
@@ -156,9 +164,6 @@ AFRAME.registerComponent("handy-controls", {
             bone.quaternion.copy(pose.transform.orientation);
             bone.applyMatrix4(this.el.object3D.matrixWorld);
             bone.updateMatrixWorld();
-          } else {
-            this.el.removeObject3D("mesh-");
-            break;
           }
         }
       }
@@ -183,11 +188,11 @@ AFRAME.registerComponent("handy-controls", {
   remove() {
     if (this.bonesLeft) {
       this.bonesLeft = null;
-      this.el.removeObject3D("mesh-left");
+      this.el.removeObject3D("hand-mesh-left");
     }
     if (this.bonesRight) {
       this.bonesRight = null;
-      this.el.removeObject3D("mesh-right")
+      this.el.removeObject3D("hand-mesh-right")
     };
   },
 });
