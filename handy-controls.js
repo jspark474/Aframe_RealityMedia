@@ -144,7 +144,9 @@ AFRAME.registerComponent("handy-controls", {
       const els = Array.from(this.el.querySelectorAll(`[data-${inputSource.handedness}]`)); 
 
       if (!inputSource.hand) {
-        
+        for (const el of els) {
+          el.object3D.visible = false;
+        }
         currentMesh.visible = false;
         continue;
       }
@@ -162,6 +164,13 @@ AFRAME.registerComponent("handy-controls", {
             currentMesh.visible = true;
             if (bone.jointName) {
               console.log(inputSource.handedness + ': ' + pose.transform.position);
+            }
+            for (const el of els) {
+              if (el.dataset[inputSource.handedness] === bone.jointName) {
+                el.object3D.position.copy(pose.transform.position);
+                el.object3D.quaternion.copy(pose.transform.orientation);
+                el.object3D.visible = true;
+              }
             }
             bone.position.copy(pose.transform.position);
             bone.quaternion.copy(pose.transform.orientation);
