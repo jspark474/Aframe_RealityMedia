@@ -33,9 +33,11 @@ const joints = [
 AFRAME.registerComponent("handy-controls", {
   schema: {
     left: {
+      type: 'model',
       default: DEFAULT_HAND_PROFILE_PATH + "left.glb",
     },
     right: {
+      type: 'model',
       default: DEFAULT_HAND_PROFILE_PATH + "right.glb",
     },
   },
