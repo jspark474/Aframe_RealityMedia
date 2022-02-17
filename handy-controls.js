@@ -203,8 +203,8 @@ AFRAME.registerComponent("handy-controls", {
     
     const els = Array.from(this.el.querySelectorAll(`[data-${handedness}]`));
     for (const el of els) {
-      el.emit('pose_' + distances[0][0]);
-      el.emit('pose_' + distances[0][0]);
+      el.emit('pose_' + distances[0][0], undefined, false);
+      el.emit('pose', distances[0][0], false);
     }
     
 	},
