@@ -196,9 +196,16 @@ AFRAME.registerComponent("handy-controls", {
 	}) {
 		this.el.emit('pose_' + handedness + '_' + distances[0][0]);
 		this.el.emit('pose', {
-      distances[0][0]
-  });
+      pose: distances[0][0],
+      poses: distances,
+      handedness
+    });
     
+    const els = Array.from(this.el.querySelectorAll(`[data-${handedness}]`));
+    for (const el of els) {
+      el.emit('pose_' + distances[0][0]);
+      el.emit('pose_' + distances[0][0]);
+    }
     
 	},
   remove() {
