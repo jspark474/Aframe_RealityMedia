@@ -32,6 +32,13 @@ window.addEventListener("DOMContentLoaded", function() {
   const arContainerEl = document.getElementById("my-ar-objects");
   const cameraRig = document.getElementById("cameraRig");
   
+  const labels = Array.from(document.querySelectorAll('.pose-label'));
+  for (const el of labels) {
+    el.parentNode.addEventListener('pose', function (event) {
+      el.setAttribute('text', 'value', event.detail);
+    });
+  }
+  
   sceneEl.addEventListener('object3dset', function () {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
   });
