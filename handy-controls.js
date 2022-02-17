@@ -192,10 +192,14 @@ AFRAME.registerComponent("handy-controls", {
     }
   },
   handyWorkCallback: function ({
-		distances
+		distances, handedness
 	}) {
-		this.el.emit('pose_' + distances[0][0]);
-		this.el.emit('pose', distances[0][0]);
+		this.el.emit('pose_' + handedness + '_' + distances[0][0]);
+		this.el.emit('pose', {
+      distances[0][0]
+  });
+    
+    
 	},
   remove() {
     if (this.bonesLeft) {
