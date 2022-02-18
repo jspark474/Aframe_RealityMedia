@@ -26,6 +26,20 @@ AFRAME.registerComponent("origin-on-ar-start", {
   }
 });
 
+AFRAME.registerComponent("exit-on", {
+  schema: {
+    default: 'click'
+  },
+  update(oldEvent) {
+    const newEvent = this.data;
+    this.el.removeEventListener(oldEvent, this.exitVR);
+    this.el.addEventListener(newEvent, this.exitVR);
+  },
+  exitVR() {
+    this.sceneEl.exitVR();
+  }
+});
+
 window.addEventListener("DOMContentLoaded", function() {
   const sceneEl = document.querySelector("a-scene");
   const message = document.getElementById("dom-overlay-message");

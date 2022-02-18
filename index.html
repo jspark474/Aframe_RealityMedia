@@ -82,7 +82,7 @@
       <a-asset-item id="navmesh-glb" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/navmesh.glb?v=1644329586500"></a-asset-item>
       <a-asset-item id="right-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-right-hand-webxr/model.gltf"></a-asset-item>
       <a-asset-item id="left-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-left-hand-webxr/model.gltf"></a-asset-item>
-      <a-asset-item id="watch" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watch.glb?v=1645016979219"></a-asset-item>
+      <a-asset-item id="watch-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watch.glb?v=1645016979219"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-mixin>
@@ -104,7 +104,7 @@
       
       <!-- Hand tracking -->
       <a-entity handy-controls="right:#right-gltf;materialOverride:right;" material="color:gold;metalness:1;roughness:0;">
-        <a-gltf-model src="#watch" data-left="wrist" aabb-collider="collideNonVisible:true;objects:[data-right$=-tip];">
+        <a-gltf-model id="watch" src="#watch-gltf" data-left="wrist" aabb-collider="collideNonVisible:true;objects:[data-right$=-tip];" exit-on="hitend">
           <a-entity position="0 0 -0.22" class="pose-label" text="value: Hello World; align: center;"></a-entity>
         </a-gltf-model>
         <a-entity data-right="wrist">
