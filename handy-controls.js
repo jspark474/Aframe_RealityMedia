@@ -209,6 +209,8 @@ AFRAME.registerComponent("handy-controls", {
   emit(name, handedness, details) {
     if (name === this[handedness + '_currentPose']) return;
     
+    console.log(`Old pose was ${this[handedness + '_currentPose']} current pose is $[name], so resetting events`);
+    
     const els = Array.from(this.el.querySelectorAll(`[data-${handedness}]`));
     
     clearTimeout(this[handedness + '_vshortTimeout']);
