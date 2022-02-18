@@ -220,25 +220,25 @@ AFRAME.registerComponent("handy-controls", {
     this[handedness + '_currentPose'] = name;
 
     this[handedness + '_vshortTimeout'] = setTimeout(() => {
-      this.el.emit(name, details);
+      this.el.emit('pose_' + name, details);
       this.el.emit('pose', details);
 
       for (const el of els) {
-        el.emit(name, details, false);
+        el.emit('pose_' + name, details, false);
         el.emit('pose', details, false);
       }
     }, this.data.fuseVShort);
     
     this[handedness + '_shortTimeout'] = setTimeout(() => {
       // console.log('Emiting ', name + '_fuseShort');
-      this.el.emit(name + '_fuseShort', details);
-      for (const el of els) el.emit(name + '_fuseShort', details, false);
+      this.el.emit('pose_' + name + '_fuseShort', details);
+      for (const el of els) el.emit('pose_' + name + '_fuseShort', details, false);
     }, this.data.fuseShort);
     
     this[handedness + '_longTimeout'] = setTimeout(() => {
       // console.log('Emiting ', name + '_fuseLong');
-      this.el.emit(name + '_fuseLong', details);    
-      for (const el of els) el.emit(name + '_fuseLong', details, false);
+      this.el.emit('pose_' + name + '_fuseLong', details);    
+      for (const el of els) el.emit('pose_' + name + '_fuseLong', details, false);
     }, this.data.fuseLong);
   },
   remove() {
