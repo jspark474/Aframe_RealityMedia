@@ -217,18 +217,40 @@ AFRAME.registerComponent("handy-controls", {
     }
     
 	},
-  
-  emit(name, details) {
-    if (name === this.currentPose) return;
+  emit(name, handedness, details) {
+    if (name === this[handedness + '_currentPose']) return;
     
-    clearTimeout(this.vshortTimeout);
-    clearTimeout(this.shortTimeout);
-    clearTimeout(this.longTimeout);
+    const els = Array.from(this.el.querySelectorAll(`[data-${handedness}]`));
     
-    this.currentPose = name;
-    this.vshortTimeout = setTimeout(, this.data.fuseVShort);
-    this.shortTimeout = setTimeout(, this.data.fuseShort);
-    this.longTimeout = setTimeout(, this.data.fuseLong);
+    clearTimeout(this[handedness + '_vshortTimeout']);
+    clearTimeout(this[handedness + '_shortTimeout']);
+    clearTimeout(this[handedness + '_longTimeout']);
+    
+    this[handedness + '_currentPose'] = name;
+    this[handedness + '_vshortTimeout'] = setTimeout(() => {
+      this.el.emit(name, details);    
+
+      for (const el of els) {
+        el.emit(name, undefined, false);
+        el.emit('pose', details, false);
+      }
+    }, this.data.fuseVShort);
+    this[handedness + '_shortTimeout'] = setTimeout(() => {
+      this.el.emit(name + '_fuseShort', details);    
+
+      for (const el of els) {
+        el.emit(name, undefined, false);
+        el.emit('pose', details, false);
+      }
+    }, this.data.fuseShort);
+    this[handedness + '_longTimeout'] = setTimeout(() => {
+      this.el.emit(name + '_fuseLong', details);    
+
+      for (const el of els) {
+        el.emit(name + '_fuseLong', undefined, false);
+        el.emit('pose', details, false);
+      }
+    }, this.data.fuseLong);
   },
   remove() {
     if (this.bonesLeft) {
