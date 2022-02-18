@@ -200,7 +200,7 @@ AFRAME.registerComponent("handy-controls", {
   handyWorkCallback: function ({
 		distances, handedness
 	}) {
-		this.emit('pose', handedness, {
+		this.emit(distances[0][0], handedness, {
       pose: distances[0][0],
       poses: distances,
       handedness
@@ -209,7 +209,7 @@ AFRAME.registerComponent("handy-controls", {
   emit(name, handedness, details) {
     if (name === this[handedness + '_currentPose']) return;
     
-    console.log(`Old pose was ${this[handedness + '_currentPose']} current pose is $[name], so resetting events`);
+    // console.log(`Old pose was ${this[handedness + '_currentPose']} current pose is ${name}, so resetting events`);
     
     const els = Array.from(this.el.querySelectorAll(`[data-${handedness}]`));
     
@@ -224,27 +224,21 @@ AFRAME.registerComponent("handy-controls", {
       this.el.emit('pose', details);
 
       for (const el of els) {
-        el.emit(name, undefined, false);
+        el.emit(name, details, false);
         el.emit('pose', details, false);
       }
     }, this.data.fuseVShort);
     
-
     this[handedness + '_shortTimeout'] = setTimeout(() => {
+      // console.log('Emiting ', name + '_fuseShort');
       this.el.emit(name + '_fuseShort', details);
-
-      for (const el of els) {
-        el.emit(name + '_fuseShort', undefined, false);
-      }
+      for (const el of els) el.emit(name + '_fuseShort', details, false);
     }, this.data.fuseShort);
     
-  
     this[handedness + '_longTimeout'] = setTimeout(() => {
+      // console.log('Emiting ', name + '_fuseLong');
       this.el.emit(name + '_fuseLong', details);    
-
-      for (const el of els) {
-        el.emit(name + '_fuseLong', undefined, false);
-      }
+      for (const el of els) el.emit(name + '_fuseLong', details, false);
     }, this.data.fuseLong);
   },
   remove() {
