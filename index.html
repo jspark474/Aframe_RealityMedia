@@ -104,7 +104,8 @@
       
       <!-- Hand tracking -->
       <a-entity handy-controls="right:#right-gltf;materialOverride:right;" material="color:gold;metalness:1;roughness:0;">
-        <a-gltf-model id="watch" src="#watch-gltf" data-left="wrist" aabb-collider="collideNonVisible:true;objects:[data-right$=-tip];" exit-on="hitend">
+        <a-gltf-model id="watch" src="#watch-gltf" data-left="wrist" position="-1000 0 0">
+          <a-sphere radius="0.02" position="0 0.02 0" aabb-collider="debug:true;collideNonVisible:true;objects:[data-right$=-tip];" exit-on="hitstart" visible="false"></a-sphere>
           <a-entity position="0 0 -0.22" class="pose-label" text="value: Hello World; align: center;"></a-entity>
         </a-gltf-model>
         <a-entity data-right="wrist">
@@ -118,17 +119,16 @@
         <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
     
         <!-- Invisible objects at the tips of each finger for physics or intersections -->
-        <a-sphere data-right="index-finger-tip" radius="0.01" visible="false"></a-sphere>
-        <a-sphere data-right="middle-finger-tip" radius="0.01" visible="false"></a-sphere>
-        <a-sphere data-right="ring-finger-tip" radius="0.01" visible="false"></a-sphere>
-        <a-sphere data-right="pinky-finger-tip" radius="0.01" visible="false"></a-sphere>
-        <a-sphere data-right="thumb-tip" radius="0.01" visible="false"></a-sphere>
-        
-        <a-sphere data-left="index-finger-tip" radius="0.01" visible="false"></a-sphere>
-        <a-sphere data-left="middle-finger-tip" radius="0.01" visible="false"></a-sphere>
-        <a-sphere data-left="ring-finger-tip" radius="0.01" visible="false"></a-sphere>
-        <a-sphere data-left="pinky-finger-tip" radius="0.01" visible="false"></a-sphere>
-        <a-sphere data-left="thumb-tip" radius="0.01" visible="false"></a-sphere>
+        <a-sphere data-right="index-finger-tip" data-aabb-collider-dynamic radius="0.01" visible="false"></a-sphere>
+        <a-sphere data-right="middle-finger-tip" data-aabb-collider-dynamic radius="0.01" visible="false"></a-sphere>
+        <a-sphere data-right="ring-finger-tip" data-aabb-collider-dynamic radius="0.01" visible="false"></a-sphere>
+        <a-sphere data-right="pinky-finger-tip" data-aabb-collider-dynamic radius="0.01" visible="false"></a-sphere>
+        <a-sphere data-right="thumb-tip" data-aabb-collider-dynamic radius="0.01" visible="false"></a-sphere>
+        <a-sphere data-left="index-finger-tip" data-aabb-collider-dynamic radius="0.01" visible="false"></a-sphere>
+        <a-sphere data-left="middle-finger-tip" data-aabb-collider-dynamic radius="0.01" visible="false"></a-sphere>
+        <a-sphere data-left="ring-finger-tip" data-aabb-collider-dynamic radius="0.01" visible="false"></a-sphere>
+        <a-sphere data-left="pinky-finger-tip" data-aabb-collider-dynamic radius="0.01" visible="false"></a-sphere>
+        <a-sphere data-left="thumb-tip" data-aabb-collider-dynamic radius="0.01" visible="false"></a-sphere>
       </a-entity>
     </a-entity>
       
