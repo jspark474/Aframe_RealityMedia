@@ -175,7 +175,7 @@ AFRAME.registerComponent("handy-controls", {
               if (el.dataset[inputSource.handedness] === bone.jointName) {
                 el.object3D.position.copy(pose.transform.position);
                 el.object3D.quaternion.copy(pose.transform.orientation);
-                el.object3D.visible = el.getAttribute('visible');
+                el.object3D.visible = el.getDOMAttribute('visible') !== 'false');
               }
             }
             bone.position.copy(pose.transform.position);
