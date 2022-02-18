@@ -203,19 +203,11 @@ AFRAME.registerComponent("handy-controls", {
   handyWorkCallback: function ({
 		distances, handedness
 	}) {
-		this.el.emit('pose_' + handedness + '_' + distances[0][0]);
-		this.el.emit('pose', {
+		this.emit('pose', handedness, {
       pose: distances[0][0],
       poses: distances,
       handedness
     });
-    
-    const els = Array.from(this.el.querySelectorAll(`[data-${handedness}]`));
-    for (const el of els) {
-      el.emit('pose_' + distances[0][0], undefined, false);
-      el.emit('pose', distances[0][0], false);
-    }
-    
 	},
   emit(name, handedness, details) {
     if (name === this[handedness + '_currentPose']) return;
@@ -227,28 +219,32 @@ AFRAME.registerComponent("handy-controls", {
     clearTimeout(this[handedness + '_longTimeout']);
     
     this[handedness + '_currentPose'] = name;
+
     this[handedness + '_vshortTimeout'] = setTimeout(() => {
-      this.el.emit(name, details);    
+      this.el.emit(name, details);
+      this.el.emit('pose', details);
 
       for (const el of els) {
         el.emit(name, undefined, false);
         el.emit('pose', details, false);
       }
     }, this.data.fuseVShort);
+    
+
     this[handedness + '_shortTimeout'] = setTimeout(() => {
-      this.el.emit(name + '_fuseShort', details);    
+      this.el.emit(name + '_fuseShort', details);
 
       for (const el of els) {
-        el.emit(name, undefined, false);
-        el.emit('pose', details, false);
+        el.emit(name + '_fuseShort', undefined, false);
       }
     }, this.data.fuseShort);
+    
+  
     this[handedness + '_longTimeout'] = setTimeout(() => {
       this.el.emit(name + '_fuseLong', details);    
 
       for (const el of els) {
         el.emit(name + '_fuseLong', undefined, false);
-        el.emit('pose', details, false);
       }
     }, this.data.fuseLong);
   },

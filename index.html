@@ -118,8 +118,8 @@
           <a-torus position="0 0 -0.03" radius="0.008" radius-tubular="0.001" scale="1 1 1.5" material="color:gold;metalness:1;roughness:0;"></a-torus>
         </a-entity>
         
-        <a-entity data-right="index-finger-tip" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;startEvents:pose_point;endEvents:pose_point_fuse;"></a-entity>
-        <a-entity data-left="index-finger-tip" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;startEvents:pose_point;endEvents:pose_point_fuse;"></a-entity>
+        <a-entity data-right="index-finger-tip" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
+        <a-entity data-left="index-finger-tip" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
     
         <!-- Invisible objects at the tips of each finger for physics or intersections -->
         <a-sphere data-right="index-finger-tip" radius="0.01" visible="false"></a-sphere>
