@@ -35,7 +35,7 @@ window.addEventListener("DOMContentLoaded", function() {
   const labels = Array.from(document.querySelectorAll('.pose-label'));
   for (const el of labels) {
     el.parentNode.addEventListener('pose', function (event) {
-      el.setAttribute('text', 'value', event.detail);
+      el.setAttribute('text', 'value', event.detail.pose);
     });
   }
   
