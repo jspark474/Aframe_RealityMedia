@@ -43,6 +43,15 @@ AFRAME.registerComponent("handy-controls", {
     materialOverride: {
       oneOf: ['both', 'left', 'right', 'none'],
       default: 'both'
+    },
+    fuseVShort: {
+      default:48
+    },
+    fuseShort: {
+      default:240
+    },
+    fuseLong: {
+      default:720
     }
   },
   init() {
@@ -208,6 +217,19 @@ AFRAME.registerComponent("handy-controls", {
     }
     
 	},
+  
+  emit(name, details) {
+    if (name === this.currentPose) return;
+    
+    clearTimeout(this.vshortTimeout);
+    clearTimeout(this.shortTimeout);
+    clearTimeout(this.longTimeout);
+    
+    this.currentPose = name;
+    this.vshortTimeout = setTimeout(, this.data.fuseVShort);
+    this.shortTimeout = setTimeout(, this.data.fuseShort);
+    this.longTimeout = setTimeout(, this.data.fuseLong);
+  },
   remove() {
     if (this.bonesLeft) {
       this.bonesLeft = null;
