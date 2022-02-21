@@ -1,7 +1,7 @@
 /* global AFRAME, THREE */
 
-const DEFAULT_HAND_PROFILE_PATH =
-  "https://cdn.jsdelivr.net/npm/@webxr-input-profiles/assets@1.0/dist/profiles/generic-hand/";
+const DEFAULT_HAND_PROFILE_PATH = "https://cdn.jsdelivr.net/npm/@webxr-input-profiles/assets@1.0/dist/profiles/generic-hand/";
+const POSE_FOLDER = "https://cdn.jsdelivr.net/gh/AdaRoseCannon/handy-work@main/poses/";
 const joints = [
   "wrist",
   "thumb-metacarpal",
@@ -54,7 +54,7 @@ AFRAME.registerComponent("handy-controls", {
       default:1440
     }
   },
-  async init() {
+  init() {
     this.handyWorkCallback = this.handyWorkCallback.bind(this);
     
     const webxrData = this.el.sceneEl.getAttribute('webxr');
@@ -80,8 +80,23 @@ AFRAME.registerComponent("handy-controls", {
       this.ready = Promise.resolve();
     }
     
-    const stuff = await import("https://cdn.jsdelivr.net/npm/handy-work@1.2.0/build/esm/handy-work.standalone.js");
-    console.log(stuff);
+    import("https://cdn.jsdelivr.net/npm/handy-work@1.2.0/build/esm/handy-work.standalone.js")
+    .then(function ({
+			update,
+			loadPose,
+			dumpHands
+    }) {
+      this.handyWorkUpdate = update;
+      this.dumpHands = dumpHands;
+
+      loadPose('relax', POSE_FOLDER + 'relax.handpose');
+      loadPose('fist', POSE_FOLDER + 'fist.handpose');
+      loadPose('flat', POSE_FOLDER + 'flat.handpose');
+      loadPose('point', POSE_FOLDER + 'point.handpose');
+      loadPose('horns', POSE_FOLDER + 'horns.handpose');
+      loadPose('shaka', POSE_FOLDER + 'shaka.handpose');
+      loadPose('vulcan', POSE_FOLDER + 'vulcan.handpose');
+    });
   },
 
   async gltfToJoints(src, name) {
@@ -191,8 +206,8 @@ AFRAME.registerComponent("handy-controls", {
     }
 
     // perform hand tracking
-    if (toUpdate.length && window.handyWorkUpdate) {
-      window.handyWorkUpdate(
+    if (toUpdate.length && this.handyWorkUpdate) {
+      this.handyWorkUpdate(
         toUpdate,
         referenceSpace,
         frame,
