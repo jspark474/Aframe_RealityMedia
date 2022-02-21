@@ -54,7 +54,7 @@ AFRAME.registerComponent("handy-controls", {
       default:1440
     }
   },
-  init() {
+  async init() {
     this.handyWorkCallback = this.handyWorkCallback.bind(this);
     
     const webxrData = this.el.sceneEl.getAttribute('webxr');
@@ -79,6 +79,9 @@ AFRAME.registerComponent("handy-controls", {
     } else {
       this.ready = Promise.resolve();
     }
+    
+    const stuff = await import("https://cdn.jsdelivr.net/npm/handy-work@1.2.0/build/esm/handy-work.standalone.js");
+    console.log(stuff);
   },
 
   async gltfToJoints(src, name) {
