@@ -106,7 +106,7 @@ AFRAME.registerComponent("handy-controls", {
       }
     }
     
-    this.gripOffset = new THREE.Vector3(-0.03, -0.015, 0);
+    this.gripOffset = new THREE.Vector3(-0.005, -0.03, 0);
     this.gripQuaternions = [new THREE.Quaternion().setFromUnitVectors(
       new THREE.Vector3(0,0,-1),
       new THREE.Vector3(-3,0,-1).normalize()
@@ -242,7 +242,7 @@ AFRAME.registerComponent("handy-controls", {
           }
         }
       }
-      // Ideally we would do this but the grip space doesn't actually line up with where you hold something
+      // Ideally we would do this but the grip space doesn't actually line up with where you hold something so I map it to the middle finger metacarpal isntead
       // if (elMap.has('grip') && inputSource.gripSpace) {
       //   const pose = frame.getPose(inputSource.gripSpace, referenceSpace);
       //   if (pose) {
