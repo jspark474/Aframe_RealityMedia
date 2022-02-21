@@ -98,6 +98,13 @@ AFRAME.registerComponent("handy-controls", {
       loadPose('shaka', POSE_FOLDER + 'shaka.handpose');
       loadPose('vulcan', POSE_FOLDER + 'vulcan.handpose');
     }.bind(this));
+    
+    for (const handedness of ['left', 'right']) {
+      const els = Array.from(this.el.querySelectorAll(`[data-${handedness}]`));
+      for (const el of els) {
+        el.object3D.visible = false;
+      }
+    }
   },
 
   async gltfToJoints(src, name) {

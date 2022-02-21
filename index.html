@@ -25,45 +25,10 @@
   <meta name="twitter:site" content="@AdaRoseCannon" />
   <meta name="twitter:creator" content="@AdaRoseCannon" />
   <meta property="og:url" content="https://aframe-xr-starterkit.glitch.me/" />
-  <meta
-    name="description"
-    content="A beautiful VR garden with peaceful music. Listen with headphones for the full effect."
-  />
-  <meta
-    property="og:description"
-    content="A beautiful VR garden with peaceful music. Listen with headphones for the full effect."
-  />
-  <meta
-    property="og:image"
-    content="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/snapshot.png?v=1645201177438"
-  />
-  
-  <style>
-		body {
-			font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-		}
-    
-    #dom-overlay-message {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      padding: 1em;
-      background: #33333355;
-      border-top: 5px solid #ffffff55;
-      color: white;
-    }
-
-    .a-dom-overlay button {
-      padding: 1em;
-      appearance: none;
-      background: #00000055;
-      border: 3px solid white;
-      border-radius: 1em;
-      margin: 1em 1em 0 0;
-      color: white;
-    }
-  </style>  
+  <meta name="description" content="A sample scene for working with WebXR Hand Tracking" />
+  <meta property="og:description" content="A sample scene for working with WebXR Hand Tracking" />
+  <meta property="og:image" content="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/snapshot.png?v=1645201177438" />
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -83,7 +48,7 @@
       <a-asset-item id="right-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-right-hand-webxr/model.gltf"></a-asset-item>
       <a-asset-item id="left-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-left-hand-webxr/model.gltf"></a-asset-item>
       <a-asset-item id="watch-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watch.glb?v=1645016979219"></a-asset-item>
-      <a-asset-item id="sword-gltf" src="https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/sword-scimitar/model.gltf"></a-asset-item>
+      <a-asset-item id="sword-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/scimitar.glb?v=1645454049799"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-mixin>
