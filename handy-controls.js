@@ -29,6 +29,7 @@ const joints = [
   "pinky-finger-phalanx-distal",
   "pinky-finger-tip",
 ];
+const tempVec3 = new THREE.Vector3();
 
 AFRAME.registerComponent("handy-controls", {
   schema: {
