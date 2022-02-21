@@ -88,6 +88,7 @@ AFRAME.registerComponent("handy-controls", {
     }) {
       this.handyWorkUpdate = update;
       this.dumpHands = dumpHands;
+      this.loadPose = loadPose;
 
       loadPose('relax', POSE_FOLDER + 'relax.handpose');
       loadPose('fist', POSE_FOLDER + 'fist.handpose');
