@@ -204,6 +204,14 @@ AFRAME.registerComponent("handy-controls", {
           }
         }
       }
+      for (const el of els) {
+        if (el.dataset[inputSource.handedness] === 'grip') {
+          
+        }
+        if (el.dataset[inputSource.handedness] === 'ray') {
+          
+        }
+      }
     }
 
     // perform hand tracking
