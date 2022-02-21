@@ -211,20 +211,24 @@ AFRAME.registerComponent("handy-controls", {
           }
         }
       }
-      if (elMap.has('grip')) {
+      if (elMap.has('grip') && inputSource.targetGripSpace) {
         const pose = frame.getPose(inputSource.targetGripSpace, referenceSpace);
-        for (const el of elMap.get('grip')) {
-          el.object3D.position.copy(pose.transform.position);
-          el.object3D.quaternion.copy(pose.transform.orientation);
-          el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+        if (pose) {
+          for (const el of elMap.get('grip')) {
+            el.object3D.position.copy(pose.transform.position);
+            el.object3D.quaternion.copy(pose.transform.orientation);
+            el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+          }
         }
       }
-      if (elMap.has('ray')) {
+      if (elMap.has('ray') && inputSource.targetRaySpace) {
         const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
-        for (const el of elMap.get('ray')) {
-          el.object3D.position.copy(pose.transform.position);
-          el.object3D.quaternion.copy(pose.transform.orientation);
-          el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+        if (pose) {
+          for (const el of elMap.get('ray')) {
+            el.object3D.position.copy(pose.transform.position);
+            el.object3D.quaternion.copy(pose.transform.orientation);
+            el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+          }
         }
       }
     }

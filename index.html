@@ -83,6 +83,7 @@
       <a-asset-item id="right-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-right-hand-webxr/model.gltf"></a-asset-item>
       <a-asset-item id="left-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-left-hand-webxr/model.gltf"></a-asset-item>
       <a-asset-item id="watch-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watch.glb?v=1645016979219"></a-asset-item>
+      <a-asset-item id="sword-gltf" src="https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/sword-scimitar/model.gltf"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-mixin>
@@ -98,7 +99,7 @@
         simple-navmesh-constraint="navmesh:#navmesh;fall:0.5;height:1.65;"
       ></a-entity>
 
-      <!-- hand controls -->
+      <!-- Replace controllers with hand models -->
       <a-entity  hand-controls="hand:left" id="left-hand" mixin="blink"></a-entity>
       <a-entity  hand-controls="hand:right" id="right-hand" mixin="blink"></a-entity>
       
@@ -118,6 +119,10 @@
         <a-entity data-right="index-finger-tip" mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
         <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
     
+        <a-entity data-right="grip">
+          <a-gltf-model src="sword-gltf"></a-gltf-model>
+        </a-entity>
+        
         <!-- Invisible objects at the tips of each finger for physics or intersections -->
         <a-sphere data-right="index-finger-tip" radius="0.01" visible="false"></a-sphere>
         <a-sphere data-right="middle-finger-tip" radius="0.01" visible="false"></a-sphere>
