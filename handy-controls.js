@@ -106,7 +106,7 @@ AFRAME.registerComponent("handy-controls", {
       }
     }
     
-    this.gripOffset = new THREE.Vector3();
+    this.gripOffset = new THREE.Vector3(-0.03, -0.015, 0);
     this.gripQuaternions = [new THREE.Quaternion().setFromUnitVectors(
       new THREE.Vector3(0,0,-1),
       new THREE.Vector3(-3,0,-1).normalize()
@@ -225,9 +225,11 @@ AFRAME.registerComponent("handy-controls", {
             if (bone.jointName === "middle-finger-metacarpal") {
               if (elMap.has('grip')) {
                 for (const el of elMap.get('grip')) {
-                  el.object3D.position.copy(pose.transform.position);
                   el.object3D.quaternion.copy(pose.transform.orientation);
                   this.gripQuaternions.forEach(q => el.object3D.quaternion.multiply(q));
+                  el.object3D.position.copy(this.gripOffset);
+                  el.object3D.position.applyQuaternion(el.object3D.quaternion);
+                  el.object3D.position.add(pose.transform.position);
                   el.object3D.visible = (el.getDOMAttribute('visible') !== false);
                 }
               }
