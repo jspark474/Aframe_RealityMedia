@@ -8,9 +8,9 @@
 
   <!-- the AFrame library -->
 	<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/AdaRoseCannon/aframe-blink-controls@main/dist/aframe-blink-controls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls/dist/aframe-blink-controls.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
-  <script>window.module = {exports:{}}</script><!-- Dirty hack to get the sphere collider loading -->
+  <script>window.module = {exports:{}}</script><!-- Dirty hack to get the sphere collider loading :-( -->
 	<script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-extras@master/src/misc/sphere-collider.js"></script>
   <script src="ar-shadow-helper.js"></script>
   <script src="ar-cursor.js"></script>
@@ -120,7 +120,7 @@
         <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
     
         <a-entity data-right="grip">
-          <a-gltf-model src="sword-gltf"></a-gltf-model>
+          <a-gltf-model src="#sword-gltf"></a-gltf-model>
         </a-entity>
         
         <!-- Invisible objects at the tips of each finger for physics or intersections -->

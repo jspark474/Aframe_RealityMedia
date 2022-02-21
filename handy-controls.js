@@ -97,7 +97,7 @@ AFRAME.registerComponent("handy-controls", {
       loadPose('horns', POSE_FOLDER + 'horns.handpose');
       loadPose('shaka', POSE_FOLDER + 'shaka.handpose');
       loadPose('vulcan', POSE_FOLDER + 'vulcan.handpose');
-    });
+    }.bind(this));
   },
 
   async gltfToJoints(src, name) {
