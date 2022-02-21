@@ -211,8 +211,8 @@ AFRAME.registerComponent("handy-controls", {
           }
         }
       }
-      if (elMap.has('grip') && inputSource.targetGripSpace) {
-        const pose = frame.getPose(inputSource.targetGripSpace, referenceSpace);
+      if (elMap.has('grip') && inputSource.gripSpace) {
+        const pose = frame.getPose(inputSource.gripSpace, referenceSpace);
         if (pose) {
           for (const el of elMap.get('grip')) {
             el.object3D.position.copy(pose.transform.position);
