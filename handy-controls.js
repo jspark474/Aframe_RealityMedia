@@ -169,7 +169,14 @@ AFRAME.registerComponent("handy-controls", {
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
       if (!currentMesh) return;
       
-      const els = Array.from(this.el.querySelectorAll(`[data-${inputSource.handedness}]`)); 
+      const els = Array.from(this.el.querySelectorAll(`[data-${inputSource.handedness}]`));
+      const elMap = new Map();
+      for (const el of els) {
+        const poseName = el.dataset[inputSource.handedness];
+        const elArray = elMap.get(poseName) || [];
+        elArray.push(el);
+        elMap.set(poseName, elArray);
+      }
 
       if (!inputSource.hand) {
         for (const el of els) {
@@ -190,8 +197,8 @@ AFRAME.registerComponent("handy-controls", {
           const pose = frame.getJointPose(joint, referenceSpace);
           if (pose) {
             currentMesh.visible = true;
-            for (const el of els) {
-              if (el.dataset[inputSource.handedness] === bone.jointName) {
+            if (elMap.has(bone.jointName)) {
+              for (const el of elMap.get(bone.jointName)) {
                 el.object3D.position.copy(pose.transform.position);
                 el.object3D.quaternion.copy(pose.transform.orientation);
                 el.object3D.visible = (el.getDOMAttribute('visible') !== false);
@@ -204,12 +211,20 @@ AFRAME.registerComponent("handy-controls", {
           }
         }
       }
-      for (const el of els) {
-        if (el.dataset[inputSource.handedness] === 'grip') {
-          
+      if (elMap.has('grip')) {
+        const pose = frame.getPose(inputSource.targetGripSpace, referenceSpace);
+        for (const el of elMap.get('grip')) {
+          el.object3D.position.copy(pose.transform.position);
+          el.object3D.quaternion.copy(pose.transform.orientation);
+          el.object3D.visible = (el.getDOMAttribute('visible') !== false);
         }
-        if (el.dataset[inputSource.handedness] === 'ray') {
-          
+      }
+      if (elMap.has('ray')) {
+        const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
+        for (const el of elMap.get('ray')) {
+          el.object3D.position.copy(pose.transform.position);
+          el.object3D.quaternion.copy(pose.transform.orientation);
+          el.object3D.visible = (el.getDOMAttribute('visible') !== false);
         }
       }
     }
