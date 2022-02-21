@@ -29,7 +29,6 @@ const joints = [
   "pinky-finger-phalanx-distal",
   "pinky-finger-tip",
 ];
-const tempVec3 = new THREE.Vector3();
 
 AFRAME.registerComponent("handy-controls", {
   schema: {
@@ -106,6 +105,12 @@ AFRAME.registerComponent("handy-controls", {
         el.object3D.visible = false;
       }
     }
+    
+    this.gripQuaternion = new THREE.Quaternion().setFromUnitVectors(
+      new THREE.Vector3(0,0,-1),
+      new THREE.Vector3(0,1,0)
+    );
+    
   },
 
   async gltfToJoints(src, name) {
@@ -212,6 +217,18 @@ AFRAME.registerComponent("handy-controls", {
                 el.object3D.visible = (el.getDOMAttribute('visible') !== false);
               }
             }
+            
+            if (bone.jointName === "middle-finger-metacarpal") {
+              if (elMap.has('grip')) {
+                for (const el of elMap.get('grip')) {
+                  el.object3D.position.copy(pose.transform.position);
+                  el.object3D.quaternion.copy(pose.transform.orientation);
+                  el.object3D.quaternion(this.gripQuaternion);
+                  el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+                }
+              }
+            }
+            
             bone.position.copy(pose.transform.position);
             bone.quaternion.copy(pose.transform.orientation);
             bone.applyMatrix4(this.el.object3D.matrixWorld);
@@ -219,16 +236,17 @@ AFRAME.registerComponent("handy-controls", {
           }
         }
       }
-      if (elMap.has('grip') && inputSource.gripSpace) {
-        const pose = frame.getPose(inputSource.gripSpace, referenceSpace);
-        if (pose) {
-          for (const el of elMap.get('grip')) {
-            el.object3D.position.copy(pose.transform.position);
-            el.object3D.quaternion.copy(pose.transform.orientation);
-            el.object3D.visible = (el.getDOMAttribute('visible') !== false);
-          }
-        }
-      }
+      // Ideally we would do this but the grip space doesn't actually line up with where you hold something
+      // if (elMap.has('grip') && inputSource.gripSpace) {
+      //   const pose = frame.getPose(inputSource.gripSpace, referenceSpace);
+      //   if (pose) {
+      //     for (const el of elMap.get('grip')) {
+      //       el.object3D.position.copy(pose.transform.position);
+      //       el.object3D.quaternion.copy(pose.transform.orientation);
+      //       el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+      //     }
+      //   }
+      // }
       if (elMap.has('ray') && inputSource.targetRaySpace) {
         const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
         if (pose) {
