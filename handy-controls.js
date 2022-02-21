@@ -110,8 +110,8 @@ AFRAME.registerComponent("handy-controls", {
       new THREE.Vector3(0,0,-1),
       new THREE.Vector3(-1,0,0)
     ),new THREE.Quaternion().setFromUnitVectors(
-      new THREE.Vector3(-1,0,0),
-      new THREE.Vector3(0,0,-1)
+      new THREE.Vector3(0,0,-1),
+      new THREE.Vector3(-1,0,0)
     )];
     
   },
@@ -225,9 +225,9 @@ AFRAME.registerComponent("handy-controls", {
               if (elMap.has('grip')) {
                 for (const el of elMap.get('grip')) {
                   el.object3D.position.copy(pose.transform.position);
-                  el.position.x -= 0.02;
+                  el.object3D.position.x -= 0.02;
                   el.object3D.quaternion.copy(pose.transform.orientation);
-                  this.gripQuaternion.forEach(q => el.object3D.quaternion.multiply(q));
+                  this.gripQuaternions.forEach(q => el.object3D.quaternion.multiply(q));
                   el.object3D.visible = (el.getDOMAttribute('visible') !== false);
                 }
               }
