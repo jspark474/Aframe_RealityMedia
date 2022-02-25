@@ -16,14 +16,16 @@ async function recordPose(frames=180, inputSources, referenceSpace) {
 			size        // weighting for individual joints right hand
 		);
     
-    // This gets filled by the gerneatePose function
-		const outData = new Float32Array(frameSize * frames);
     return function * () {
+
+      // This gets filled by the gerneatePose function
+      const outData = new Float32Array(frameSize * frames);
       for (let i=0;i<frames;i++) {
         const frame = yield;
         const float32Array = new Float32Array(outData, frameSize, frameSize*i);
-        generatePose(inputSources, referenceSpace, frame, );
+        generatePose(inputSources, referenceSpace, frame, float32Array);
       }
+      return outData;
     }
   }
 }
