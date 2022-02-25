@@ -8,12 +8,22 @@ async function recordPose(frames=180, inputSources, referenceSpace) {
 	}
 	if (tempHands.left && tempHands.right) {
 		const size = tempHands.left.size;
-		const outData = new Float32Array((
+    const frameSize = (
 			1 +         // store size
 			size * 16 + // left hand
 			size * 16 + // right hand
 			size +      // weighting for individual joints left hand
 			size        // weighting for individual joints right hand
-		) * size);
+		);
+    
+    // This gets filled by the gerneatePose function
+		const outData = new Float32Array(frameSize * frames);
+    return function * () {
+      for (let i=0;i<frames;i++) {
+        const frame = yield;
+        const float32Array = new Float32Array(outData, frameSize, frameSize*i);
+        generatePose(inputSources, referenceSpace, frame, );
+      }
+    }
   }
 }
