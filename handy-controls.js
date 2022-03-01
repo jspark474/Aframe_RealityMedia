@@ -194,21 +194,25 @@ AFRAME.registerComponent("handy-controls", {
     if (!session) return;
     const referenceSpace = this.el.sceneEl.renderer.xr.getReferenceSpace();
     
-    const magnetEl = this.el.querySelector('data-magnet');
+    const magnetEls = [
+      this.el.querySelector('[data-magnet][data-left]'),
+      this.el.querySelector('[data-magnet][data-right]')
+    ];
     let shouldMagnet = false;
-    let magnetTarget = null;
-    if (magnetEl) {
-      const magnetTargets = Array.from(this.el.querySelectorAll(magnetEl.dataset.magnet));
-      for (const el of magnetTargets) {
-        const magnetRange = 0.1;
-        el.object3D.getWorldPosition(tempVector3);
-        magnetEl.worldToLocal(tempVector3);
-        if (tempVector3.lengthSq() < magnetRange*magnetRange) {
-          shouldMagnet = true;
-          magnetTarget = el;
+    let magnetTargets = magnetEls.map(function(magnetEl) {
+      if (magnetEl) {
+        const magnetTargets = Array.from(this.el.querySelectorAll(magnetEl.dataset.magnet));
+        for (const el of magnetTargets) {
+          const magnetRange = 0.1;
+          el.object3D.getWorldPosition(tempVector3);
+          magnetEl.worldToLocal(tempVector3);
+          if (tempVector3.lengthSq() < magnetRange*magnetRange) {
+            shouldMagnet = true;
+            return el;
+          }
         }
       }
-    }
+    });
     
     const toUpdate = [];
     const frame = this.el.sceneEl.frame;
