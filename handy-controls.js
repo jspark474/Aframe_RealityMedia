@@ -292,8 +292,8 @@ AFRAME.registerComponent("handy-controls", {
         // matrix.compose(magnetTarget.object3D.position, magnetTarget.object3D.quaternion, SCALE1);
         // matrix.invert();
         // matrix.multiplyMatrices(magnetEl.object3D.matrixWorld, matrix);
+        tempVector3.copy(magnetTarget.object3D.position);
         tempVector3.sub(magnetEl.object3D.position);
-        tempVector3.add(magnetTarget.object3D.position);
         for (const bone of bones) {
           bone.position.add(tempVector3);
           bone.updateMatrixWorld();
