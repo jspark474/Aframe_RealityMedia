@@ -34,6 +34,8 @@ const joints = [
   "pinky-finger-tip",
 ];
 
+const tempVector3 = new THREE.Vector3();
+
 AFRAME.registerComponent("handy-controls", {
   schema: {
     left: {
@@ -195,9 +197,14 @@ AFRAME.registerComponent("handy-controls", {
     const magnetEl = this.el.querySelector('data-magnet');
     let shouldMagnet = false;
     if (magnetEl) {
-      const magnetTargets = Array.from(this.el.querySelectorAll(magnetEl.dataset.magnet));
-      for (const el of magnetTargets) {
+      const magnetTargets = Array.from(this.el.querySelectorAll(magnetEl.dataset.magnet))
+      .map(function (el) {
         
+      })
+      for (const el of magnetTargets) {
+        if (d<magnetRange) {
+          return;
+        }
       }
     }
     
