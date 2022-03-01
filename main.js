@@ -39,7 +39,7 @@ AFRAME.registerComponent("xr-follow", {
     camera.getWorldPosition(object3D.position);
     this.el.parentNode.object3D.worldToLocal(object3D.position);
   }
-})
+});
 
 AFRAME.registerComponent("exit-on", {
   schema: {
