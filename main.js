@@ -31,10 +31,12 @@ AFRAME.registerComponent("xr-follow", {
   init() {
   },
   tick() {
-    const camera = this.el.sceneEl.camera;
-    const cameraPos = this.el.sceneEl.camera.parent;
+    const scene = this.el.sceneEl;
+    const cameraObject = scene.camera;
+    const camera = (scene.is('ar-mode') || scene.is('vr-mode')) ?
+          scene.renderer.xr.getCamera(cameraObject) : cameraObject;
     const object3D = this.el.object3D;
-    cameraPos.getWorldPosition(object3D.position);
+    camera.getWorldPosition(object3D.position);
     this.el.parentNode.object3D.worldToLocal(object3D.position);
   }
 })
