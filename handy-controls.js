@@ -36,6 +36,7 @@ const joints = [
 
 const tempVector3 = new THREE.Vector3();
 const tempObject3D = new THREE.Object3D();
+const tempMatrix4 = new THREE.Matrix4();
 
 AFRAME.registerComponent("handy-controls", {
   schema: {
@@ -254,11 +255,13 @@ AFRAME.registerComponent("handy-controls", {
       if (shouldMagnet) {
         tempObject3D.updateMatrixWorld();
         magnetEl.object3D.updateMatrixWorld();
-        tempObject3D.matrixWorld.invert();
-        tempObject3D.matrixWorld.multiplyMatrices(
-          tempObject3D.matrixWorld,
-          magnetEl.object3D.matrixWorld
-        );
+        if (this.el.object3D.parent) {
+          tempMatrix4.copy(this.el.object3D.parent.matrix4);
+          tempMatrix4.invert();
+        } else {
+          tempMatrix4
+        }
+        tempObject3D.applyMatrix(tempMatrix4);
         tempObject3D.matrixWorld.decompose( tempObject3D.position, tempObject3D.quaternion, tempObject3D.scale );
       }
       
