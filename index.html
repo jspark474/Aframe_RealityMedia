@@ -70,6 +70,10 @@
       <a-entity  hand-controls="hand:left" id="left-hand" mixin="blink"></a-entity>
       <a-entity  hand-controls="hand:right" id="right-hand" mixin="blink"></a-entity>
       
+      <a-entity xr-follow>
+        <a-gltf-model id="sword" src="#sword-gltf" scale="0.6,0.6,1" position="-0.3 0.8 0" rotation="-30 180 0"></a-gltf-model>
+      </a-entity>
+      
       <!-- Hand tracking -->
       <a-entity handy-controls="right:#right-gltf;materialOverride:right;" material="color:gold;metalness:1;roughness:0;">
         <a-gltf-model src="#watch-gltf" data-left="wrist" position="-1000 0 0">
@@ -86,9 +90,7 @@
         <a-entity data-right="index-finger-tip" mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
         <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
     
-        <a-entity data-right="grip">
-          <a-gltf-model src="#sword-gltf" scale="0.6,0.6,1"></a-gltf-model>
-        </a-entity>
+        <a-entity data-right="grip" data-magnet="#sword"></a-entity>
         
         <!-- Invisible objects at the tips of each finger for physics or intersections -->
         <a-sphere data-right="index-finger-tip" radius="0.01" visible="false"></a-sphere>

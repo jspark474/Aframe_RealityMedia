@@ -1,3 +1,4 @@
+// WIP This is going to be a componet to allow the 
 const handyWorkModule = import('https://cdn.jsdelivr.net/npm/handy-work/build/handy-work.min.js');
 async function recordPose(frames=180, inputSources, referenceSpace) {
   const {generatePose} = await handyWorkModule;
