@@ -253,11 +253,11 @@ AFRAME.registerComponent("handy-controls", {
       
       if (shouldMagnet) {
         tempObject3D.updateMatrixWorld();
-        magnetEl.updateMatrixWorld();
+        magnetEl.object3D.updateMatrixWorld();
         tempObject3D.matrixWorld.invert();
         tempObject3D.matrixWorld.multiplyMatrices(
           tempObject3D.matrixWorld,
-          magnetEl.matrixWorld
+          magnetEl.object3D.matrixWorld
         );
         tempObject3D.matrixWorld.decompose( tempObject3D.position, tempObject3D.quaternion, tempObject3D.scale );
       }
