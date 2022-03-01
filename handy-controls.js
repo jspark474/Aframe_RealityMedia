@@ -35,9 +35,6 @@ const joints = [
 ];
 
 const tempVector3 = new THREE.Vector3();
-const tempObject3D = new THREE.Object3D();
-const tempObject3D_A = new THREE.Object3D();
-const tempObject3D_B = new THREE.Object3D();
 const tempMatrix4 = new THREE.Matrix4();
 
 AFRAME.registerComponent("handy-controls", {
@@ -291,9 +288,19 @@ AFRAME.registerComponent("handy-controls", {
       }
       
       if (magnetTarget) {
+        const matrix = tempMatrix4;
+        magnetTarget.object3D.updateWorldMatrix();
+        magnetEl.object3D.updateWorldMatrix();
+        matrix.copy(magnetTarget.object3D.matrixWorld);
+        matrix.invert();
+        matrix.multiplyMatrices(magnetEl.object3D.matrixWorld, magnetTarget.object3D.matrixWorld);
+        magnetTarget.object3D.updateWorldMatrix();
         for (const bone of bones) {
+          bone.applyMatrix4(matrix);
         }
-        els
+        for (const el of els) {
+          el.object3D.applyMatrix4(matrix);
+        }
       }
     }
 
