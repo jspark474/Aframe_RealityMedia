@@ -199,7 +199,7 @@ AFRAME.registerComponent("handy-controls", {
       this.el.querySelector('[data-magnet][data-left]'),
       this.el.querySelector('[data-magnet][data-right]')
     ];
-    let magnetTargets = magnetEls.map(function(magnetEl) {
+    let magnetTargets = magnetEls.map(magnetEl => {
       if (magnetEl) {
         const magnetTargets = Array.from(this.el.querySelectorAll(magnetEl.dataset.magnet));
         for (const el of magnetTargets) {
