@@ -292,25 +292,29 @@ AFRAME.registerComponent("handy-controls", {
       }
       
       if (magnetTarget) {
-        magnetTarget.object3D.getWorldQuaternion(tempQuaternion_A);
-        magnetEl.object3D.getWorldQuaternion(tempQuaternion_B);
-        tempQuaternion_A.multiply(tempQuaternion_B.invert());
         
         magnetTarget.object3D.getWorldPosition(tempVector3_A);
         magnetEl.object3D.getWorldPosition(tempVector3_B);
         tempVector3_A.sub(tempVector3_B);
+        
+        magnetTarget.object3D.getWorldQuaternion(tempQuaternion_A);
+        magnetEl.object3D.getWorldQuaternion(tempQuaternion_B);
+        tempQuaternion_A.multiply(tempQuaternion_B.invert());
+        
         for (const bone of bones) {
           bone.position.add(tempVector3_A);
-          bone.position.add(magnetEl.object3D.position);
-          bone.quaternion.multiply(tempQuaternion_A);
           bone.position.sub(magnetEl.object3D.position);
+          bone.applyQuaternion(tempQuaternion_A);
+          bone.position.applyQuaternion(tempQuaternion_A);
+          bone.position.add(tempVector3_C);
           bone.updateMatrixWorld();
         }
         for (const el of els) {
           el.object3D.position.add(tempVector3_A);
-          el.object3D.position.add(magnetEl.object3D.position);
-          el.object3D.quaternion.multiply(tempQuaternion_A);
           el.object3D.position.sub(magnetEl.object3D.position);
+          el.object3D.position.applyQuaternion(tempQuaternion_A);
+          el.object3D.applyQuaternion(tempQuaternion_A);
+          el.object3D.position.add(tempVector3_C);
         }
       }
     }
