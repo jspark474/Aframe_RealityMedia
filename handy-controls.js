@@ -302,19 +302,19 @@ AFRAME.registerComponent("handy-controls", {
         tempQuaternion_A.multiply(tempQuaternion_B.invert());
         
         for (const bone of bones) {
-          bone.position.add(tempVector3_A);
           bone.position.sub(magnetEl.object3D.position);
-          bone.applyQuaternion(tempQuaternion_A);
           bone.position.applyQuaternion(tempQuaternion_A);
-          bone.position.add(tempVector3_C);
+          bone.position.add(magnetEl.object3D.position);
+          bone.applyQuaternion(tempQuaternion_A);
+          bone.position.add(tempVector3_A);
           bone.updateMatrixWorld();
         }
         for (const el of els) {
-          el.object3D.position.add(tempVector3_A);
           el.object3D.position.sub(magnetEl.object3D.position);
           el.object3D.position.applyQuaternion(tempQuaternion_A);
+          el.object3D.position.add(magnetEl.object3D.position);
           el.object3D.applyQuaternion(tempQuaternion_A);
-          el.object3D.position.add(tempVector3_C);
+          el.object3D.position.add(tempVector3_A);
         }
       }
     }
