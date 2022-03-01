@@ -267,6 +267,9 @@ AFRAME.registerComponent("handy-controls", {
         const fromObj = tempObject3D_A;
         const toObj = tempObject3D_B;
         
+        tempObject3D.position.subVectors(fromObj.position, toObj.position);
+        tempObject3D.scale.set(1,1,1);
+        tempObject3D.quaternion.identity();
       }
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
