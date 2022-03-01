@@ -218,17 +218,7 @@ AFRAME.registerComponent("handy-controls", {
           }
         }
       }
-      
-      // Need to get the transform that moves tempObject3D to the position of the magnetTarget
-      // and store it in tempObject3D
-      if (magnetTarget) {
-        magnetTarget.object3D.getWorldPosition(tempObject3D.position);
-        magnetEl.object3D.worldToLocal(tempObject3D.position);
-        tempObject3D.position.multiplyScalar(-1);
 
-        tempObject3D.scale.set(1,1,1);
-        tempObject3D.quaternion.identity();
-      }
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
       if (!currentMesh) return;
@@ -265,7 +255,6 @@ AFRAME.registerComponent("handy-controls", {
               for (const el of elMap.get(bone.jointName)) {
                 el.object3D.position.copy(pose.transform.position);
                 el.object3D.quaternion.copy(pose.transform.orientation);
-                // if (shouldMagnet) el.object3D.applyMatrix4(tempObject3D.matrix);
                 el.object3D.visible = (el.getDOMAttribute('visible') !== false);
               }
             }
@@ -278,7 +267,6 @@ AFRAME.registerComponent("handy-controls", {
                   el.object3D.position.copy(this.gripOffset);
                   el.object3D.position.applyQuaternion(el.object3D.quaternion);
                   el.object3D.position.add(pose.transform.position);
-                  // if (shouldMagnet) el.object3D.applyMatrix4(tempObject3D.matrix);
                   el.object3D.visible = (el.getDOMAttribute('visible') !== false);
                 }
               }
@@ -287,7 +275,6 @@ AFRAME.registerComponent("handy-controls", {
             bone.position.copy(pose.transform.position);
             bone.quaternion.copy(pose.transform.orientation);
             bone.applyMatrix4(this.el.object3D.matrixWorld);
-            if (shouldMagnet) bone.applyMatrix4(tempObject3D.matrix);
             bone.updateMatrixWorld();
           }
         }
@@ -301,6 +288,12 @@ AFRAME.registerComponent("handy-controls", {
             el.object3D.visible = (el.getDOMAttribute('visible') !== false);
           }
         }
+      }
+      
+      if (magnetTarget) {
+        for (const bone of bones) {
+        }
+        els
       }
     }
 
