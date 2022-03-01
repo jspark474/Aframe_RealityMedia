@@ -199,25 +199,6 @@ AFRAME.registerComponent("handy-controls", {
     const frame = this.el.sceneEl.frame;
     for (const inputSource of session.inputSources) {
       
-      let index=null;
-      let magnetEl = this.el.querySelector(`[data-magnet][data-${inputSource.handedness}]`);
-      let magnetTarget = null;
-      
-      if (magnetEl) {
-        const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet));
-        for (const el of magnetTargets) {
-          const magnetRange = 0.2;
-          el.object3D.getWorldPosition(tempVector3);
-          magnetEl.object3D.worldToLocal(tempVector3);
-          // console.log(tempVector3.length().toFixed(2));
-          if (tempVector3.length() < magnetRange) {
-            magnetTarget = el;
-            break;
-          }
-        }
-      }
-
-      
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
       if (!currentMesh) return;
       
@@ -284,6 +265,23 @@ AFRAME.registerComponent("handy-controls", {
             el.object3D.position.copy(pose.transform.position);
             el.object3D.quaternion.copy(pose.transform.orientation);
             el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+          }
+        }
+      }
+      
+      let magnetEl = this.el.querySelector(`[data-magnet][data-${inputSource.handedness}]`);
+      let magnetTarget = null;
+      
+      if (magnetEl) {
+        const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet));
+        for (const el of magnetTargets) {
+          const magnetRange = 0.2;
+          el.object3D.getWorldPosition(tempVector3);
+          magnetEl.object3D.worldToLocal(tempVector3);
+          // console.log(tempVector3.length().toFixed(2));
+          if (tempVector3.length() < magnetRange) {
+            magnetTarget = el;
+            break;
           }
         }
       }
