@@ -192,6 +192,15 @@ AFRAME.registerComponent("handy-controls", {
     if (!session) return;
     const referenceSpace = this.el.sceneEl.renderer.xr.getReferenceSpace();
     
+    const magnetEl = this.el.querySelector('data-magnet');
+    let shouldMagnet = false;
+    if (magnetEl) {
+      const magnetTargets = Array.from(this.el.querySelectorAll(magnetEl.dataset.magnet));
+      for (const el of magnetTargets) {
+        
+      }
+    }
+    
     const toUpdate = [];
     const frame = this.el.sceneEl.frame;
     for (const inputSource of session.inputSources) {
