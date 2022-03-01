@@ -256,10 +256,10 @@ AFRAME.registerComponent("handy-controls", {
         tempObject3D.updateMatrixWorld();
         magnetEl.object3D.updateMatrixWorld();
         if (this.el.object3D.parent) {
-          tempMatrix4.copy(this.el.object3D.parent.matrix4);
+          tempMatrix4.copy(this.el.object3D.parent.matrix);
           tempMatrix4.invert();
         } else {
-          tempMatrix4
+          tempMatrix4.identity();
         }
         tempObject3D.applyMatrix(tempMatrix4);
         tempObject3D.matrixWorld.decompose( tempObject3D.position, tempObject3D.quaternion, tempObject3D.scale );
@@ -300,7 +300,7 @@ AFRAME.registerComponent("handy-controls", {
               for (const el of elMap.get(bone.jointName)) {
                 el.object3D.position.copy(pose.transform.position);
                 el.object3D.quaternion.copy(pose.transform.orientation);
-                if (shouldMagnet) el.object3D.applyMatrix4(tempObject3D.matrixWorld);
+                if (shouldMagnet) el.object3D.applyMatrix4(tempObject3D.matrix);
                 el.object3D.visible = (el.getDOMAttribute('visible') !== false);
               }
             }
@@ -313,7 +313,7 @@ AFRAME.registerComponent("handy-controls", {
                   el.object3D.position.copy(this.gripOffset);
                   el.object3D.position.applyQuaternion(el.object3D.quaternion);
                   el.object3D.position.add(pose.transform.position);
-                  if (shouldMagnet) el.object3D.applyMatrix4(tempObject3D.matrixWorld);
+                  // if (shouldMagnet) el.object3D.applyMatrix4(tempObject3D.matrix);
                   el.object3D.visible = (el.getDOMAttribute('visible') !== false);
                 }
               }
@@ -322,7 +322,7 @@ AFRAME.registerComponent("handy-controls", {
             bone.position.copy(pose.transform.position);
             bone.quaternion.copy(pose.transform.orientation);
             bone.applyMatrix4(this.el.object3D.matrixWorld);
-            if (shouldMagnet) bone.applyMatrix4(tempObject3D.matrixWorld);
+            if (shouldMagnet) bone.applyMatrix4(tempObject3D.matrix);
             bone.updateMatrixWorld();
           }
         }
