@@ -201,12 +201,13 @@ AFRAME.registerComponent("handy-controls", {
     ];
     let magnetTargets = magnetEls.map(magnetEl => {
       if (magnetEl) {
-        const magnetTargets = Array.from(this.el.querySelectorAll(magnetEl.dataset.magnet));
+        const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet));
         for (const el of magnetTargets) {
-          const magnetRange = 0.1;
+          const magnetRange = 0.2;
           el.object3D.getWorldPosition(tempVector3);
-          magnetEl.worldToLocal(tempVector3);
-          if (tempVector3.lengthSq() < magnetRange*magnetRange) {
+          magnetEl.object3D.worldToLocal(tempVector3);
+          console.log(tempVector3.length().toFixed(2));
+          if (tempVector3.length() < magnetRange) {
             return el;
           }
         }
