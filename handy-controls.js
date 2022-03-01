@@ -261,8 +261,8 @@ AFRAME.registerComponent("handy-controls", {
         tempObject3D.updateMatrixWorld();
         magnetTarget.object3D.updateMatrixWorld();
         
-        tempObject3D.matrix.decompose( tempObject3D_A.position, tempObject3D_A.quaternion, tempObject3D_A.scale );
-        magnetTarget.object3D.matrix.decompose( tempObject3D_B.position, tempObject3D_B.quaternion, tempObject3D_B.scale );
+        tempObject3D.matrixWorld.decompose( tempObject3D_A.position, tempObject3D_A.quaternion, tempObject3D_A.scale );
+        magnetTarget.object3D.matrixWorld.decompose( tempObject3D_B.position, tempObject3D_B.quaternion, tempObject3D_B.scale );
         
         const fromObj = tempObject3D_A;
         const toObj = tempObject3D_B;
