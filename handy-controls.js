@@ -5,7 +5,8 @@ const DEFAULT_HAND_PROFILE_PATH = "https://cdn.jsdelivr.net/npm/@webxr-input-pro
 const LIB_URL = "https://cdn.jsdelivr.net/npm/handy-work" + (__version__ ? '@' + __version__ : '');
 const LIB = LIB_URL + "/build/esm/handy-work.standalone.js";
 const POSE_FOLDER = LIB_URL + "/poses/";
-
+const clamp = (a, min = 0, max = 1) => Math.min(max, Math.max(min, a));
+const invlerp = (x, y, a) => clamp((a - x) / (y - x));
 const joints = [
   "wrist",
   "thumb-metacarpal",
@@ -257,8 +258,6 @@ AFRAME.registerComponent("handy-controls", {
             
             bone.position.copy(pose.transform.position);
             bone.quaternion.copy(pose.transform.orientation);
-            bone.applyMatrix4(this.el.object3D.matrixWorld);
-            bone.updateMatrixWorld();
           }
         }
       }
@@ -275,17 +274,25 @@ AFRAME.registerComponent("handy-controls", {
       
       let magnetEl = this.el.querySelector(`[data-magnet][data-${inputSource.handedness}]`);
       let magnetTarget = null;
+      let fadeT = 1;
       
       if (magnetEl) {
         magnetEl.object3D.updateWorldMatrix(true, false);
         const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet));
         for (const el of magnetTargets) {
-          const magnetRange = 0.2;
+          const [magnetRange,fadeDistance] = (el.dataset.magnetRange || "0.2,0.1").split(',');
           el.object3D.getWorldPosition(tempVector3);
           magnetEl.object3D.worldToLocal(tempVector3);
           // console.log(tempVector3.length().toFixed(2));
           if (tempVector3.length() < magnetRange) {
             magnetTarget = el;
+            
+            if (fadeDistance) {
+              fadeT = 
+            } else {
+              fadeT = 1;
+            }
+            
             break;
           }
         }
@@ -307,6 +314,7 @@ AFRAME.registerComponent("handy-controls", {
           bone.position.add(magnetEl.object3D.position);
           bone.applyQuaternion(tempQuaternion_A);
           bone.position.add(tempVector3_A);
+          bone.applyMatrix4(this.el.object3D.matrixWorld);
           bone.updateMatrixWorld();
         }
         for (const el of els) {
@@ -315,6 +323,11 @@ AFRAME.registerComponent("handy-controls", {
           el.object3D.position.add(magnetEl.object3D.position);
           el.object3D.applyQuaternion(tempQuaternion_A);
           el.object3D.position.add(tempVector3_A);
+        }
+      } else {
+        for (const bone of bones) {
+          bone.applyMatrix4(this.el.object3D.matrixWorld);
+          bone.updateMatrixWorld();
         }
       }
     }
