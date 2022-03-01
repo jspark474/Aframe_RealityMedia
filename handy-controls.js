@@ -197,12 +197,14 @@ AFRAME.registerComponent("handy-controls", {
     const session = this.el.sceneEl.xrSession;
     if (!session) return;
     const referenceSpace = this.el.sceneEl.renderer.xr.getReferenceSpace();
-    
-    const magnetEls = [
-      this.el.querySelector('[data-magnet][data-left]'),
-      this.el.querySelector('[data-magnet][data-right]')
-    ];
-    let magnetTargets = magnetEls.map(magnetEl => {
+    const toUpdate = [];
+    const frame = this.el.sceneEl.frame;
+    for (const inputSource of session.inputSources) {
+      
+      let index=null;
+      let magnetEl = this.el.querySelector(`[data-magnet][data-${inputSource.handedness}]`);
+      let magnetTarget = null;
+      
       if (magnetEl) {
         const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet));
         for (const el of magnetTargets) {
@@ -211,63 +213,19 @@ AFRAME.registerComponent("handy-controls", {
           magnetEl.object3D.worldToLocal(tempVector3);
           // console.log(tempVector3.length().toFixed(2));
           if (tempVector3.length() < magnetRange) {
-            return el;
+            magnetTarget = el;
+            break;
           }
         }
       }
-    });
-    
-    const toUpdate = [];
-    const frame = this.el.sceneEl.frame;
-    for (const inputSource of session.inputSources) {
-      
-      let index=null;
-      let shouldMagnet = false;
-      let magnetEl = null;
-      let magnetTarget = null;
-      if (inputSource.handedness === "left") index=0;
-      if (inputSource.handedness === "right") index=1;
-      if (index !== null && magnetEls[index] && magnetTargets[index]) {
-        magnetEl = magnetEls[index];
-        magnetTarget = magnetTargets[index];
-        const jointName = magnetEl.dataset[inputSource.handedness];
-        let pose;
-        if (jointName === 'grip') {
-            const joint = inputSource.hand.get("middle-finger-metacarpal");
-            if (joint) {
-              pose = frame.getJointPose(joint, referenceSpace);
-              tempObject3D.quaternion.copy(pose.transform.orientation);
-              this.gripQuaternions.forEach(q => tempObject3D.quaternion.multiply(q));
-              tempObject3D.position.copy(this.gripOffset);
-              tempObject3D.position.applyQuaternion(tempObject3D.quaternion);
-              tempObject3D.position.add(pose.transform.position);
-              shouldMagnet = true;
-            }
-        } else {
-          const joint = inputSource.hand.get(jointName);
-          if (joint) {
-            pose = frame.getJointPose(joint, referenceSpace);
-            tempObject3D.position.copy(pose.transform.position);
-            tempObject3D.quaternion.copy(pose.transform.orientation);
-            shouldMagnet = true;
-          }
-        }
-      }
-      
       
       // Need to get the transform that moves tempObject3D to the position of the magnetTarget
       // and store it in tempObject3D
-      if (shouldMagnet) {
-        tempObject3D.updateMatrixWorld();
-        magnetTarget.object3D.updateMatrixWorld();
-        
-        tempObject3D.matrixWorld.decompose( tempObject3D_A.position, tempObject3D_A.quaternion, tempObject3D_A.scale );
-        magnetTarget.object3D.matrixWorld.decompose( tempObject3D_B.position, tempObject3D_B.quaternion, tempObject3D_B.scale );
-        
-        const fromObj = tempObject3D_A;
-        const toObj = tempObject3D_B;
-        
-        tempObject3D.position.subVectors(fromObj.position, toObj.position);
+      if (magnetTarget) {
+        magnetTarget.object3D.getWorldPosition(tempObject3D.position);
+        magnetEl.object3D.worldToLocal(tempObject3D.position);
+        tempObject3D.position.multiplyScalar(-1);
+
         tempObject3D.scale.set(1,1,1);
         tempObject3D.quaternion.identity();
       }
