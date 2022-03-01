@@ -219,11 +219,13 @@ AFRAME.registerComponent("handy-controls", {
       
       let index=null;
       let shouldMagnet = false;
+      let magnetEl = null;
+      let magnetTarget = null;
       if (inputSource.handedness === "left") index=0;
       if (inputSource.handedness === "right") index=1;
       if (index !== null && magnetEls[index] && magnetTargets[index]) {
-        const magnetEl = magnetEls[index];
-        const magnetTarget = magnetTargets[index];
+        magnetEl = magnetEls[index];
+        magnetTarget = magnetTargets[index];
         const jointName = magnetEl.dataset[inputSource.handedness];
         let pose;
         if (jointName === 'grip') {
@@ -249,7 +251,8 @@ AFRAME.registerComponent("handy-controls", {
       }
       
       if (shouldMagnet) {
-        
+        tempObject3D.updateMatrixWorld();
+        magnetEl.updateMatrixWorld();
       }
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
