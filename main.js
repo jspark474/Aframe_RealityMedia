@@ -26,6 +26,19 @@ AFRAME.registerComponent("origin-on-ar-start", {
   }
 });
 
+AFRAME.registerComponent("xr-follow", {
+  schema: {},
+  init() {
+  },
+  tick() {
+    const camera = this.el.sceneEl.camera;
+    const cameraPos = this.el.sceneEl.camera.parent;
+    const object3D = this.el.object3D;
+    cameraPos.getWorldPosition(object3D.position);
+    this.el.parentNode.object3D.worldToLocal(object3D.position);
+  }
+})
+
 AFRAME.registerComponent("exit-on", {
   schema: {
     default: 'click'
