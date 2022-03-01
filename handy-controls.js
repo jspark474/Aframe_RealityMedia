@@ -280,15 +280,17 @@ AFRAME.registerComponent("handy-controls", {
         magnetEl.object3D.updateWorldMatrix(true, false);
         const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet));
         for (const el of magnetTargets) {
-          const [magnetRange,fadeDistance] = (el.dataset.magnetRange || "0.2,0.1").split(',');
+          const [magnetRange,fadeEnd] = (el.dataset.magnetRange || "0.2,0.1").split(',').map(n => Number(n));
           el.object3D.getWorldPosition(tempVector3);
           magnetEl.object3D.worldToLocal(tempVector3);
           // console.log(tempVector3.length().toFixed(2));
-          if (tempVector3.length() < magnetRange) {
+          
+          const d = tempVector3.length();
+          if (d < magnetRange) {
             magnetTarget = el;
             
-            if (fadeDistance) {
-              fadeT = 
+            if (fadeEnd) {
+              fadeT = invlerp(magnetRange,fadeEnd,d);
             } else {
               fadeT = 1;
             }
@@ -299,6 +301,8 @@ AFRAME.registerComponent("handy-controls", {
       }
       
       if (magnetTarget) {
+        
+        //TODO: Handle fadeT
         
         magnetTarget.object3D.getWorldPosition(tempVector3_A);
         magnetEl.object3D.getWorldPosition(tempVector3_B);
