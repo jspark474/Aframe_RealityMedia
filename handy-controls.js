@@ -196,14 +196,16 @@ AFRAME.registerComponent("handy-controls", {
     
     const magnetEl = this.el.querySelector('data-magnet');
     let shouldMagnet = false;
+    let magnetTarget = null;
     if (magnetEl) {
-      const magnetTargets = Array.from(this.el.querySelectorAll(magnetEl.dataset.magnet))
-      .map(function (el) {
-        
-      })
+      const magnetTargets = Array.from(this.el.querySelectorAll(magnetEl.dataset.magnet));
       for (const el of magnetTargets) {
-        if (d<magnetRange) {
-          return;
+        const magnetRange = 0.1;
+        el.object3D.getWorldPosition(tempVector3);
+        magnetEl.worldToLocal(tempVector3);
+        if (tempVector3.lengthSq() < magnetRange*magnetRange) {
+          shouldMagnet = true;
+          magnetTarget = el;
         }
       }
     }
