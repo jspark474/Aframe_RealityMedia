@@ -289,16 +289,21 @@ AFRAME.registerComponent("handy-controls", {
       }
       
       if (magnetTarget) {
-        const matrix = tempMatrix4;
-        magnetEl.object3D.updateWorldMatrix();
-        matrix.compose(magnetTarget.object3D.position, magnetTarget.object3D.quaternion, SCALE1);
-        matrix.invert();
-        matrix.multiplyMatrices(magnetEl.object3D.matrixWorld, matrix);
+        // const matrix = tempMatrix4;
+        // magnetEl.object3D.updateWorldMatrix();
+        // matrix.compose(magnetTarget.object3D.position, magnetTarget.object3D.quaternion, SCALE1);
+        // matrix.invert();
+        // matrix.multiplyMatrices(magnetEl.object3D.matrixWorld, matrix);
         for (const bone of bones) {
-          bone.applyMatrix4(matrix);
+          // bone.applyMatrix4(matrix);
+          bone.position.sub(magnetEl.position);
+          bone.position.add(magnetTarget.position);
+          bone.updateMatrixWorld();
         }
         for (const el of els) {
-          el.object3D.applyMatrix4(matrix);
+          el.object3D.position.sub(magnetEl.position);
+          el.object3D.position.add(magnetTarget.position);
+          // el.object3D.applyMatrix4(matrix);
         }
       }
     }
