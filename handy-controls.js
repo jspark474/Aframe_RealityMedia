@@ -254,6 +254,11 @@ AFRAME.registerComponent("handy-controls", {
         tempObject3D.updateMatrixWorld();
         magnetEl.updateMatrixWorld();
         tempObject3D.matrixWorld.invert();
+        tempObject3D.matrixWorld.multiplyMatrices(
+          tempObject3D.matrixWorld,
+          magnetEl.matrixWorld
+        );
+        tempObject3D.matrixWorld.decompose( tempObject3D.position, tempObject3D.quaternion, tempObject3D.scale );
       }
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
@@ -291,6 +296,7 @@ AFRAME.registerComponent("handy-controls", {
               for (const el of elMap.get(bone.jointName)) {
                 el.object3D.position.copy(pose.transform.position);
                 el.object3D.quaternion.copy(pose.transform.orientation);
+                if (shouldMagnet) el.object3D.applyMatrix4(tempObject3D.matrixWorld);
                 el.object3D.visible = (el.getDOMAttribute('visible') !== false);
               }
             }
@@ -303,6 +309,7 @@ AFRAME.registerComponent("handy-controls", {
                   el.object3D.position.copy(this.gripOffset);
                   el.object3D.position.applyQuaternion(el.object3D.quaternion);
                   el.object3D.position.add(pose.transform.position);
+                  if (shouldMagnet) el.object3D.applyMatrix4(tempObject3D.matrixWorld);
                   el.object3D.visible = (el.getDOMAttribute('visible') !== false);
                 }
               }
@@ -311,21 +318,11 @@ AFRAME.registerComponent("handy-controls", {
             bone.position.copy(pose.transform.position);
             bone.quaternion.copy(pose.transform.orientation);
             bone.applyMatrix4(this.el.object3D.matrixWorld);
+            if (shouldMagnet) bone.applyMatrix4(tempObject3D.matrixWorld);
             bone.updateMatrixWorld();
           }
         }
       }
-      // Ideally we would do this but the grip space doesn't actually line up with where you hold something so I map it to the middle finger metacarpal isntead
-      // if (elMap.has('grip') && inputSource.gripSpace) {
-      //   const pose = frame.getPose(inputSource.gripSpace, referenceSpace);
-      //   if (pose) {
-      //     for (const el of elMap.get('grip')) {
-      //       el.object3D.position.copy(pose.transform.position);
-      //       el.object3D.quaternion.copy(pose.transform.orientation);
-      //       el.object3D.visible = (el.getDOMAttribute('visible') !== false);
-      //     }
-      //   }
-      // }
       if (elMap.has('ray') && inputSource.targetRaySpace) {
         const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
         if (pose) {
