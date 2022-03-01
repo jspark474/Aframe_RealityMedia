@@ -37,8 +37,8 @@ const joints = [
 const tempVector3 = new THREE.Vector3();
 const tempVector3_A = new THREE.Vector3();
 const tempVector3_B = new THREE.Vector3();
-const tempQuaternion3_A = new THREE.Quaternion3();
-const tempQuaternion3_B = new THREE.Quaternion3();
+const tempQuaternion_A = new THREE.Quaternion();
+const tempQuaternion_B = new THREE.Quaternion();
 const SCALE1 = new THREE.Vector3(1,1,1);
 const tempMatrix4 = new THREE.Matrix4();
 
@@ -292,21 +292,21 @@ AFRAME.registerComponent("handy-controls", {
       }
       
       if (magnetTarget) {
-        magnetTarget.object3D.getWorldQuaternion(tempQuaternion3_A);
-        magnetEl.object3D.getWorldQuaternion(tempQuaternion3_B);
-        tempQuaternion3_A.multiply(tempQuaternion3_B.invert());
+        magnetTarget.object3D.getWorldQuaternion(tempQuaternion_A);
+        magnetEl.object3D.getWorldQuaternion(tempQuaternion_B);
+        tempQuaternion_A.multiply(tempQuaternion_B.invert());
         
         magnetTarget.object3D.getWorldPosition(tempVector3_A);
         magnetEl.object3D.getWorldPosition(tempVector3_B);
         tempVector3_A.sub(tempVector3_B);
         for (const bone of bones) {
           bone.position.add(tempVector3_A);
-          bone.quaternion.multiply(tempQuaternion3_A);
+          bone.quaternion.multiply(tempQuaternion_A);
           bone.updateMatrixWorld();
         }
         for (const el of els) {
           el.object3D.position.add(tempVector3_A);
-          el.object3D.quaternion.multiply(tempQuaternion3_A);
+          el.object3D.quaternion.multiply(tempQuaternion_A);
         }
       }
     }
