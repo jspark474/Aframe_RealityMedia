@@ -253,6 +253,7 @@ AFRAME.registerComponent("handy-controls", {
       if (shouldMagnet) {
         tempObject3D.updateMatrixWorld();
         magnetEl.updateMatrixWorld();
+        tempObject3D.matrixWorld.invert();
       }
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
