@@ -301,12 +301,16 @@ AFRAME.registerComponent("handy-controls", {
         tempVector3_A.sub(tempVector3_B);
         for (const bone of bones) {
           bone.position.add(tempVector3_A);
+          bone.position.add(magnetEl.object3D.position);
           bone.quaternion.multiply(tempQuaternion_A);
+          bone.position.sub(magnetEl.object3D.position);
           bone.updateMatrixWorld();
         }
         for (const el of els) {
           el.object3D.position.add(tempVector3_A);
+          el.object3D.position.add(magnetEl.object3D.position);
           el.object3D.quaternion.multiply(tempQuaternion_A);
+          el.object3D.position.sub(magnetEl.object3D.position);
         }
       }
     }
