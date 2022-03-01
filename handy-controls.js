@@ -256,7 +256,11 @@ AFRAME.registerComponent("handy-controls", {
       // Need to get the transform that moves tempObject3D to the position of the magnetTarget
       // and store it in tempObject3D
       if (shouldMagnet) {
-        
+        const fromObj = tempObject3D;
+        const toObj = magnetTarget.object3D;
+        tempMatrix4.copy(toObj.matrixWorld);
+        tempMatrix4.copy(toObj.matrixWorld);
+        tempObject3D.updateMatrixWorld();
       }
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
