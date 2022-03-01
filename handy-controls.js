@@ -35,6 +35,8 @@ const joints = [
 ];
 
 const tempVector3 = new THREE.Vector3();
+const tempVector3_A = new THREE.Vector3();
+const tempVector3_B = new THREE.Vector3();
 const SCALE1 = new THREE.Vector3(1,1,1);
 const tempMatrix4 = new THREE.Matrix4();
 
@@ -273,6 +275,7 @@ AFRAME.registerComponent("handy-controls", {
       let magnetTarget = null;
       
       if (magnetEl) {
+        magnetEl.object3D.updateWorldMatrix(true, false);
         const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet));
         for (const el of magnetTargets) {
           const magnetRange = 0.2;
@@ -292,14 +295,15 @@ AFRAME.registerComponent("handy-controls", {
         // matrix.compose(magnetTarget.object3D.position, magnetTarget.object3D.quaternion, SCALE1);
         // matrix.invert();
         // matrix.multiplyMatrices(magnetEl.object3D.matrixWorld, matrix);
-        tempVector3.copy(magnetTarget.object3D.position);
-        tempVector3.sub(magnetEl.object3D.position);
+        magnetTarget.object3D.getWorldPosition(tempVector3_A);
+        magnetEl.object3D.getWorldPosition(tempVector3_B);
+        tempVector3_A.sub(tempVector3_B);
         for (const bone of bones) {
-          bone.position.add(tempVector3);
+          bone.position.add(tempVector3_A);
           bone.updateMatrixWorld();
         }
         for (const el of els) {
-          el.object3D.position.add(tempVector3);
+          el.object3D.position.add(tempVector3_A);
         }
       }
     }
