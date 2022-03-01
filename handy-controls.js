@@ -36,6 +36,8 @@ const joints = [
 
 const tempVector3 = new THREE.Vector3();
 const tempObject3D = new THREE.Object3D();
+const tempObject3D_A = new THREE.Object3D();
+const tempObject3D_B = new THREE.Object3D();
 const tempMatrix4 = new THREE.Matrix4();
 
 AFRAME.registerComponent("handy-controls", {
@@ -256,11 +258,15 @@ AFRAME.registerComponent("handy-controls", {
       // Need to get the transform that moves tempObject3D to the position of the magnetTarget
       // and store it in tempObject3D
       if (shouldMagnet) {
-        const fromObj = tempObject3D;
-        const toObj = magnetTarget.object3D;
-        tempMatrix4.copy(toObj.matrixWorld);
-        tempMatrix4.copy(toObj.matrixWorld);
         tempObject3D.updateMatrixWorld();
+        magnetTarget.object3D.updateMatrixWorld();
+        
+        tempObject3D.matrix.decompose( tempObject3D_A.position, tempObject3D_A.quaternion, tempObject3D_A.scale );
+        magnetTarget.object3D.matrix.decompose( tempObject3D_B.position, tempObject3D_B.quaternion, tempObject3D_B.scale );
+        
+        const fromObj = tempObject3D_A;
+        const toObj = tempObject3D_B;
+        
       }
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
