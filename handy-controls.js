@@ -35,6 +35,7 @@ const joints = [
 ];
 
 const tempVector3 = new THREE.Vector3();
+const tempObject3D = new THREE.Object3D();
 
 AFRAME.registerComponent("handy-controls", {
   schema: {
@@ -198,7 +199,6 @@ AFRAME.registerComponent("handy-controls", {
       this.el.querySelector('[data-magnet][data-left]'),
       this.el.querySelector('[data-magnet][data-right]')
     ];
-    let shouldMagnet = false;
     let magnetTargets = magnetEls.map(function(magnetEl) {
       if (magnetEl) {
         const magnetTargets = Array.from(this.el.querySelectorAll(magnetEl.dataset.magnet));
@@ -207,7 +207,6 @@ AFRAME.registerComponent("handy-controls", {
           el.object3D.getWorldPosition(tempVector3);
           magnetEl.worldToLocal(tempVector3);
           if (tempVector3.lengthSq() < magnetRange*magnetRange) {
-            shouldMagnet = true;
             return el;
           }
         }
@@ -217,6 +216,41 @@ AFRAME.registerComponent("handy-controls", {
     const toUpdate = [];
     const frame = this.el.sceneEl.frame;
     for (const inputSource of session.inputSources) {
+      
+      let index=null;
+      let shouldMagnet = false;
+      if (inputSource.handedness === "left") index=0;
+      if (inputSource.handedness === "right") index=1;
+      if (index !== null && magnetEls[index] && magnetTargets[index]) {
+        const magnetEl = magnetEls[index];
+        const magnetTarget = magnetTargets[index];
+        const jointName = magnetEl.dataset[inputSource.handedness];
+        let pose;
+        if (jointName === 'grip') {
+            const joint = inputSource.hand.get("middle-finger-metacarpal");
+            if (joint) {
+              pose = frame.getJointPose(joint, referenceSpace);
+              tempObject3D.quaternion.copy(pose.transform.orientation);
+              this.gripQuaternions.forEach(q => tempObject3D.quaternion.multiply(q));
+              tempObject3D.position.copy(this.gripOffset);
+              tempObject3D.position.applyQuaternion(tempObject3D.quaternion);
+              tempObject3D.position.add(pose.transform.position);
+              shouldMagnet = true;
+            }
+        } else {
+          const joint = inputSource.hand.get(jointName);
+          if (joint) {
+            pose = frame.getJointPose(joint, referenceSpace);
+            tempObject3D.position.copy(pose.transform.position);
+            tempObject3D.quaternion.copy(pose.transform.orientation);
+            shouldMagnet = true;
+          }
+        }
+      }
+      
+      if (shouldMagnet) {
+        
+      }
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
       if (!currentMesh) return;
