@@ -207,7 +207,7 @@ AFRAME.registerComponent("handy-controls", {
           const magnetRange = 0.2;
           el.object3D.getWorldPosition(tempVector3);
           magnetEl.object3D.worldToLocal(tempVector3);
-          console.log(tempVector3.length().toFixed(2));
+          // console.log(tempVector3.length().toFixed(2));
           if (tempVector3.length() < magnetRange) {
             return el;
           }
@@ -252,17 +252,15 @@ AFRAME.registerComponent("handy-controls", {
         }
       }
       
+      
+      // Need to get the transform that moves tempObject3D to the position of the magnetTarget
+      // and store it in tempObject3D
       if (shouldMagnet) {
+        const fromObj = tempObject3D;
+        const toObj = magnetTarget.object3D;
         tempObject3D.updateMatrixWorld();
-        magnetEl.object3D.updateMatrixWorld();
-        if (this.el.object3D.parent) {
-          tempMatrix4.copy(this.el.object3D.parent.matrix);
-          tempMatrix4.invert();
-        } else {
-          tempMatrix4.identity();
-        }
-        tempObject3D.applyMatrix(tempMatrix4);
-        tempObject3D.matrixWorld.decompose( tempObject3D.position, tempObject3D.quaternion, tempObject3D.scale );
+        toObj.updateMatrixWorld();
+        
       }
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
@@ -300,7 +298,7 @@ AFRAME.registerComponent("handy-controls", {
               for (const el of elMap.get(bone.jointName)) {
                 el.object3D.position.copy(pose.transform.position);
                 el.object3D.quaternion.copy(pose.transform.orientation);
-                if (shouldMagnet) el.object3D.applyMatrix4(tempObject3D.matrix);
+                // if (shouldMagnet) el.object3D.applyMatrix4(tempObject3D.matrix);
                 el.object3D.visible = (el.getDOMAttribute('visible') !== false);
               }
             }
