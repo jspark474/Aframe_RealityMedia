@@ -212,6 +212,8 @@ AFRAME.registerComponent("handy-controls", {
     const referenceSpace = this.el.sceneEl.renderer.xr.getReferenceSpace();
     const toUpdate = [];
     const frame = this.el.sceneEl.frame;
+    
+    inputSourceLoop:
     for (const inputSource of session.inputSources) {
       
       const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
@@ -268,6 +270,9 @@ AFRAME.registerComponent("handy-controls", {
             
             bone.position.copy(pose.transform.position);
             bone.quaternion.copy(pose.transform.orientation);
+          } else {
+            // Failed to get hand pose so continue looping over elements
+            continue inputSourceLoop;
           }
         }
       }
