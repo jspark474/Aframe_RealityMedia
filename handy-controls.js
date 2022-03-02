@@ -127,21 +127,24 @@ AFRAME.registerComponent("handy-controls", {
       }
     }
     
-    this.gripOffset = new THREE.Vector3(-0.005, -0.03, 0);
+    this.gripOffset = {
+      right: new THREE.Vector3(-0.005, -0.03, 0),
+      left: new THREE.Vector3(0.005, -0.03, 0)
+    };
     this.gripQuaternions = {
       right: [new THREE.Quaternion().setFromUnitVectors(
         new THREE.Vector3(0,0,-1),
-        new THREE.Vector3(-3,0,-1).normalize()
+        new THREE.Vector3(-1,0,0).normalize()
       ),new THREE.Quaternion().setFromUnitVectors(
         new THREE.Vector3(0,1,0),
         new THREE.Vector3(-1,0,0)
       )],
       left: [new THREE.Quaternion().setFromUnitVectors(
         new THREE.Vector3(0,0,1),
-        new THREE.Vector3(-3,0,-1).normalize()
+        new THREE.Vector3(1,0,0).normalize()
       ),new THREE.Quaternion().setFromUnitVectors(
-        new THREE.Vector3(0,1,0),
-        new THREE.Vector3(-1,0,0)
+        new THREE.Vector3(1,1,0),
+        new THREE.Vector3(-1,0,-1)
       )]
     };
     
@@ -255,7 +258,7 @@ AFRAME.registerComponent("handy-controls", {
                 for (const el of elMap.get('grip')) {
                   el.object3D.quaternion.copy(pose.transform.orientation);
                   this.gripQuaternions[inputSource.handedness].forEach(q => el.object3D.quaternion.multiply(q));
-                  el.object3D.position.copy(this.gripOffset);
+                  el.object3D.position.copy(this.gripOffset[inputSource.handedness]);
                   el.object3D.position.applyQuaternion(el.object3D.quaternion);
                   el.object3D.position.add(pose.transform.position);
                   el.object3D.visible = (el.getDOMAttribute('visible') !== false);
