@@ -41,6 +41,8 @@ const tempVector3_B = new THREE.Vector3();
 const tempQuaternion_A = new THREE.Quaternion();
 const tempQuaternion_B = new THREE.Quaternion();
 const SCALE1 = new THREE.Vector3(1,1,1);
+const QUATERNION1 = new THREE.Quaternion().identity();
+const POSITION1 = new THREE.Vector3(0,0,0);
 const tempMatrix4 = new THREE.Matrix4();
 
 AFRAME.registerComponent("handy-controls", {
@@ -308,9 +310,15 @@ AFRAME.registerComponent("handy-controls", {
         magnetEl.object3D.getWorldPosition(tempVector3_B);
         tempVector3_A.sub(tempVector3_B);
         
+        // moderate it by the T
+        tempVector3_A.lerpVectors(POSITION1, tempVector3_A, fadeT);
+        
         magnetTarget.object3D.getWorldQuaternion(tempQuaternion_A);
         magnetEl.object3D.getWorldQuaternion(tempQuaternion_B);
         tempQuaternion_A.multiply(tempQuaternion_B.invert());
+        
+        // moderate it by the T
+        tempQuaternion_A.slerpQuaternions(QUATERNION1, tempQuaternion_A, fadeT);
         
         for (const bone of bones) {
           bone.position.sub(magnetEl.object3D.position);
