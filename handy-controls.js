@@ -40,10 +40,6 @@ const tempVector3_A = new THREE.Vector3();
 const tempVector3_B = new THREE.Vector3();
 const tempQuaternion_A = new THREE.Quaternion();
 const tempQuaternion_B = new THREE.Quaternion();
-const SCALE1 = new THREE.Vector3(1,1,1);
-const QUATERNION1 = new THREE.Quaternion().identity();
-const POSITION1 = new THREE.Vector3(0,0,0);
-const tempMatrix4 = new THREE.Matrix4();
 
 AFRAME.registerComponent("handy-controls", {
   schema: {
@@ -132,13 +128,20 @@ AFRAME.registerComponent("handy-controls", {
     }
     
     this.gripOffset = new THREE.Vector3(-0.005, -0.03, 0);
-    this.gripQuaternions = [new THREE.Quaternion().setFromUnitVectors(
+    this.gripQuaternions = {right: [new THREE.Quaternion().setFromUnitVectors(
       new THREE.Vector3(0,0,-1),
       new THREE.Vector3(-3,0,-1).normalize()
     ),new THREE.Quaternion().setFromUnitVectors(
       new THREE.Vector3(0,1,0),
       new THREE.Vector3(-1,0,0)
-    )];
+    )],
+                           left: [new THREE.Quaternion().setFromUnitVectors(
+      new THREE.Vector3(0,0,-1),
+      new THREE.Vector3(-3,0,-1).normalize()
+    ),new THREE.Quaternion().setFromUnitVectors(
+      new THREE.Vector3(0,1,0),
+      new THREE.Vector3(-1,0,0)
+    )]};
     
   },
 
@@ -249,7 +252,7 @@ AFRAME.registerComponent("handy-controls", {
               if (elMap.has('grip')) {
                 for (const el of elMap.get('grip')) {
                   el.object3D.quaternion.copy(pose.transform.orientation);
-                  this.gripQuaternions.forEach(q => el.object3D.quaternion.multiply(q));
+                  this.gripQuaternions[inputSource.handedness].forEach(q => el.object3D.quaternion.multiply(q));
                   el.object3D.position.copy(this.gripOffset);
                   el.object3D.position.applyQuaternion(el.object3D.quaternion);
                   el.object3D.position.add(pose.transform.position);
@@ -308,17 +311,11 @@ AFRAME.registerComponent("handy-controls", {
         
         magnetTarget.object3D.getWorldPosition(tempVector3_A);
         magnetEl.object3D.getWorldPosition(tempVector3_B);
-        tempVector3_A.sub(tempVector3_B);
-        
-        // moderate it by the T
-        tempVector3_A.lerpVectors(POSITION1, tempVector3_A, fadeT);
+        tempVector3_A.lerp(tempVector3_B, 1-fadeT).sub(tempVector3_B);
         
         magnetTarget.object3D.getWorldQuaternion(tempQuaternion_A);
         magnetEl.object3D.getWorldQuaternion(tempQuaternion_B);
-        tempQuaternion_A.multiply(tempQuaternion_B.invert());
-        
-        // moderate it by the T
-        tempQuaternion_A.slerpQuaternions(QUATERNION1, tempQuaternion_A, fadeT);
+        tempQuaternion_A.slerp(tempQuaternion_B, 1-fadeT).multiply(tempQuaternion_B.invert());
         
         for (const bone of bones) {
           bone.position.sub(magnetEl.object3D.position);
