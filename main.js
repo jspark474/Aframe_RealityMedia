@@ -66,6 +66,9 @@ window.addEventListener("DOMContentLoaded", function() {
     el.parentNode.addEventListener('pose', function (event) {
       el.setAttribute('text', 'value', event.detail.pose);
     });
+    el.parentNode.addEventListener('gamepad', function (event) {
+      el.setAttribute('text', 'value', event.detail.event);
+    });
   }
   
   sceneEl.addEventListener('object3dset', function () {
