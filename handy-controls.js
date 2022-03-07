@@ -1025,6 +1025,7 @@
           const elArray = elMap.get(poseName) || [];
           elArray.push(el);
           elMap.set(poseName, elArray);
+          el.object3D.visible = false;
         }
 
         handMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
@@ -1040,6 +1041,16 @@
           for (const bone of bones) {
             const joint = inputSource.hand.get(bone.jointName);
             if (joint) {
+
+              // Keep hand elements visible even when tracking is lost
+              if (handMesh.visible) {
+                if (elMap.has(bone.jointName)) {
+                  for (const el of elMap.get(bone.jointName)) {
+                    el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+                  }
+                }
+              }
+
               const pose = frame.getJointPose(joint, referenceSpace);
               if (pose) {
                 handMesh.visible = true;
@@ -1047,7 +1058,6 @@
                   for (const el of elMap.get(bone.jointName)) {
                     el.object3D.position.copy(pose.transform.position);
                     el.object3D.quaternion.copy(pose.transform.orientation);
-                    el.object3D.visible = (el.getDOMAttribute('visible') !== false);
                     if (el.dataset.noMagnet === undefined) toMagnet.push(el.object3D);
                   }
                 }
@@ -1075,9 +1085,6 @@
             }
           }
         } else {
-          for (const el of allEls) {
-            el.object3D.visible = false;
-          }
           if (handMesh) {
             handMesh.visible = false;
           }
