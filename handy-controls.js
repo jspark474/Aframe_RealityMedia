@@ -1027,19 +1027,6 @@
           elMap.set(poseName, elArray);
         }
 
-        if (inputSource.targetRayMode === "screen") {
-          const name = `screen-${transientSourceIndex++}`;
-          const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
-          if (!pose) continue inputSourceLoop;
-          if (elMap.has(name)) {
-            for (const el of elMap.get(name)) {
-              el.object3D.position.copy(pose.transform.position);
-              el.object3D.quaternion.copy(pose.transform.orientation);
-              el.object3D.visible = (el.getDOMAttribute('visible') !== false);
-            }
-          }
-        }
-
         handMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
         if (inputSource.hand) {
           toUpdate.push(inputSource);
@@ -1093,6 +1080,19 @@
           }
           if (handMesh) {
             handMesh.visible = false;
+          }
+        }
+
+        if (inputSource.targetRayMode === "screen") {
+          const name = `screen-${transientSourceIndex++}`;
+          const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
+          if (!pose) continue inputSourceLoop;
+          if (elMap.has(name)) {
+            for (const el of elMap.get(name)) {
+              el.object3D.position.copy(pose.transform.position);
+              el.object3D.quaternion.copy(pose.transform.orientation);
+              el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+            }
           }
         }
 
