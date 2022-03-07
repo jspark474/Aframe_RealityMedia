@@ -73,9 +73,9 @@
       
       <!-- Hand tracking -->
       <a-entity handy-controls="right:#right-gltf;materialOverride:right;" material="color:gold;metalness:1;roughness:0;">
-        <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:blue" data-no-magnet data-none="screen-0"></a-torus>
-        <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:green" data-no-magnet data-none="screen-1"></a-torus>
-        <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:red" data-no-magnet data-none="screen-2"></a-torus>
+        <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:blue" data-none="screen-0"></a-torus>
+        <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:green" data-none="screen-1"></a-torus>
+        <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:red" data-none="screen-2"></a-torus>
         
         <a-gltf-model src="#watch-gltf" data-left="wrist" position="-1000 0 0">
           <a-sphere radius="0.02" position="0 0.02 0" sphere-collider="radius:0.02;objects:[data-right$=-tip];" exit-on="hitend" visible="false"></a-sphere>
