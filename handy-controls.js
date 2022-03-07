@@ -1128,7 +1128,8 @@
           }
         }
 
-        if (this.data.renderGamepad && inputSource.gamepad) {
+        // If we should draw gamepads then do 
+        if (this.data.renderGamepad && inputSource.gamepad && !inputSource.hand) {
           controllerModel = this.getControllerModel(i, inputSource);
           controllerModel.visible = true;
 
