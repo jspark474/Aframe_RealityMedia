@@ -1091,7 +1091,9 @@
           for (const el of allEls) {
             el.object3D.visible = false;
           }
-          handMesh.visible = false;
+          if (handMesh) {
+            handMesh.visible = false;
+          }
         }
 
         if (this.data.renderGamepad && inputSource.gamepad) {
