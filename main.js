@@ -26,20 +26,20 @@ AFRAME.registerComponent("origin-on-ar-start", {
   }
 });
 
-// AFRAME.registerComponent("xr-follow", {
-//   schema: {},
-//   init() {
-//   },
-//   tick() {
-//     const scene = this.el.sceneEl;
-//     const cameraObject = scene.camera;
-//     const camera = (scene.is('ar-mode') || scene.is('vr-mode')) ?
-//           scene.renderer.xr.getCamera(cameraObject) : cameraObject;
-//     const object3D = this.el.object3D;
-//     camera.getWorldPosition(object3D.position);
-//     this.el.parentNode.object3D.worldToLocal(object3D.position);
-//   }
-// });
+AFRAME.registerComponent("xr-follow", {
+  schema: {},
+  init() {
+  },
+  tick() {
+    const scene = this.el.sceneEl;
+    const cameraObject = scene.camera;
+    const camera = (scene.is('ar-mode') || scene.is('vr-mode')) ?
+          scene.renderer.xr.getCamera(cameraObject) : cameraObject;
+    const object3D = this.el.object3D;
+    camera.getWorldPosition(object3D.position);
+    object3D.parent.worldToLocal(object3D.position);
+  }
+});
 
 AFRAME.registerComponent("exit-on", {
   schema: {
