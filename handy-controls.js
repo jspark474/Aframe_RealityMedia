@@ -943,7 +943,7 @@
         const session = this.el.sceneEl.xrSession;
         const frame = e.frame;
         const inputSource = e.inputSource;
-        const referenceSpace = this.el.renderer.xr.getReferenceSpace();
+        const referenceSpace = this.el.sceneEl.renderer.xr.getReferenceSpace();
         const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
         const handedness = e.inputSource.handedness;
         const details = {
@@ -954,10 +954,6 @@
 
         let transientSourceIndex = 0;
         for (const inputSource of session.inputSources) {
-          
-          const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
-          if (!currentMesh) return;
-          
           const allEls = Array.from(this.el.querySelectorAll(`[data-${inputSource.handedness}]`));
           if (inputSource.targetRayMode === "screen") {
             const name = `screen-${transientSourceIndex++}`;
@@ -1019,9 +1015,7 @@
         let bones = [];
         const toMagnet = [];
         let controllerModel;
-        
-        const currentMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
-        if (!currentMesh) return;
+        let handMesh;
         
         const allEls = Array.from(this.el.querySelectorAll(`[data-${inputSource.handedness}]`));
 
@@ -1046,6 +1040,7 @@
           }
         }
 
+        handMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
         if (inputSource.hand) {
           toUpdate.push(inputSource);
           const controllerModel = this.el.getObject3D('controller-model-' + inputSource.handedness);
@@ -1060,7 +1055,7 @@
             if (joint) {
               const pose = frame.getJointPose(joint, referenceSpace);
               if (pose) {
-                currentMesh.visible = true;
+                handMesh.visible = true;
                 if (elMap.has(bone.jointName)) {
                   for (const el of elMap.get(bone.jointName)) {
                     el.object3D.position.copy(pose.transform.position);
@@ -1096,7 +1091,7 @@
           for (const el of allEls) {
             el.object3D.visible = false;
           }
-          currentMesh.visible = false;
+          handMesh.visible = false;
         }
 
         if (this.data.renderGamepad && inputSource.gamepad) {
