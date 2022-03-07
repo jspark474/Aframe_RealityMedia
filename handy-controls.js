@@ -1085,13 +1085,29 @@
 
         if (inputSource.targetRayMode === "screen") {
           const name = `screen-${transientSourceIndex++}`;
-          const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
-          if (!pose) continue inputSourceLoop;
           if (elMap.has(name)) {
+            const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
+            if (!pose) continue inputSourceLoop;
             for (const el of elMap.get(name)) {
               el.object3D.position.copy(pose.transform.position);
               el.object3D.quaternion.copy(pose.transform.orientation);
               el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+            }
+          }
+
+          // Don't do the magnet behaviour and don't render any gamepads
+          continue inputSourceLoop;
+        }
+
+        // handle any tracked elements attached to the ray space of the input source this works for any types
+        if (elMap.has('ray') && inputSource.targetRaySpace) {
+          const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
+          if (pose) {
+            for (const el of elMap.get('ray')) {
+              el.object3D.position.copy(pose.transform.position);
+              el.object3D.quaternion.copy(pose.transform.orientation);
+              el.object3D.visible = (el.getDOMAttribute('visible') !== false);
+              if (el.dataset.noMagnet === undefined) toMagnet.push(el.object3D);
             }
           }
         }
@@ -1168,18 +1184,6 @@
             }
           }
           prevGamePads.set(inputSource, data);
-        }
-
-        if (elMap.has('ray') && inputSource.targetRaySpace) {
-          const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
-          if (pose) {
-            for (const el of elMap.get('ray')) {
-              el.object3D.position.copy(pose.transform.position);
-              el.object3D.quaternion.copy(pose.transform.orientation);
-              el.object3D.visible = (el.getDOMAttribute('visible') !== false);
-              if (el.dataset.noMagnet === undefined) toMagnet.push(el.object3D);
-            }
-          }
         }
         
         if (magnetEl) {
