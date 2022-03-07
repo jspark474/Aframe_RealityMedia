@@ -1004,6 +1004,23 @@
       const toUpdate = [];
       const frame = this.el.sceneEl.frame;
       
+      const els = Array.from(this.el.querySelectorAll(`[data-left],[data-right],[data-none]`));
+      const elArrays = { left: [], right: [], none: [] };
+      const elMaps = { left: new Map(), right: new Map(), none: new Map() };
+      for (const el of els) {
+        el.object3D.visible = false;
+        for (const handedness of ['left', 'right', 'none']) {
+          if (el.dataset[handedness] !== undefined) {
+            elArrays[handedness].push(el);
+
+            const poseName = el.dataset[handedness];
+            const poseElArray = elMaps[handedness].get(poseName) || [];
+            poseElArray.push(el);
+            elMaps[handedness].set(poseName, poseElArray);
+          }
+        }
+      }
+      
       let i=-1;
       let transientSourceIndex = 0;
       inputSourceLoop:
@@ -1017,16 +1034,8 @@
         let controllerModel;
         let handMesh;
         
-        const allEls = Array.from(this.el.querySelectorAll(`[data-${inputSource.handedness}]`));
-
-        const elMap = new Map();
-        for (const el of allEls) {
-          const poseName = el.dataset[inputSource.handedness];
-          const elArray = elMap.get(poseName) || [];
-          elArray.push(el);
-          elMap.set(poseName, elArray);
-          el.object3D.visible = false;
-        }
+        const allEls = elArrays[inputSource.handedness];
+        const elMap = elMaps[inputSource.handedness];
 
         handMesh = this.el.getObject3D("hand-mesh-" + inputSource.handedness);
         if (inputSource.hand) {
