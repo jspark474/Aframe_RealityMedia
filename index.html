@@ -73,7 +73,7 @@
       
       <!-- Hand tracking -->
       <a-entity handy-controls="right:#right-gltf;materialOverride:right;" material="color:gold;metalness:1;roughness:0;">
-        <a-entity data-none="screen-0"><a-torus radius="0.01" radius-tubular="0.01" color="skyblue" position="0 0 -0.2"></a-torus></a-entity>
+        <a-entity data-none="screen-0"><a-torus radius="0.2" radius-tubular="0.05" material="color:skyblue;side:double;" position="0 0 -0.2"></a-torus></a-entity>
 
         <a-gltf-model src="#watch-gltf" data-left="wrist" position="-1000 0 0">
           <a-sphere radius="0.02" position="0 0.02 0" sphere-collider="radius:0.02;objects:[data-right$=-tip];" exit-on="hitend" visible="false"></a-sphere>
