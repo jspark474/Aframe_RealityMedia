@@ -69,8 +69,8 @@ AFRAME.registerComponent("grab-magnet-target", {
     this.isGrabbing = false;
     this.oldParent = null;
     this.grabbedEl = null;
-    this.oldQuaternion = THREE.Quaternion();
-    this.oldPosition = THREE.Quaternion();
+    this.oldQuaternion = new THREE.Quaternion();
+    this.oldPosition = new THREE.Quaternion();
   },
   update(oldData) {
     if (oldData.startEvents) {
@@ -106,7 +106,10 @@ AFRAME.registerComponent("grab-magnet-target", {
   grabEnd() {
     if (this.isGrabbing) {
       const el = this.grabbedEl;
+      this.oldParent.appendChild(el);
       el.object3D.quaternion.copy(this.oldQuaternion);
+      el.object3D.position.copy(this.oldPosition);
+      this.isGrabbing = false;
     }
   },
 });

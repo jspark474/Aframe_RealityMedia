@@ -702,7 +702,7 @@
   /* global AFRAME, THREE */
   const DEFAULT_PROFILES_PATH = "https://cdn.jsdelivr.net/npm/@webxr-input-profiles/assets/dist/profiles";
   const DEFAULT_HAND_PROFILE_PATH = DEFAULT_PROFILES_PATH + "/generic-hand";
-  const LIB_URL = "https://cdn.jsdelivr.net/npm/handy-work" + ('@' + "2.1.0" );
+  const LIB_URL = "https://cdn.jsdelivr.net/npm/handy-work" + ('@' + "2.2.1" );
   const LIB = LIB_URL + "/build/esm/handy-work.standalone.js";
   const POSE_FOLDER = LIB_URL + "/poses/";
   const clamp = (a, min = 0, max = 1) => Math.min(max, Math.max(min, a));
@@ -754,7 +754,8 @@
   AFRAME.registerComponent("handy-controls", {
     schema: {
       renderGamepad: {
-        default: true,
+        oneOf: ['both', 'left', 'right', 'none'],
+        default: 'both',
         description: `Whether to render a gamepad model when it's not doing hand tracking`
       },
       left: {
@@ -845,7 +846,7 @@
       }
 
       sceneEl.addEventListener("enter-vr", () => {
-        for (const name of ["select", "selectend", "squeeze", "squeezeend", "squeezestart"])
+        for (const name of ["select", "selectstart", "selectend", "squeeze", "squeezeend", "squeezestart"])
           sceneEl.xrSession.addEventListener(name, this.eventFactory(name, this));
       });
       
@@ -1128,8 +1129,11 @@
           }
         }
 
-        // If we should draw gamepads then do 
-        if (this.data.renderGamepad && inputSource.gamepad && !inputSource.hand) {
+        // If we should draw gamepads then do, but don't draw gamepad and hand
+        if (
+          (this.data.renderGamepad === "both" || this.data.renderGamepad === inputSource.handedness) &&
+          inputSource.gamepad && !inputSource.hand
+        ) {
           controllerModel = this.getControllerModel(i, inputSource);
           controllerModel.visible = true;
 
@@ -1195,7 +1199,7 @@
               data.axes.forEach((value,i)=>{
                 let name = controllerModel.gamepadMappings?.axes[i] || `axes${i}`;
                 if (value !== old.axes[i]) {
-                  this.emitGamepad(allEls, `${name}changed`, Object.assign({value}, eventDetails));
+                  this.emitGamepad(allEls, `${name}moved`, Object.assign({value}, eventDetails));
                 }
               });
             }
@@ -1224,6 +1228,12 @@
               break;
             }
           }
+        }
+
+        if (fadeT > 0.99 && magnetTarget && magnetTarget.id) {
+          magnetEl.dataset.magnetTarget = magnetTarget.id;
+        } else {
+          magnetEl.dataset.magnetTarget = undefined;
         }
         
         if (magnetTarget) {
