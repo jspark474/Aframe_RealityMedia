@@ -68,7 +68,7 @@
       ></a-entity>
       
       <a-entity xr-follow>
-        <a-gltf-model id="sword" src="#sword-gltf" scale="0.6,0.6,1" position="-0.2 -0.4 -0.2" rotation="-30 180 0"></a-gltf-model>
+        <a-gltf-model id="sword" src="#sword-gltf" class="magnet" scale="0.6,0.6,1" position="-0.2 -0.4 -0.2" rotation="-30 180 0"></a-gltf-model>
       </a-entity>
       
       <!-- Hand tracking -->
@@ -94,8 +94,8 @@
         <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
         
         <!-- These get drawn towards grabable objects, moving the whole hand and the attached elements-->
-        <a-entity data-right="grip" data-magnet="#sword"></a-entity>
-        <a-entity data-left="grip" data-magnet="#sword"></a-entity>
+        <a-entity data-right="grip" data-magnet=".magnet-left,.magnet" grab-magnet-target="startEvents:squeezestart,fist;stopEvents:flat,squeezeend;"></a-entity>
+        <a-entity data-left="grip" data-magnet=".magnet-right,.magnet" grab-magnet-target="startEvents:squeezestart,fist;stopEvents:flat,squeezeend;"></a-entity>
     
         <!-- markers to let us know the real location of the hands -->
         <a-sphere data-right="grip" data-no-magnet radius="0.01" color="red"></a-sphere>

@@ -54,6 +54,37 @@ AFRAME.registerComponent("exit-on", {
   }
 });
 
+AFRAME.registerComponent("grab-magnet-target", {
+  schema: {
+    startEvents: {
+      type: 'array'
+    },
+    stopEvents: {
+      type: 'array'
+    },
+  },
+  init() {
+    this.grabStart = this.grabStart.bind(this);
+    this.grabEnd = this.grabEnd.bind(this);
+  },
+  update(oldData) {
+    for (const eventName of oldData.grabStart) {
+      this.el.removeEventListener(eventName, this.grabStart);
+    }
+    for (const eventName of oldData.grabEnd) {
+      this.el.removeEventListener(eventName, this.grabEnd);
+    }
+    for (const eventName of this.data.grabStart) {
+      
+    }
+    for (const eventName of this.data.grabEnd) {
+      
+    }
+  },
+  grabStart() {},
+  grabEnd() {},
+});
+
 window.addEventListener("DOMContentLoaded", function() {
   const sceneEl = document.querySelector("a-scene");
   const message = document.getElementById("dom-overlay-message");
