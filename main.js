@@ -68,21 +68,29 @@ AFRAME.registerComponent("grab-magnet-target", {
     this.grabEnd = this.grabEnd.bind(this);
   },
   update(oldData) {
-    for (const eventName of oldData.grabStart) {
-      this.el.removeEventListener(eventName, this.grabStart);
+    if (oldData.startEvents) {
+      for (const eventName of oldData.startEvents) {
+        this.el.removeEventListener(eventName, this.grabStart);
+      }
     }
-    for (const eventName of oldData.grabEnd) {
-      this.el.removeEventListener(eventName, this.grabEnd);
+    if (oldData.stopEvents) {
+      for (const eventName of oldData.stopEvents) {
+        this.el.removeEventListener(eventName, this.grabEnd);
+      }
     }
-    for (const eventName of this.data.grabStart) {
-      
+    for (const eventName of this.data.startEvents) {
+      this.el.addEventListener(eventName, this.startEvents);
     }
-    for (const eventName of this.data.grabEnd) {
-      
+    for (const eventName of this.data.stopEvents) {
+      this.el.addEventListener(eventName, this.stopEvents);
     }
   },
-  grabStart() {},
-  grabEnd() {},
+  grabStart() {
+    
+  },
+  grabEnd() {
+    
+  },
 });
 
 window.addEventListener("DOMContentLoaded", function() {
