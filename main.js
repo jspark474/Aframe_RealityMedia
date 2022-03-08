@@ -66,6 +66,11 @@ AFRAME.registerComponent("grab-magnet-target", {
   init() {
     this.grabStart = this.grabStart.bind(this);
     this.grabEnd = this.grabEnd.bind(this);
+    this.isGrabbing = false;
+    this.oldParent = null;
+    this.grabbedEl = null;
+    this.oldQuaternion = THREE.Quaternion();
+    this.oldPosition = THREE.Quaternion();
   },
   update(oldData) {
     if (oldData.startEvents) {
@@ -86,10 +91,23 @@ AFRAME.registerComponent("grab-magnet-target", {
     }
   },
   grabStart() {
-    
+    const targetId = this.el.dataset.magnetTarget;
+    if (this.isGrabbing === false && targetId) {
+      const el = document.getElementById(targetId);
+      this.grabbedEl = el;
+      this.el.appendChild(el);
+      this.isGrabbing = true;
+      this.oldQuaternion.copy(el.object3D.quaternion);
+      el.object3D.quaternion.identity();
+      this.oldPosition.copy(el.object3D.position);
+      el.object3D.position.set(0,0,0);
+    }
   },
   grabEnd() {
-    
+    if (this.isGrabbing) {
+      const el = this.grabbedEl;
+      el.object3D.quaternion.copy(this.oldQuaternion);
+    }
   },
 });
 
