@@ -953,25 +953,21 @@
         };
         if (!pose) return;
 
-        let transientSourceIndex = 0;
-        for (const inputSource of session.inputSources) {
-          const allEls = Array.from(this.el.querySelectorAll(`[data-${inputSource.handedness}]`));
-          if (inputSource.targetRayMode === "screen") {
-            const name = `screen-${transientSourceIndex++}`;
-            for (const el of allEls) {
-              if (el.dataset[inputSource.handedness] === name) continue; 
+        const allEls = Array.from(this.el.querySelectorAll(`[data-${inputSource.handedness}]`));
+        if (inputSource.targetRayMode === "screen") {
+          const name = `screen-${
+          Array.from(session.inputSources).filter(i=>i.targetRayMode === "screen").indexOf(inputSource)
+        }`;
+          for (const el of allEls) {
+            if (el.dataset[inputSource.handedness] === name) {
               el.object3D.position.copy(pose.transform.position);
               el.object3D.quaternion.copy(pose.transform.orientation);
               el.object3D.visible = (el.getDOMAttribute('visible') !== false);
               el.emit(eventName, details);
             }
           }
-
-          if (inputSource.gamepad || inputSource.hand) {
-            for (const el of allEls) {
-              el.emit(eventName, details);
-            }
-          }
+        } else if (inputSource.gamepad || inputSource.hand) {
+          for (const el of allEls) el.emit(eventName, details);
         }
       }
       if (event) return eventHandler.call(bindTarget, event);
