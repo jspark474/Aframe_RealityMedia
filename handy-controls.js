@@ -1001,7 +1001,7 @@
       const toUpdate = [];
       const frame = this.el.sceneEl.frame;
 
-      for (const el of this.el.childNodes){
+      for (const el of this.el.children){
         el.object3D.visible = false;
       }
 
@@ -1084,9 +1084,9 @@
         }
 
         // handle any tracked elements attached to the ray space of the input source this works for any types
-        for (const [name, pose] of [['ray', inputSource.targetRaySpace],['grip', inputSource.gripSpace]]) {
-          if (elMap.has(name) && pose) {
-            const pose = frame.getPose(pose, referenceSpace);
+        for (const [name, inputSourcePose] of [['ray', inputSource.targetRaySpace],['grip', inputSource.gripSpace]]) {
+          if (elMap.has(name) && inputSourcePose) {
+            const pose = frame.getPose(inputSourcePose, referenceSpace);
             if (pose) {
               for (const el of elMap.get(name)) {
                 el.object3D.position.copy(pose.transform.position);
