@@ -1229,7 +1229,7 @@
         if (fadeT > 0.99 && magnetTarget && magnetTarget.id) {
           magnetEl.dataset.magnetTarget = magnetTarget.id;
         } else {
-          magnetEl.dataset.magnetTarget = undefined;
+          delete magnetEl.dataset.magnetTarget;
         }
         
         if (magnetTarget) {
