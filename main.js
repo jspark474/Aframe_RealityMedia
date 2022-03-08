@@ -84,10 +84,10 @@ AFRAME.registerComponent("grab-magnet-target", {
       }
     }
     for (const eventName of this.data.startEvents) {
-      this.el.addEventListener(eventName, this.startEvents);
+      this.el.addEventListener(eventName, this.grabStart);
     }
     for (const eventName of this.data.stopEvents) {
-      this.el.addEventListener(eventName, this.stopEvents);
+      this.el.addEventListener(eventName, this.grabEnd);
     }
   },
   grabStart() {
