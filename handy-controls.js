@@ -1191,15 +1191,18 @@
           
           magnetTarget.object3D.getWorldQuaternion(tempQuaternion_A);
           magnetEl.object3D.getWorldQuaternion(tempQuaternion_B);
-          tempQuaternion_A.slerp(tempQuaternion_B, 1-fadeT).multiply(tempQuaternion_B.invert());
+          tempQuaternion_A.slerp(tempQuaternion_B, 1-fadeT);
+          tempQuaternion_B.invert();
           
-          magnetEl.object3D.getWorldPosition(tempVector3_B);
+          tempVector3_B.copy(magnetEl.object3D.position);
 
           // Move elements to match the bones but skil elements which are marked data-no-magnet
           for (const object3D of toMagnet) {
             object3D.position.sub(tempVector3_B);
+            object3D.position.applyQuaternion(tempQuaternion_B);
             object3D.position.applyQuaternion(tempQuaternion_A);
             object3D.position.add(tempVector3_B);
+            object3D.applyQuaternion(tempQuaternion_B);
             object3D.applyQuaternion(tempQuaternion_A);
             object3D.position.add(tempVector3_A);
           }
