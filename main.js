@@ -75,7 +75,7 @@ AFRAME.registerComponent('linear-constraint', {
   },
   tick() {
     this.data.target.object3D.getWorldPosition(this.tempVec3);
-    this.el.object3D.
+    this.el.object3D.parent.worldToLocal(this.tempVec3);
   }
 })
 
