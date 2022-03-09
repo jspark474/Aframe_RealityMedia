@@ -67,27 +67,33 @@ AFRAME.registerComponent('linear-constraint', {
     max: {
       default: Infinity
     },
-    el: {
-      type: 'querySelector'
+    target: {
+      type: 'selector'
     }
   },
   init() {
     this.tempVec3 = new THREE.Vector3();
+    this.n =  new THREE.Vector3();
+  },
+  update () {
+    // Ensure the axis is normalized
+    this.n.copy(this.data.axis).normalize();
   },
   tick() {
     this.data.target.object3D.getWorldPosition(this.tempVec3);
     this.el.object3D.parent.worldToLocal(this.tempVec3);
     
-    const n = this.data.axis;
+    const n = this.n;
     const p0 = this.tempVec3;
     // We have a plane with normal n that contains p0
     // We want to place the object where a vector n from the origin intersects the plane
     // n.x x + n.y y + n.z z = p0.n
     // Sub in vector equation p=tn
-    // n.x * n.x + 
-
+    // t * n.x * n.x + t * n.y * n.y + t * n.z * n.z = p0.n
+    // equivalent to  t * n.length() = p0.n
     const t = clamp(p0.dot(n)/n.length() ,this.data.min, this.data.max);
-    
+    this.el.object3D.position.copy(n);
+    this.el.object3D.position.multiplyScalar(t);
   }
 });
 
