@@ -717,13 +717,6 @@
   const tempQuaternion_B = new THREE.Quaternion();
   const handednesses = ['left', 'right', 'none'];
 
-  function moveAroundAndTranslate(object3D, center, quaternion, translate) {
-    object3D.position.sub(center);
-    object3D.position.applyQuaternion(quaternion);
-    object3D.position.add(center);
-    object3D.applyQuaternion(quaternion);
-    object3D.position.add(translate);
-  }
   const joints = [
     "wrist",
     "thumb-metacarpal",
@@ -1005,11 +998,12 @@
         el.object3D.visible = false;
       }
 
-      let i=-1;
+      let i=0;
       let transientSourceIndex = 0;
+      const numberOfTransientInputSources = Array.from(session.inputSources).reduce((a,inputSource)=>inputSource.targetRayMode === "screen"?a+1:a,0);
       inputSourceLoop:
       for (const inputSource of session.inputSources) {
-        i++;
+        const inputSourceIndex = i++;
         const magnetEl = this.el.querySelector(`[data-magnet][data-${inputSource.handedness}]`);
         let magnetTarget = null;
         let fadeT = 1;
@@ -1033,6 +1027,7 @@
           if (!bones.length) continue;
           for (const bone of bones) {
             const joint = inputSource.hand.get(bone.jointName);
+            toMagnet.push(bone);
             if (joint) {
 
               // Keep hand elements visible even when tracking is lost
@@ -1068,7 +1063,7 @@
         }
 
         if (inputSource.targetRayMode === "screen") {
-          const name = `screen-${transientSourceIndex++}`;
+          const name = `screen-${-1 + numberOfTransientInputSources - transientSourceIndex++}`;
           if (elMap.has(name)) {
             const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
             if (!pose) continue inputSourceLoop;
@@ -1103,7 +1098,7 @@
           (this.data.renderGamepad === "any" || this.data.renderGamepad === inputSource.handedness) &&
           inputSource.gamepad && !inputSource.hand
         ) {
-          controllerModel = this.getControllerModel(i, inputSource);
+          controllerModel = this.getControllerModel(inputSourceIndex, inputSource);
           controllerModel.visible = true;
 
           if (inputSource.gripSpace) {
@@ -1175,10 +1170,7 @@
           const magnetTargets = document.querySelectorAll(magnetEl.dataset.magnet);
           for (const el of magnetTargets) {
             const [magnetRange,fadeEnd] = (el.dataset.magnetRange || "0.2,0.1").split(',').map(n => Number(n));
-            el.object3D.getWorldPosition(tempVector3);
-            magnetEl.object3D.worldToLocal(tempVector3);
-            
-            const d = tempVector3.length();
+            const d =  magnetEl.object3D.worldToLocal(el.object3D.getWorldPosition(tempVector3)).length();
             if (d < magnetRange) {
               magnetTarget = el;
               fadeT = invlerp(magnetRange,fadeEnd===undefined?magnetRange:fadeEnd,d);
@@ -1206,11 +1198,14 @@
 
           // Move elements to match the bones but skil elements which are marked data-no-magnet
           for (const object3D of toMagnet) {
-            moveAroundAndTranslate(object3D, tempVector3_B, tempQuaternion_A, tempVector3_A);
+            object3D.position.sub(tempVector3_B);
+            object3D.position.applyQuaternion(tempQuaternion_A);
+            object3D.position.add(tempVector3_B);
+            object3D.applyQuaternion(tempQuaternion_A);
+            object3D.position.add(tempVector3_A);
           }
         }
         for (const bone of bones) {
-          if (magnetTarget) moveAroundAndTranslate(bone, tempVector3_B, tempQuaternion_A, tempVector3_A);
           bone.applyMatrix4(this.el.object3D.matrixWorld);
           bone.updateMatrixWorld();
         }
