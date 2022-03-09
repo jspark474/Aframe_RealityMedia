@@ -94,12 +94,12 @@
         <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
         
         <!-- These get drawn towards grabable objects, moving the whole hand and the attached elements-->
-        <a-entity data-right="grip" data-magnet=".magnet-right:not([data-no-magnet]),.magnet:not([data-no-magnet])" grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort  vf            ,squeezeend;"></a-entity>
-        <a-entity data-left="grip"  data-magnet=".magnet-left:not([data-no-magnet]),.magnet:not([data-no-magnet])"  grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort  vf            ,squeezeend;"></a-entity>
+        <a-entity data-right="grip" data-magnet=".magnet-right:not([data-no-magnet]),.magnet:not([data-no-magnet])" grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;"></a-entity>
+        <a-entity data-left="grip"  data-magnet=".magnet-left:not([data-no-magnet]),.magnet:not([data-no-magnet])"  grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;"></a-entity>
     
         <!-- markers to let us know the real location of the hands -->
-        <a-sphere data-right="grip" data-no-magnet radius="0.01" color="red"></a-sphere>
-        <a-sphere data-left="grip" data-no-magnet radius="0.01" color="red"></a-sphere>
+        <a-sphere id="right-no-magnet" data-right="grip" data-no-magnet radius="0.01" color="red"></a-sphere>
+        <a-sphere id="left-no-magnet" data-left="grip" data-no-magnet radius="0.01" color="red"></a-sphere>
         
         <!-- Invisible objects at the tips of each finger for physics or intersections -->
         <a-sphere data-right="index-finger-tip" radius="0.01" visible="false"></a-sphere>
@@ -116,8 +116,8 @@
     </a-entity>
     
     <a-box shadow width="0.2" height="0.2" depth="0.2" position="-5 0.1 -2" rotation="0 30 0">
-      <a-box shadow width="0.1" height="0.1" depth="0.1" class="magnet" linear-constraint="axis:0 1 0;min:0.15;max:1;">
-      </a-box>
+      <a-box shadow width="0.1" height="0.1" depth="0.1" class="magnet" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#right-no-magnet;"></a-box>
+      <a-box shadow width="0.1" height="0.1" depth="0.1" class="magnet" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#left-no-magnet;"></a-box>
     </a-box>
       
     <a-entity id="my-ar-objects" position="-6 0 1">

@@ -57,9 +57,26 @@ AFRAME.registerComponent("exit-on", {
 AFRAME.registerComponent('linear-constraint', {
   schema: {
     axis: {
-      
+      type: 'vec3',
+      default: {x:0, y:0, z:-1}
+    },
+    min: {
+      default: -Infinity
+    },
+    max: {
+      default: Infinity
+    },
+    el: {
+      type: 'querySelector'
     }
   },
+  init() {
+    this.tempVec3 = new THREE.Vector3();
+  },
+  tick() {
+    this.data.target.object3D.getWorldPosition(this.tempVec3);
+    this.el.object3D.
+  }
 })
 
 AFRAME.registerComponent("grab-magnet-target", {
