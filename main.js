@@ -76,8 +76,15 @@ AFRAME.registerComponent('linear-constraint', {
   tick() {
     this.data.target.object3D.getWorldPosition(this.tempVec3);
     this.el.object3D.parent.worldToLocal(this.tempVec3);
+    
+    const n = this.data.axis;
+    const p0 = this.tempVec3;
+    // We have a plane with normal n that contains p0
+    // We want to place the object where a vector n from the origin intersects the plane
+    
+    
   }
-})
+});
 
 AFRAME.registerComponent("grab-magnet-target", {
   schema: {
