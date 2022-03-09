@@ -92,8 +92,7 @@ AFRAME.registerComponent('linear-constraint', {
     // t * n.x * n.x + t * n.y * n.y + t * n.z * n.z = p0.n
     // equivalent to  t * n.length() = p0.n
     const t = clamp(p0.dot(n)/n.length() ,this.data.min, this.data.max);
-    this.el.object3D.position.copy(n);
-    this.el.object3D.position.multiplyScalar(t);
+    this.el.object3D.position.copy(n).multiplyScalar(t);
   }
 });
 
