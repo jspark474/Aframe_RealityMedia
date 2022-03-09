@@ -1000,7 +1000,6 @@
 
       let i=0;
       let transientSourceIndex = 0;
-      const numberOfTransientInputSources = Array.from(session.inputSources).reduce((a,inputSource)=>inputSource.targetRayMode === "screen"?a+1:a,0);
       inputSourceLoop:
       for (const inputSource of session.inputSources) {
         const inputSourceIndex = i++;
@@ -1063,7 +1062,7 @@
         }
 
         if (inputSource.targetRayMode === "screen") {
-          const name = `screen-${-1 + numberOfTransientInputSources - transientSourceIndex++}`;
+          const name = `screen-${transientSourceIndex++}`;
           if (elMap.has(name)) {
             const pose = frame.getPose(inputSource.targetRaySpace, referenceSpace);
             if (!pose) continue inputSourceLoop;
