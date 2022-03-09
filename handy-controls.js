@@ -755,9 +755,9 @@
   AFRAME.registerComponent("handy-controls", {
     schema: {
       renderGamepad: {
-        oneOf: ['both', 'left', 'right', 'none'],
-        default: 'both',
-        description: `Whether to render a gamepad model when it's not doing hand tracking`
+        oneOf: ['any', 'left', 'right', 'none', 'never'],
+        default: 'any',
+        description: `Whether to render a gamepad model when it's not doing hand tracking, right, none and left are the names of controller handedness, any is all of them, and never is to not draw gamepads`
       },
       left: {
         description: 'URL for left controller',
@@ -771,7 +771,7 @@
       },
       materialOverride: {
         description: 'Which hand to use the `material` component for',
-        oneOf: ['both', 'left', 'right', 'none'],
+        oneOf: ['both', 'left', 'right', 'neither'],
         default: 'both'
       },
       fuseVShort: {
@@ -1098,9 +1098,9 @@
           }
         }
 
-        // If we should draw gamepads then do, but don't draw gamepad and hand
+        // If we should draw gamepads then do, but don't draw gamepad and hand if btoh present
         if (
-          (this.data.renderGamepad === "both" || this.data.renderGamepad === inputSource.handedness) &&
+          (this.data.renderGamepad === "any" || this.data.renderGamepad === inputSource.handedness) &&
           inputSource.gamepad && !inputSource.hand
         ) {
           controllerModel = this.getControllerModel(i, inputSource);
@@ -1172,7 +1172,7 @@
         
         if (magnetEl) {
           magnetEl.object3D.updateWorldMatrix(true, false);
-          const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet));
+          const magnetTargets = document.querySelectorAll(magnetEl.dataset.magnet);
           for (const el of magnetTargets) {
             const [magnetRange,fadeEnd] = (el.dataset.magnetRange || "0.2,0.1").split(',').map(n => Number(n));
             el.object3D.getWorldPosition(tempVector3);
@@ -1181,26 +1181,19 @@
             const d = tempVector3.length();
             if (d < magnetRange) {
               magnetTarget = el;
-              
-              if (fadeEnd) {
-                fadeT = invlerp(magnetRange,fadeEnd,d);
-              } else {
-                fadeT = 1;
-              }
-              
+              fadeT = invlerp(magnetRange,fadeEnd===undefined?magnetRange:fadeEnd,d);
               break;
             }
           }
-        }
 
-        if (fadeT > 0.99 && magnetTarget && magnetTarget.id) {
-          magnetEl.dataset.magnetTarget = magnetTarget.id;
-        } else {
-          delete magnetEl.dataset.magnetTarget;
+          if (fadeT > 0.5 && magnetTarget && magnetTarget.id) {
+            magnetEl.dataset.magnetTarget = magnetTarget.id;
+          } else {
+            delete magnetEl.dataset.magnetTarget;
+          }
         }
         
         if (magnetTarget) {
-          
           magnetTarget.object3D.getWorldPosition(tempVector3_A);
           magnetEl.object3D.getWorldPosition(tempVector3_B);
           tempVector3_A.lerp(tempVector3_B, 1-fadeT).sub(tempVector3_B);
@@ -1211,21 +1204,15 @@
           
           tempVector3_B.copy(magnetEl.object3D.position);
 
-          for (const bone of bones) {
-            moveAroundAndTranslate(bone, tempVector3_B, tempQuaternion_A, tempVector3_A);
-            bone.applyMatrix4(this.el.object3D.matrixWorld);
-            bone.updateMatrixWorld();
-          }
-
           // Move elements to match the bones but skil elements which are marked data-no-magnet
           for (const object3D of toMagnet) {
             moveAroundAndTranslate(object3D, tempVector3_B, tempQuaternion_A, tempVector3_A);
           }
-        } else {
-          for (const bone of bones) {
-            bone.applyMatrix4(this.el.object3D.matrixWorld);
-            bone.updateMatrixWorld();
-          }
+        }
+        for (const bone of bones) {
+          if (magnetTarget) moveAroundAndTranslate(bone, tempVector3_B, tempQuaternion_A, tempVector3_A);
+          bone.applyMatrix4(this.el.object3D.matrixWorld);
+          bone.updateMatrixWorld();
         }
       }
 
