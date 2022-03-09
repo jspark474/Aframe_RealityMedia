@@ -54,6 +54,14 @@ AFRAME.registerComponent("exit-on", {
   }
 });
 
+AFRAME.registerComponent('linear-constraint', {
+  schema: {
+    axis: {
+      
+    }
+  },
+})
+
 AFRAME.registerComponent("grab-magnet-target", {
   schema: {
     startEvents: {
