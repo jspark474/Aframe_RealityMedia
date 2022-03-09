@@ -714,6 +714,7 @@
   const tempVector3_B = new THREE.Vector3();
   const tempQuaternion_A = new THREE.Quaternion();
   const tempQuaternion_B = new THREE.Quaternion();
+  const tempQuaternion_C = new THREE.Quaternion();
   const handednesses = ['left', 'right', 'none'];
 
   const joints = [
@@ -1190,8 +1191,10 @@
           tempVector3_B.copy(magnetEl.object3D.position);
           tempVector3_A.lerp(tempVector3_B, 1-fadeT).sub(tempVector3_B);
           
+          this.el.object3D.getWorldQuaternion(tempQuaternion_C).invert();
           magnetTarget.object3D.getWorldQuaternion(tempQuaternion_A);
-          magnetEl.object3D.getWorldQuaternion(tempQuaternion_B);
+          tempQuaternion_A.premultiply(tempQuaternion_C);
+          tempQuaternion_B.copy(magnetEl.object3D.quaternion);
           tempQuaternion_A.slerp(tempQuaternion_B, 1-fadeT).multiply(tempQuaternion_B.invert());
           
           // Move elements to match the bones but skil elements which are marked data-no-magnet
