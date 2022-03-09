@@ -710,7 +710,6 @@
   const prevGamePads = new Map();
   const changedAxes = new Set();
 
-  const tempVector3 = new THREE.Vector3();
   const tempVector3_A = new THREE.Vector3();
   const tempVector3_B = new THREE.Vector3();
   const tempQuaternion_A = new THREE.Quaternion();
@@ -1167,9 +1166,10 @@
         if (magnetEl) {
           magnetEl.object3D.updateWorldMatrix(true, false);
           const magnetTargets = document.querySelectorAll(magnetEl.dataset.magnet);
+          magnetEl.object3D.getWorldPosition(tempVector3_A);
           for (const el of magnetTargets) {
             const [magnetRange,fadeEnd] = (el.dataset.magnetRange || "0.2,0.1").split(',').map(n => Number(n));
-            const d =  magnetEl.object3D.worldToLocal(el.object3D.getWorldPosition(tempVector3)).length();
+            const d =  el.object3D.getWorldPosition(tempVector3_B).sub(tempVector3_A).length();
             if (d < magnetRange) {
               magnetTarget = el;
               fadeT = invlerp(magnetRange,fadeEnd===undefined?magnetRange:fadeEnd,d);
