@@ -54,6 +54,7 @@ AFRAME.registerComponent("exit-on", {
   }
 });
 
+const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 AFRAME.registerComponent('linear-constraint', {
   schema: {
     axis: {
@@ -81,7 +82,11 @@ AFRAME.registerComponent('linear-constraint', {
     const p0 = this.tempVec3;
     // We have a plane with normal n that contains p0
     // We want to place the object where a vector n from the origin intersects the plane
-    
+    // n.x x + n.y y + n.z z = p0.n
+    // Sub in vector equation p=tn
+    // n.x * n.x + 
+
+    const t = clamp(p0.dot(n)/n.length() ,this.data.min, this.data.max);
     
   }
 });
