@@ -54,9 +54,11 @@
       <a-asset-item id="watch-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watch.glb?v=1645016979219"></a-asset-item>
       <a-asset-item id="sword-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/scimitar.glb?v=1645454049799"></a-asset-item>
       <a-asset-item id="watergun-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watergun.glb?v=1646916260646"></a-asset-item>
+      <a-asset-item id="stew-gltf" src="https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/pot-stew/model.gltf"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700" crossorigin="anonymous">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-mixin>
+      <a-mixin id="handle" width="0.05" height="0.05" depth="0.2" visible="false"></a-mixin>
     </a-assets>
 
     <a-entity position="-1 0 1" rotation="0 45 0" origin-on-ar-start id="cameraRig">
@@ -72,7 +74,7 @@
       <a-entity xr-follow>
         <a-gltf-model data-pick-up id="sword" src="#sword-gltf" class="magnet" scale="0.6,0.6,1" position="-0.2 -0.4 -0.2" rotation="-30 180 0"></a-gltf-model>
         <a-gltf-model data-pick-up id="watergun" src="#watergun-gltf" class="magnet" position="0.2 -0.4 -0.2" rotation="30 180 0" linear-constraint="axis:0 1 0;min:-0.15;max:0;part:Slider;">
-          <a-box id="watergun-slider-magnet" shadow width="0.05" height="0.05" depth="0.2" rotation="-74 0 0" attach-to-model="Slider" visible="false"></a-box>
+          <a-box id="watergun-slider-magnet" shadow mixin="handle" rotation="-74 0 0" attach-to-model="Slider"></a-box>
         </a-gltf-model>
       </a-entity>
       
@@ -121,10 +123,15 @@
     </a-entity>
     
     <a-box shadow width="0.2" height="0.2" depth="0.2" position="-2 0.1 0" rotation="0 30 0">
-      <a-box shadow width="0.05" height="0.05" depth="0.2" class="magnet-right" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#right-no-magnet;"></a-box>
-      <a-box shadow width="0.05" height="0.05" depth="0.2" class="magnet-left" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#left-no-magnet;"></a-box>
+      <a-box shadow mixin="handle" visible="true" class="magnet-right" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#right-no-magnet;"></a-box>
+      <a-box shadow mixin="handle" visible="true" class="magnet-left" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#left-no-magnet;"></a-box>
     </a-box>
-      
+
+    <a-gltf-model id="pot" shadow src="#stew-gltf">
+      <a-box id="stew-handle-1" mixin="handle" visible="true" position="0.2 0.1 0"></a-box>
+      <a-box id="stew-handle-2" mixin="handle" visible="true" position="0.2 0.1 0"></a-box>
+    </a-gltf-model>
+    
     <a-entity id="my-ar-objects" position="-6 0 1">
       <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
       <a-gltf-model id="piano" rotation="0 100 0" shadow="receive:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
