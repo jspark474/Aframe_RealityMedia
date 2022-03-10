@@ -82,7 +82,7 @@ AFRAME.registerComponent('linear-constraint', {
   update () {
     // Ensure the axis is normalized
     this.n.copy(this.data.axis).normalize();
-    if (this.data.part) this.part = this.el.object3D.getObjectByName('Slider');
+    if (this.data.part) this.part = this.el.object3D.getObjectByName(this.data.part);
   },
   tick() {
     const object3D = this.data.part ? this.part : this.el.object3D;
@@ -92,6 +92,7 @@ AFRAME.registerComponent('linear-constraint', {
     const p0 = this.tempVec3;
     this.data.target.object3D.getWorldPosition(p0);
     object3D.parent.worldToLocal(p0);
+    p0.sub(this.originalOffset);
     // We have a plane with normal n that contains p0
     // We want to place the object where a vector n from the origin intersects the plane
     // n.x x + n.y y + n.z z = p0.n
@@ -100,6 +101,24 @@ AFRAME.registerComponent('linear-constraint', {
     // equivalent to  t * n.length() = p0.n
     const t = clamp(p0.dot(n)/n.length() ,this.data.min, this.data.max);
     object3D.position.copy(n).multiplyScalar(t).add(this.originalOffset);
+  }
+});
+
+AFRAME.registerComponent("attach-to-model", {
+  schema: {
+    default: ''
+  },
+  init() {
+    this.el.addEventListener('object3dset', this.update.bind(this));
+  },
+  update () {
+    if (this.data.part) this.part = this.el.object3D.getObjectByName(this.data.part);
+  },
+  tick() {
+    if (this.part) {
+      const p = this.el.object3D.position;
+      this.el.object3D.parent.worldToLocal(this.part.getWorldPosition(p));
+    }
   }
 });
 
