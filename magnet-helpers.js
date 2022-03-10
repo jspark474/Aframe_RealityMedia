@@ -127,10 +127,11 @@ AFRAME.registerComponent("grab-magnet-target", {
       this.grabbedEl = el;
       this.targetEl = target;
       if (pickUp === undefined) return;
+
       const oldGrabber = el.dataset.oldGrabber;
-      if (oldGrabber) {
-        
-      }
+      if (oldGrabber) document.getElementById(oldGrabber).components["grab-magnet-target"].grabEnd();
+      el.dataset.oldGrabber = this.el.id;
+
       target.dataset.noMagnet = "";
       this.oldParent = el.parentNode;
       this.el.add(el);
@@ -154,6 +155,7 @@ AFRAME.registerComponent("grab-magnet-target", {
       if (!this.oldParent) return;
       this.oldParent.add(el);
       delete this.targetEl.dataset.noMagnet;
+      delete el.dataset.oldGrabber;
       this.targetEl = null;
       this.oldParent = null;
       this.grabbedEl = null;
