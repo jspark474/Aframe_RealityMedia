@@ -18,6 +18,7 @@
   <script src="ar-cursor.js"></script>
   <script src="simple-navmesh-constraint.js"></script>
   <script src="model-utils.js"></script>
+  <script src="magnet-helpers.js"></script>
   
   <!-- Our custom behaviour -->
 	<script src="main.js"></script>
@@ -69,9 +70,9 @@
       ></a-entity>
       
       <a-entity xr-follow>
-        <a-gltf-model id="sword" src="#sword-gltf" class="magnet" scale="0.6,0.6,1" position="-0.2 -0.4 -0.2" rotation="-30 180 0"></a-gltf-model>
-        <a-gltf-model id="watergun" src="#watergun-gltf" class="magnet" position="0.2 -0.4 -0.2" rotation="30 180 0" linear-constraint="axis:0 1 0;min:-0.15;max:0;part:Slider;">
-          <a-box id="watergun-slider-magnet" shadow width="0.05" height="0.05" depth="0.2" rotation="-74 0 0" attach-to-model="Slider" visible="false" data-no-grab></a-box>
+        <a-gltf-model data-pick-up id="sword" src="#sword-gltf" class="magnet" scale="0.6,0.6,1" position="-0.2 -0.4 -0.2" rotation="-30 180 0"></a-gltf-model>
+        <a-gltf-model data-pick-up id="watergun" src="#watergun-gltf" class="magnet" position="0.2 -0.4 -0.2" rotation="30 180 0" linear-constraint="axis:0 1 0;min:-0.15;max:0;part:Slider;">
+          <a-box id="watergun-slider-magnet" shadow width="0.05" height="0.05" depth="0.2" rotation="-74 0 0" attach-to-model="Slider" visible="false"></a-box>
         </a-gltf-model>
       </a-entity>
       
