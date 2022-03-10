@@ -77,7 +77,7 @@ AFRAME.registerComponent("attach-to-model", {
 });
 
 
-
+const tempQuaternion = new THREE.Quaternion();
 AFRAME.registerComponent("grab-magnet-target", {
   schema: {
     startEvents: {
@@ -117,19 +117,25 @@ AFRAME.registerComponent("grab-magnet-target", {
   grabStart() {
     const targetId = this.el.dataset.magnetTarget;
     if (this.isGrabbing === false && targetId) {
-      let el = document.getElementById(targetId);
+      const pickUp = el.dataset.pickUp;
+      const target = document.getElementById(targetId);
+      const el = pickUp === 'parent' ? target.parentNode : target;
       el.emit('grabbed', {by: this.el});
       this.isGrabbing = true;
       this.grabbedEl = el;
-      if (el.dataset.pickUp === undefined) return;
-      if ()
-      el.dataset.noMagnet = "";
+      this.targetEl = target;
+      if (pickUp === undefined) return;
+      target.dataset.noMagnet = "";
       this.oldParent = el.parentNode;
       this.el.add(el);
       this.oldQuaternion.copy(el.object3D.quaternion);
       el.object3D.quaternion.identity();
       this.oldPosition.copy(el.object3D.position);
       el.object3D.position.set(0,0,0);
+      if (pickUp === 'parent') {
+        el.object3D.applyQuaternion(tempQuaternion.copy(target.object3D.quaternion).invert());
+        el.object3D.position.sub(target.object3D.position);
+      }
     }
   },
   grabEnd() {
@@ -139,7 +145,8 @@ AFRAME.registerComponent("grab-magnet-target", {
       this.isGrabbing = false;
       if (!this.oldParent) return;
       this.oldParent.add(el);
-      delete el.dataset.noMagnet;
+      delete this.targetEl.noMagnet;
+      this.targetEl = null;
       this.oldParent = null;
       this.grabbedEl = null;
       el.object3D.quaternion.copy(this.oldQuaternion);
