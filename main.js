@@ -133,9 +133,6 @@ AFRAME.registerComponent("grab-magnet-target", {
     },
     stopEvents: {
       type: 'array'
-    },
-    exclude: {
-      default
     }
   },
   init() {
@@ -169,29 +166,38 @@ AFRAME.registerComponent("grab-magnet-target", {
     const targetId = this.el.dataset.magnetTarget;
     if (this.isGrabbing === false && targetId) {
       const el = document.getElementById(targetId);
+      el.emit('grabbed', {by: this.el});
+      this.isGrabbing = true;
+      if (el.dataset.noGrab !== undefined) return;
       el.dataset.noMagnet = "";
       this.grabbedEl = el;
       this.oldParent = el.parentNode;
       this.el.add(el);
-      this.isGrabbing = true;
       this.oldQuaternion.copy(el.object3D.quaternion);
       el.object3D.quaternion.identity();
       this.oldPosition.copy(el.object3D.position);
       el.object3D.position.set(0,0,0);
-      el.emit('grabbed', {by: this.el});
     }
   },
   grabEnd() {
     if (this.isGrabbing) {
       const el = this.grabbedEl;
+      el.emit('released', {by: this.el});
+      if (!el) return;
       this.oldParent.add(el);
       delete el.dataset.noMagnet;
       el.object3D.quaternion.copy(this.oldQuaternion);
       el.object3D.position.copy(this.oldPosition);
       this.isGrabbing = false;
-      el.emit('released', {by: this.el});
     }
   },
+  tick () {
+    if (this.isGrabbing) {
+      if (this.grabbedEl.dataset.noGrab !== undefined && this.el.dataset.magnetTarget !== this.grabbedEl.id){
+        this.grabEnd();
+      }
+    }
+  }
 });
 
 window.addEventListener("DOMContentLoaded", function() {
