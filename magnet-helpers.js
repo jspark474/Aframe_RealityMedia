@@ -139,6 +139,8 @@ AFRAME.registerComponent("grab-magnet-target", {
       if (!this.oldParent) return;
       this.oldParent.add(el);
       delete el.dataset.noMagnet;
+      this.oldParent = null;
+      this.grabbedEl = null;
       el.object3D.quaternion.copy(this.oldQuaternion);
       el.object3D.position.copy(this.oldPosition);
     }
