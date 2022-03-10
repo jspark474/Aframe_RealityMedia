@@ -134,6 +134,9 @@ AFRAME.registerComponent("grab-magnet-target", {
     stopEvents: {
       type: 'array'
     },
+    exclude: {
+      default
+    }
   },
   init() {
     this.grabStart = this.grabStart.bind(this);
@@ -218,6 +221,16 @@ window.addEventListener("DOMContentLoaded", function() {
     if (e.target === watergunSlider) {
       if (by.dataset.right) watergun.setAttribute('linear-constraint', 'target', '#right-no-magnet');
       if (by.dataset.left) watergun.setAttribute('linear-constraint', 'target', '#left-no-magnet');
+    }
+  });
+  watergun.addEventListener('released', function (e) {
+    const by = e.detail.by;
+    if (e.target === watergun) {
+      if (by.dataset.right) watergunSlider.className = '';
+      if (by.dataset.right) watergun.setAttribute('linear-constraint', 'target', '');
+    }
+    if (e.target === watergunSlider) {
+      if (by.dataset.right) watergun.setAttribute('linear-constraint', 'target', '');
     }
   });
   
