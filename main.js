@@ -72,6 +72,9 @@ AFRAME.registerComponent('linear-constraint', {
     },
     part: {
       default: ''
+    },
+    enabled: {
+      default: true
     }
   },
   init() {
@@ -85,6 +88,7 @@ AFRAME.registerComponent('linear-constraint', {
     if (this.data.part) this.part = this.el.object3D.getObjectByName(this.data.part);
   },
   tick() {
+    if (!this.data.enabled) return;
     const object3D = this.data.part ? this.part : this.el.object3D;
     if (!object3D) return;
     if (!this.originalOffset) this.originalOffset = new THREE.Vector3().copy(object3D.position);
