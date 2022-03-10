@@ -117,11 +117,12 @@ AFRAME.registerComponent("grab-magnet-target", {
   grabStart() {
     const targetId = this.el.dataset.magnetTarget;
     if (this.isGrabbing === false && targetId) {
-      const el = document.getElementById(targetId);
+      let el = document.getElementById(targetId);
       el.emit('grabbed', {by: this.el});
       this.isGrabbing = true;
       this.grabbedEl = el;
       if (el.dataset.pickUp === undefined) return;
+      if ()
       el.dataset.noMagnet = "";
       this.oldParent = el.parentNode;
       this.el.add(el);
