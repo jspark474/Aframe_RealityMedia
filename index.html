@@ -58,7 +58,7 @@
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700" crossorigin="anonymous">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-mixin>
-      <a-mixin id="handle" width="0.05" height="0.05" depth="0.2" visible="false"></a-mixin>
+      <a-mixin id="handle" geometry="width:0.05;height:0.05;depth:0.2" visible="false"></a-mixin>
     </a-assets>
 
     <a-entity position="-1 0 1" rotation="0 45 0" origin-on-ar-start id="cameraRig">
@@ -127,9 +127,9 @@
       <a-entity shadow mixin="handle" visible="true" class="magnet-left" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#left-no-magnet;"></a-entity>
     </a-box>
 
-    <a-gltf-model id="pot" shadow src="#stew-gltf">
-      <a-entity id="stew-handle-1" mixin="handle" visible="true" position="0.2 0.1 0"></a-entity>
-      <a-entity id="stew-handle-2" mixin="handle" visible="true" position="0.2 0.1 0"></a-entity>
+    <a-gltf-model id="pot" shadow src="#stew-gltf" position="-2 0 0.5">
+      <a-entity id="stew-handle-1" data-pick-up="parent" class="magnet" mixin="handle" visible="true" position="0 0.35 -0.35" rotation="0 90 0"></a-entity>
+      <a-entity id="stew-handle-2" data-pick-up="parent" class="magnet" mixin="handle" visible="true" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
     </a-gltf-model>
     
     <a-entity id="my-ar-objects" position="-6 0 1">

@@ -117,8 +117,8 @@ AFRAME.registerComponent("grab-magnet-target", {
   grabStart() {
     const targetId = this.el.dataset.magnetTarget;
     if (this.isGrabbing === false && targetId) {
-      const pickUp = el.dataset.pickUp;
       const target = document.getElementById(targetId);
+      const pickUp = target.dataset.pickUp;
       const el = pickUp === 'parent' ? target.parentNode : target;
       el.emit('grabbed', {by: this.el});
       this.isGrabbing = true;
