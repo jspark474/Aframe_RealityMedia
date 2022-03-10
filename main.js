@@ -85,7 +85,9 @@ AFRAME.registerComponent('linear-constraint', {
     if (this.data.part) this.part = this.el.object3D.getObjectByName('Slider');
   },
   tick() {
-    const object3D = this.part || this.el.object3D;
+    const object3D = this.data.part ? this.part : this.el.object3D;
+    if (!object3D) return;
+    if (!this.originalOffset) this.originalOffset = new THREE.Vector3().copy(object3D.position);
     const n = this.n;
     const p0 = this.tempVec3;
     this.data.target.object3D.getWorldPosition(p0);
@@ -97,7 +99,7 @@ AFRAME.registerComponent('linear-constraint', {
     // t * n.x * n.x + t * n.y * n.y + t * n.z * n.z = p0.n
     // equivalent to  t * n.length() = p0.n
     const t = clamp(p0.dot(n)/n.length() ,this.data.min, this.data.max);
-    object3D.position.copy(n).multiplyScalar(t);
+    object3D.position.copy(n).multiplyScalar(t).add(this.originalOffset);
   }
 });
 
