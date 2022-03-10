@@ -211,7 +211,14 @@ window.addEventListener("DOMContentLoaded", function() {
   const watergunSlider = watergun.firstElementChild;
   watergun.addEventListener('grabbed', function (e) {
     const by = e.detail.by;
-    console.log();
+    if (e.target === watergun) {
+      if (by.dataset.right) watergunSlider.className = 'magnet-left';
+      if (by.dataset.left) watergunSlider.className = 'magnet-right';
+    }
+    if (e.target === watergunSlider) {
+      if (by.dataset.right) watergun.setAttribute('linear-constraint', 'target', '#right-no-magnet');
+      if (by.dataset.left) watergun.setAttribute('linear-constraint', 'target', '#left-no-magnet');
+    }
   });
   
   
