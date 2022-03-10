@@ -94,6 +94,7 @@ AFRAME.registerComponent("grab-magnet-target", {
     this.isGrabbing = false;
     this.oldParent = null;
     this.grabbedEl = null;
+    this.targetEl = null;
     this.oldQuaternion = new THREE.Quaternion();
     this.oldPosition = new THREE.Quaternion();
   },
@@ -126,6 +127,10 @@ AFRAME.registerComponent("grab-magnet-target", {
       this.grabbedEl = el;
       this.targetEl = target;
       if (pickUp === undefined) return;
+      const oldGrabber = el.dataset.oldGrabber;
+      if (oldGrabber) {
+        
+      }
       target.dataset.noMagnet = "";
       this.oldParent = el.parentNode;
       this.el.add(el);
