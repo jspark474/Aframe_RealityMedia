@@ -88,7 +88,7 @@ AFRAME.registerComponent('linear-constraint', {
     if (this.data.part) this.part = this.el.object3D.getObjectByName(this.data.part);
   },
   tick() {
-    if (!this.data.enabled) return;
+    if (!this.data.enabled || !this.data.target) return;
     const object3D = this.data.part ? this.part : this.el.object3D;
     if (!object3D) return;
     if (!this.originalOffset) this.originalOffset = new THREE.Vector3().copy(object3D.position);
@@ -175,7 +175,7 @@ AFRAME.registerComponent("grab-magnet-target", {
       el.object3D.quaternion.identity();
       this.oldPosition.copy(el.object3D.position);
       el.object3D.position.set(0,0,0);
-      el.emit('grabbed', {by: this});
+      el.emit('grabbed', {by: this.el});
     }
   },
   grabEnd() {
@@ -186,7 +186,7 @@ AFRAME.registerComponent("grab-magnet-target", {
       el.object3D.quaternion.copy(this.oldQuaternion);
       el.object3D.position.copy(this.oldPosition);
       this.isGrabbing = false;
-      el.emit('released', {by: this});
+      el.emit('released', {by: this.el});
     }
   },
 });
@@ -206,6 +206,14 @@ window.addEventListener("DOMContentLoaded", function() {
       el.setAttribute('text', 'value', event.detail.event);
     });
   }
+  
+  const watergun = document.getElementById("watergun");
+  const watergunSlider = watergun.firstElementChild;
+  watergun.addEventListener('grabbed', function (e) {
+    const by = e.detail.by;
+    console.log();
+  });
+  
   
   sceneEl.addEventListener('object3dset', function () {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
