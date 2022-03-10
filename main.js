@@ -168,9 +168,9 @@ AFRAME.registerComponent("grab-magnet-target", {
       const el = document.getElementById(targetId);
       el.emit('grabbed', {by: this.el});
       this.isGrabbing = true;
+      this.grabbedEl = el;
       if (el.dataset.noGrab !== undefined) return;
       el.dataset.noMagnet = "";
-      this.grabbedEl = el;
       this.oldParent = el.parentNode;
       this.el.add(el);
       this.oldQuaternion.copy(el.object3D.quaternion);
@@ -183,12 +183,12 @@ AFRAME.registerComponent("grab-magnet-target", {
     if (this.isGrabbing) {
       const el = this.grabbedEl;
       el.emit('released', {by: this.el});
-      if (!el) return;
+      this.isGrabbing = false;
+      if (!this.oldParent) return;
       this.oldParent.add(el);
       delete el.dataset.noMagnet;
       el.object3D.quaternion.copy(this.oldQuaternion);
       el.object3D.position.copy(this.oldPosition);
-      this.isGrabbing = false;
     }
   },
   tick () {
@@ -232,11 +232,11 @@ window.addEventListener("DOMContentLoaded", function() {
   watergun.addEventListener('released', function (e) {
     const by = e.detail.by;
     if (e.target === watergun) {
-      if (by.dataset.right) watergunSlider.className = '';
-      if (by.dataset.right) watergun.setAttribute('linear-constraint', 'target', '');
+      watergunSlider.className = '';
+      watergun.setAttribute('linear-constraint', 'target', '');
     }
     if (e.target === watergunSlider) {
-      if (by.dataset.right) watergun.setAttribute('linear-constraint', 'target', '');
+      watergun.setAttribute('linear-constraint', 'target', '');
     }
   });
   
