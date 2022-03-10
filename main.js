@@ -109,10 +109,10 @@ AFRAME.registerComponent("attach-to-model", {
     default: ''
   },
   init() {
-    this.el.addEventListener('object3dset', this.update.bind(this));
+    this.el.parentNode.addEventListener('object3dset', this.update.bind(this));
   },
   update () {
-    if (this.data.part) this.part = this.el.object3D.getObjectByName(this.data.part);
+    if (this.data) this.part = this.el.parentNode.object3D.getObjectByName(this.data);
   },
   tick() {
     if (this.part) {
