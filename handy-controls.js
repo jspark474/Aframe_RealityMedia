@@ -1173,15 +1173,17 @@
           for (const el of magnetTargets) {
             const [magnetRange,fadeEnd] = (el.dataset.magnetRange || "0.2,0.1").split(',').map(n => Number(n));
             const d =  el.object3D.getWorldPosition(tempVector3_B).sub(tempVector3_A).length();
-            const Θ = (180/Math.PI) * el.object3D.getWorldQuaternion(tempQuaternion_A).premultiply(tempQuaternion_C).angleTo(magnetEl.object3D.quaternion);
-            if (d < magnetRange && Θ < 90) {
-              magnetTarget = el;
-              fadeT = invlerp(magnetRange,fadeEnd===undefined?magnetRange:fadeEnd,d) * invlerp(90,45,Θ);
-              break;
+            if (d < magnetRange) {
+              const Θ = (180/Math.PI) * el.object3D.getWorldQuaternion(tempQuaternion_A).premultiply(tempQuaternion_C).angleTo(magnetEl.object3D.quaternion);
+              if (Θ < 90) {
+                magnetTarget = el;
+                fadeT = invlerp(magnetRange,fadeEnd===undefined?magnetRange:fadeEnd,d) * invlerp(90,45,Θ);
+                break;
+              }
             }
           }
 
-          if (fadeT > 0.5 && magnetTarget && magnetTarget.id) {
+          if (fadeT > 0.2 && magnetTarget && magnetTarget.id) {
             magnetEl.dataset.magnetTarget = magnetTarget.id;
           } else {
             delete magnetEl.dataset.magnetTarget;
@@ -1194,8 +1196,9 @@
           tempVector3_B.copy(magnetEl.object3D.position);
           tempVector3_A.lerp(tempVector3_B, 1-fadeT).sub(tempVector3_B);
           
-          magnetTarget.object3D.getWorldQuaternion(tempQuaternion_A);
-          tempQuaternion_A.premultiply(tempQuaternion_C);
+          // tempQuaternion_A is populated already when calculating if it's a close enough angle
+          // magnetTarget.object3D.getWorldQuaternion(tempQuaternion_A);
+          // tempQuaternion_A.premultiply(tempQuaternion_C);
           tempQuaternion_B.copy(magnetEl.object3D.quaternion);
           tempQuaternion_A.slerp(tempQuaternion_B, 1-fadeT).multiply(tempQuaternion_B.invert());
           
