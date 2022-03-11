@@ -72,7 +72,7 @@
         look-controls="pointerLockEnabled: false"
         position="0 1.65 0"
         wasd-controls="acceleration:30;"
-        simple-navmesh-constraint="navmesh:.navmesh;fall:0.5;height:1.65;"
+        simple-navmesh-constraint="navmesh:.navmesh;fall:0.5;height:1.65;exclude:.exclude;"
       ></a-entity>
       
       <a-entity xr-follow>
@@ -157,7 +157,7 @@
         <a-entity id="stew-handle-2" data-pick-up="parent" class="magnet" mixin="handle-visual" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
       </a-gltf-model>
       <a-gltf-model id="table" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0">
-        <a-box class="navmesh" geometry="width:3;depth:1.7;height:1.2;" position="0 0.1 0" ammo-body="type: static;" ammo-shape="type: box" ammo-restitution="1.5" visible="false"></a-box>
+        <a-box class="navmesh exclude" geometry="width:3;depth:1.7;height:1.2;" position="0 0.1 0" ammo-body="type: static;" ammo-shape="type: box" ammo-restitution="1.5"></a-box>
       </a-gltf-model>
       <a-gltf-model class="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
       <a-gltf-model src="#building-glb"

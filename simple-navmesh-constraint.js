@@ -25,13 +25,13 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
   },
   
   update: function () {
-    this.excludes = this.data.exclude ? Array.from(document.querySelectorAll(this.data.exclude)).map(el => el.object3D):[];
+    this.excludes = this.data.exclude ? Array.from(document.querySelectorAll(this.data.exclude)):[];
     const els = Array.from(document.querySelectorAll(this.data.navmesh));
     if (els === null) {
       console.warn('navmesh-physics: Did not match any elements');
       this.objects = [];
     } else {
-      this.objects = els.map(el => el.object3D).concat(this.excludes);
+      this.objects = els.map(el => el.object3D).concat(this.excludes.map(el => el.object3D));
     }
   },
 
@@ -78,7 +78,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         if (results.length) {
           // If it hit something we want to avoid then ignore it and continue
           for (const result of results) {
-            if(this.excludes.includes(result.object)) continue scanPatternLoop;
+            if(this.excludes.includes(result.object.el)) continue scanPatternLoop;
           }
           const hitPos = results[0].point;
           hitPos.y += this.data.height;
@@ -95,6 +95,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
           didHit = true;
           break;
         }
+        
       }
       
       if (!didHit) {
