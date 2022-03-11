@@ -1176,7 +1176,7 @@
             const Θ = (180/Math.PI) * el.object3D.getWorldQuaternion(tempQuaternion_A).premultiply(tempQuaternion_C).angleTo(magnetEl.object3D.quaternion);
             if (d < magnetRange && Θ < 90) {
               magnetTarget = el;
-              fadeT = invlerp(magnetRange,fadeEnd===undefined?magnetRange:fadeEnd,d) * invlerp(180,30,Θ);
+              fadeT = invlerp(magnetRange,fadeEnd===undefined?magnetRange:fadeEnd,d) * invlerp(90,45,Θ);
               break;
             }
           }
