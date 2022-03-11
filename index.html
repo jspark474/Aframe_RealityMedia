@@ -126,11 +126,6 @@
       </a-entity>
     </a-entity>
     
-    <a-box shadow width="0.2" height="0.2" depth="0.2" position="-2 0.1 0" rotation="0 30 0">
-      <a-entity shadow mixin="handle-visual" visible="true" class="magnet-right" data-magnet-priority="-1" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#right-no-magnet;"></a-entity>
-      <a-entity shadow mixin="handle-visual" visible="true" class="magnet-left" data-magnet-priority="-1" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#left-no-magnet;"></a-entity>
-    </a-box>
-    
     <a-entity id="my-ar-objects" position="-6 0 1">
       <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
       <a-gltf-model id="piano" rotation="0 100 0" shadow="receive:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118"></a-gltf-model>
@@ -157,11 +152,13 @@
         ammo-shape="type: box"
         ammo-restitution="1.5">
       </a-box>
-      <a-gltf-model id="pot" shadow src="#stew-gltf" position="-2 0 0.5">
+      <a-gltf-model id="pot" shadow src="#stew-gltf" position="-2 1.2 0.5" ammo-body="type: dynamic;" ammo-shape="type:cylinder;fit:manual;halfExtents:0.3 0.15 0; heightfieldData:">
         <a-entity id="stew-handle-1" data-pick-up="parent" class="magnet" mixin="handle-visual" position="0 0.35 -0.35" rotation="0 90 0"></a-entity>
         <a-entity id="stew-handle-2" data-pick-up="parent" class="magnet" mixin="handle-visual" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
       </a-gltf-model>
-      <a-gltf-model id="table" src="#table-gltf" ammo-body="type: static;" ammo-shape="type: box" ammo-restitution="1.5"></a-gltf-model>
+      <a-gltf-model id="table" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0">
+        <a-box geometry="width:3;depth:1.7;height:1.2;" position="0 0.1 0" ammo-body="type: static;" ammo-shape="type: box" ammo-restitution="1.5" visible="false"></a-box>
+      </a-gltf-model>
       <a-gltf-model id="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
       <a-gltf-model src="#building-glb"
         lightmap="src:#bake;intensity: 1.5; filter:Window,Ceiling,floor;"
