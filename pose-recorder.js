@@ -1,4 +1,4 @@
-// WIP This is going to be a componet to allow the quick saving of new hand poses
+// WIP This is going to be a componet to allow the quick saving of new hand poses, not actually used yet
 const handyWorkModule = import('https://cdn.jsdelivr.net/npm/handy-work/build/handy-work.min.js');
 async function recordPose(frames=180, inputSources, referenceSpace) {
   const {generatePose} = await handyWorkModule;
