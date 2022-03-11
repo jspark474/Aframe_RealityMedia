@@ -61,7 +61,7 @@
       <a-asset-item id="table-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/table-wood/model.gltf"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700" crossorigin="anonymous">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
-      <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-mixin>
+      <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"></a-mixin>
       <a-mixin id="handle-visual" geometry="width:0.05;height:0.05;depth:0.2" visible="false"></a-mixin>
     </a-assets>
 
@@ -72,7 +72,7 @@
         look-controls="pointerLockEnabled: false"
         position="0 1.65 0"
         wasd-controls="acceleration:30;"
-        simple-navmesh-constraint="navmesh:#navmesh;fall:0.5;height:1.65;"
+        simple-navmesh-constraint="navmesh:.navmesh;fall:0.5;height:1.65;"
       ></a-entity>
       
       <a-entity xr-follow>
@@ -157,9 +157,9 @@
         <a-entity id="stew-handle-2" data-pick-up="parent" class="magnet" mixin="handle-visual" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
       </a-gltf-model>
       <a-gltf-model id="table" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0">
-        <a-box class="navmesh-exclude" geometry="width:3;depth:1.7;height:1.2;" position="0 0.1 0" ammo-body="type: static;" ammo-shape="type: box" ammo-restitution="1.5" visible="false"></a-box>
+        <a-box class="navmesh" geometry="width:3;depth:1.7;height:1.2;" position="0 0.1 0" ammo-body="type: static;" ammo-shape="type: box" ammo-restitution="1.5" visible="false"></a-box>
       </a-gltf-model>
-      <a-gltf-model id="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
+      <a-gltf-model class="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
       <a-gltf-model src="#building-glb"
         lightmap="src:#bake;intensity: 1.5; filter:Window,Ceiling,floor;"
         depthwrite="true"

@@ -25,13 +25,13 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
   },
   
   update: function () {
-    const exclude = Array.from(document.querySelectorAll(this.data.exclude)).map(el => el.object3D);
+    this.excludes = this.data.exclude ? Array.from(document.querySelectorAll(this.data.exclude)).map(el => el.object3D):[];
     const els = Array.from(document.querySelectorAll(this.data.navmesh));
     if (els === null) {
       console.warn('navmesh-physics: Did not match any elements');
       this.objects = [];
     } else {
-      this.objects = els.map(el => el.object3D).concat(exclude);
+      this.objects = els.map(el => el.object3D).concat(this.excludes);
     }
   },
 
@@ -76,8 +76,9 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         raycaster.far = this.data.fall > 0 ? this.data.fall + maxYVelocity : Infinity;
         raycaster.intersectObjects(this.objects, true, results);
         if (results.length) {
+          // If it hit something we want to avoid then ignore it and continue
           for (const result of results) {
-            this.excludes.
+            if(this.excludes.includes(result.object)) continue scanPatternLoop;
           }
           const hitPos = results[0].point;
           hitPos.y += this.data.height;
