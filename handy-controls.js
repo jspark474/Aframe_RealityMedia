@@ -1166,7 +1166,7 @@
         
         if (magnetEl) {
           magnetEl.object3D.updateWorldMatrix(true, false);
-          const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet)).sort((a,b)=>Number(a.dataset.magnetPriority || 1)-Number(b.dataset.magnetPriority || 1));
+          const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet)).sort((a,b)=>Number(b.dataset.magnetPriority || 1)-Number(a.dataset.magnetPriority || 1));
           magnetEl.object3D.getWorldPosition(tempVector3_A);
           for (const el of magnetTargets) {
             const [magnetRange,fadeEnd] = (el.dataset.magnetRange || "0.2,0.1").split(',').map(n => Number(n));
