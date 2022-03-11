@@ -153,6 +153,11 @@
 
     <a-entity hide-on-enter-ar position="0 -0.2 0" environment="lighting:none;shadow:true;preset: osiris;"></a-entity>
 		<a-entity rotation="0 -45 0" position="0 0 0" hide-on-enter-ar>
+      <a-box 
+  ammo-body="type: dynamic;"
+  ammo-shape="type: sphere"
+  radius="0.19"
+  ammo-restitution="1.5"></a-box>
       <a-gltf-model id="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
       <a-gltf-model src="#building-glb"
         lightmap="src:#bake;intensity: 1.5; filter:Window,Ceiling,floor;"
