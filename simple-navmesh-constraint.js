@@ -13,6 +13,9 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     },
     height: {
       default: 1.6
+    },
+    exclude: {
+      default: ''
     }
   },
 
@@ -22,12 +25,13 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
   },
   
   update: function () {
+    const exclude = Array.from(document.querySelectorAll(this.data.exclude)).map(el => el.object3D);
     const els = Array.from(document.querySelectorAll(this.data.navmesh));
     if (els === null) {
       console.warn('navmesh-physics: Did not match any elements');
       this.objects = [];
     } else {
-      this.objects = els.map(el => el.object3D);
+      this.objects = els.map(el => el.object3D).concat(exclude);
     }
   },
 
@@ -60,6 +64,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
       let didHit = false;
       
       // So that it does not get stuck it takes as few samples around the user and finds the most appropriate
+      scanPatternLoop:
       for (const [angle, distance] of scanPattern) {
         tempVec.subVectors(nextPosition, this.lastPosition);
         tempVec.applyAxisAngle(down, angle*Math.PI/180);
@@ -71,6 +76,9 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         raycaster.far = this.data.fall > 0 ? this.data.fall + maxYVelocity : Infinity;
         raycaster.intersectObjects(this.objects, true, results);
         if (results.length) {
+          for (const result of results) {
+            this.excludes.
+          }
           const hitPos = results[0].point;
           hitPos.y += this.data.height;
           if (nextPosition.y - (hitPos.y - yVel*2) > 0.01) {
