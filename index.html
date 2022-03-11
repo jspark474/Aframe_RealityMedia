@@ -76,9 +76,9 @@
       ></a-entity>
       
       <a-entity xr-follow>
-        <a-gltf-model data-pick-up id="sword" src="#sword-gltf" class="magnet" scale="0.6,0.6,1" position="-0.2 -0.4 -0.2" rotation="-30 180 0"></a-gltf-model>
-        <a-gltf-model data-pick-up id="watergun" src="#watergun-gltf" class="magnet" position="0.2 -0.4 -0.2" rotation="30 180 0" linear-constraint="axis:0 1 0;min:-0.15;max:0;part:Slider;">
-          <a-entity id="watergun-slider-magnet" shadow mixin="handle-visual" rotation="-74 0 0" attach-to-model="Slider"></a-entity>
+        <a-gltf-model shadow="receive:false;" data-pick-up id="sword" src="#sword-gltf" class="magnet" scale="0.6,0.6,1" position="-0.2 -0.4 -0.2" rotation="-30 180 0"></a-gltf-model>
+        <a-gltf-model shadow="receive:false;" data-pick-up id="watergun" src="#watergun-gltf" class="magnet" position="0.2 -0.4 -0.2" rotation="30 180 0" linear-constraint="axis:0 1 0;min:-0.15;max:0;part:Slider;">
+          <a-entity id="watergun-slider-magnet" mixin="handle-visual" rotation="-74 0 0" attach-to-model="Slider"></a-entity>
         </a-gltf-model>
       </a-entity>
       
@@ -132,6 +132,7 @@
     </a-entity>
 
     <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
+		<a-light id="dirlight" auto-shadow-cam="targets:[ar-shadow-helper],#table;" intensity="0.8" light="castShadow:true;type:directional" position="0 3 -6"></a-light>
     <a-entity
       material="shader:shadow; depthWrite:false; opacity:0.9;"
       geometry="primitive:shadow-plane;"
@@ -152,12 +153,12 @@
         ammo-shape="type: box"
         ammo-restitution="1.5">
       </a-box>
-      <a-gltf-model id="pot" shadow src="#stew-gltf" position="-2.3 1.2 -0.8" ammo-body="type: dynamic;" ammo-shape="type:cylinder;fit:manual;halfExtents:0.33 0.18 0;offset:0 0.18 0;">
+      <a-gltf-model id="pot" shadow="receive:false;" src="#stew-gltf" position="-2.3 1.2 -0.8" ammo-body="type: dynamic;" ammo-shape="type:cylinder;fit:manual;halfExtents:0.33 0.18 0;offset:0 0.18 0;">
         <a-entity id="stew-handle-1" data-pick-up="parent" class="magnet" mixin="handle-visual" position="0 0.35 -0.35" rotation="0 90 0"></a-entity>
         <a-entity id="stew-handle-2" data-pick-up="parent" class="magnet" mixin="handle-visual" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
       </a-gltf-model>
-      <a-gltf-model id="table" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0">
-        <a-box class="navmesh exclude" geometry="width:3;depth:1.7;height:1.2;" position="0 0.1 0" ammo-body="type: static;" ammo-shape="type: box" ammo-restitution="1.5"></a-box>
+      <a-gltf-model id="table" shadow="receive:true;" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0">
+        <a-box class="navmesh" material="side:double;color:lightgreen;" visible="false" geometry="width:3;depth:1.7;height:1.2;" position="0 0.1 0" ammo-body="type: static;" ammo-shape="type: box" ammo-restitution="1.5"></a-box>
       </a-gltf-model>
       <a-gltf-model class="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
       <a-gltf-model src="#building-glb"
@@ -169,7 +170,6 @@
       ></a-gltf-model>
     </a-entity>
 
-		<a-light id="dirlight" auto-shadow-cam intensity="0.8" light="castShadow:true;type:directional" position="0 3 -6"></a-light>
 
 	</a-scene>
 
