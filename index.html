@@ -58,6 +58,7 @@
       <a-asset-item id="sword-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/scimitar.glb?v=1645454049799"></a-asset-item>
       <a-asset-item id="watergun-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watergun.glb?v=1646916260646"></a-asset-item>
       <a-asset-item id="stew-gltf" src="https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/pot-stew/model.gltf"></a-asset-item>
+      <a-asset-item id="table-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/table-wood/model.gltf"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700" crossorigin="anonymous">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:#navmesh;"></a-mixin>
@@ -129,11 +130,6 @@
       <a-entity shadow mixin="handle-visual" visible="true" class="magnet-right" data-magnet-priority="-1" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#right-no-magnet;"></a-entity>
       <a-entity shadow mixin="handle-visual" visible="true" class="magnet-left" data-magnet-priority="-1" linear-constraint="axis:0 1 0;min:0.15;max:1;target:#left-no-magnet;"></a-entity>
     </a-box>
-
-    <a-gltf-model id="pot" shadow src="#stew-gltf" position="-2 0 0.5">
-      <a-entity id="stew-handle-1" data-pick-up="parent" class="magnet" mixin="handle-visual" position="0 0.35 -0.35" rotation="0 90 0"></a-entity>
-      <a-entity id="stew-handle-2" data-pick-up="parent" class="magnet" mixin="handle-visual" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
-    </a-gltf-model>
     
     <a-entity id="my-ar-objects" position="-6 0 1">
       <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
@@ -154,10 +150,18 @@
     <a-entity hide-on-enter-ar position="0 -0.2 0" environment="lighting:none;shadow:true;preset: osiris;"></a-entity>
 		<a-entity rotation="0 -45 0" position="0 0 0" hide-on-enter-ar>
       <a-box 
-  ammo-body="type: dynamic;"
-  ammo-shape="type: sphere"
-  radius="0.19"
-  ammo-restitution="1.5"></a-box>
+        position="-5.148 -0.1 -0.355"
+        visible="false"
+        geometry="width:33.67;height:0.2;depth:19.06"
+        ammo-body="type: static;"
+        ammo-shape="type: box"
+        ammo-restitution="1.5">
+      </a-box>
+      <a-gltf-model id="pot" shadow src="#stew-gltf" position="-2 0 0.5">
+        <a-entity id="stew-handle-1" data-pick-up="parent" class="magnet" mixin="handle-visual" position="0 0.35 -0.35" rotation="0 90 0"></a-entity>
+        <a-entity id="stew-handle-2" data-pick-up="parent" class="magnet" mixin="handle-visual" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
+      </a-gltf-model>
+      <a-gltf-model id="table" src="#table-gltf" ammo-body="type: static;" ammo-shape="type: box" ammo-restitution="1.5"></a-gltf-model>
       <a-gltf-model id="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
       <a-gltf-model src="#building-glb"
         lightmap="src:#bake;intensity: 1.5; filter:Window,Ceiling,floor;"
