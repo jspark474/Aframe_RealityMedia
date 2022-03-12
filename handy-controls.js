@@ -891,8 +891,8 @@
       new MutationObserver(function observeFunction(changes) {
         for (const change of changes) {
           for (const [el, qS] of self.magnetQuerySelectors) {
-            if (this.magnetTargets.get(el) === null) continue;
-            const isAlreadyMagnetic = this.magnetTargets.get(el).includes(change.target);
+            if (self.magnetTargets.get(el) === null) continue;
+            const isAlreadyMagnetic = self.magnetTargets.get(el).includes(change.target);
             if (isAlreadyMagnetic !== change.target.matches(qS)) self.magnetTargets.set(el, null);
           }
         }
@@ -1218,7 +1218,7 @@
           this.el.object3D.getWorldQuaternion(tempQuaternion_C).invert();
 
           magnetEl.object3D.getWorldPosition(tempVector3_A);
-          for (const el of this.getMagnetTargets(magnetEl.dataset.magnet)) {
+          for (const el of this.getMagnetTargets(magnetEl)) {
             const [magnetRange,fadeEnd] = (el.dataset.magnetRange || "0.2,0.1").split(',').map(n => Number(n));
             const d =  el.object3D.getWorldPosition(tempVector3_B).sub(tempVector3_A).length();
             if (d < magnetRange) {
