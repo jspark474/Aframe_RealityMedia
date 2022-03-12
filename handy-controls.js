@@ -885,6 +885,7 @@
 
     getMagnetTargets(selector) {
       if (this.dirtyMagnetTargets) {
+        this.dirtyMagnetTargets = false;
         this.magnetTargets = Array.from(document.querySelectorAll(selector)).sort((a,b)=>Number(b.dataset.magnetPriority || 1)-Number(a.dataset.magnetPriority || 1));
       }
       return this.magnetTargets;
@@ -1196,9 +1197,11 @@
             const d =  el.object3D.getWorldPosition(tempVector3_B).sub(tempVector3_A).length();
             if (d < magnetRange) {
               const Θ = (180/Math.PI) * el.object3D.getWorldQuaternion(tempQuaternion_A).premultiply(tempQuaternion_C).angleTo(magnetEl.object3D.quaternion);
-              if (Θ < 90) {
+              const angleRange = 120;
+              const angleEnd = angleRange*0.66;
+              if (Θ < angleRange) {
                 magnetTarget = el;
-                fadeT = invlerp(magnetRange,fadeEnd===undefined?magnetRange:fadeEnd,d) * invlerp(90,45,Θ);
+                fadeT = invlerp(magnetRange,fadeEnd===undefined?magnetRange:fadeEnd,d) * invlerp(angleRange,angleEnd,Θ);
                 break;
               }
             }
