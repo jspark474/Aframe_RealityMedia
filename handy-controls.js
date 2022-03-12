@@ -843,10 +843,13 @@
 
       this.elArrays = { left: [], right: [], none: [] };
       this.elMaps = { left: new Map(), right: new Map(), none: new Map() };
-      const observer = new MutationObserver((function observeFunction() {
+      this.magnetEls = new Map();
+
+      function reconstructElMaps() {
         for (const handedness of handednesses) {
           self.elArrays[handedness].splice(0);
           self.elMaps[handedness].clear();
+          self.magnetEls.clear();
         }
 
         const els = Array.from(self.el.querySelectorAll(`[data-left],[data-right],[data-none]`));
@@ -858,12 +861,33 @@
               const poseElArray = self.elMaps[handedness].get(poseName) || [];
               poseElArray.push(el);
               self.elMaps[handedness].set(poseName, poseElArray);
+
+              if (el.dataset.magnet) self.magnetEls.set(handedness, el);
             }
           }
         }
-        return observeFunction;
-      }.bind(this))());
-      observer.observe(this.el, { childList: true, attributes: true, subtree: true });
+      }
+      reconstructElMaps();
+      new MutationObserver(reconstructElMaps).observe(this.el, { childList: true });
+      new MutationObserver(function (changes) {
+        if (changes.find(change => (
+          change.attributeName === 'data-none' ||
+          change.attributeName === 'data-left' ||
+          change.attributeName === 'data-right')
+        )) reconstructElMaps();
+      }).observe(this.el, { attributes: true, subtree: true });
+
+      new MutationObserver(function observeFunction() {
+        self.dirtyMagnetTargets = true;
+      }).observe(this.el.sceneEl, { attributes: true, subtree: true, childList: true });
+      this.dirtyMagnetTargets = true;
+    },
+
+    getMagnetTargets(selector) {
+      if (this.dirtyMagnetTargets) {
+        this.magnetTargets = Array.from(document.querySelectorAll(selector)).sort((a,b)=>Number(b.dataset.magnetPriority || 1)-Number(a.dataset.magnetPriority || 1));
+      }
+      return this.magnetTargets;
     },
 
     async gltfToJoints(src, name) {
@@ -1001,7 +1025,7 @@
       inputSourceLoop:
       for (const inputSource of session.inputSources) {
         const inputSourceIndex = i++;
-        const magnetEl = this.el.querySelector(`[data-magnet][data-${inputSource.handedness}]`);
+        const magnetEl = this.magnetEls.get(inputSource.handedness);
         let magnetTarget = null;
         let fadeT = 1;
         let bones = [];
@@ -1166,9 +1190,8 @@
           magnetEl.object3D.updateWorldMatrix(true, false);
           this.el.object3D.getWorldQuaternion(tempQuaternion_C).invert();
 
-          const magnetTargets = Array.from(document.querySelectorAll(magnetEl.dataset.magnet)).sort((a,b)=>Number(b.dataset.magnetPriority || 1)-Number(a.dataset.magnetPriority || 1));
           magnetEl.object3D.getWorldPosition(tempVector3_A);
-          for (const el of magnetTargets) {
+          for (const el of this.getMagnetTargets(magnetEl.dataset.magnet)) {
             const [magnetRange,fadeEnd] = (el.dataset.magnetRange || "0.2,0.1").split(',').map(n => Number(n));
             const d =  el.object3D.getWorldPosition(tempVector3_B).sub(tempVector3_A).length();
             if (d < magnetRange) {
@@ -1243,7 +1266,7 @@
     },
     emitHandpose(name, handedness, details) {
       if (name === this[handedness + '_currentPose']) return;
-      const els = Array.from(this.el.querySelectorAll(`[data-${handedness}]`));
+      const els = this.elArrays[handedness];
       
       clearTimeout(this[handedness + '_vshortTimeout']);
       clearTimeout(this[handedness + '_shortTimeout']);
