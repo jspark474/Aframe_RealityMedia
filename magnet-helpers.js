@@ -160,9 +160,10 @@ AFRAME.registerComponent("grab-magnet-target", {
         el.object3D.position.copy(this.oldPosition);
       } else {
         // Keep in place in the new parent
-        this.oldParent.worldToLocal(el.object3D.getWorldPosition(el.object3D.position));
-        this.oldParent.getWorldQuaternion(tempQuaternion).invert();
-        el.object3D.getWorldQuaternion(el.object3D.quaternion).multiply(tempQuaternion);
+        this.oldParent.object3D.worldToLocal(el.object3D.getWorldPosition(el.object3D.position));
+        
+        this.oldParent.object3D.getWorldQuaternion(tempQuaternion).invert();
+        el.object3D.getWorldQuaternion(el.object3D.quaternion).premultiply(tempQuaternion);
       }
       this.oldParent.add(el);
       this.targetEl = null;
