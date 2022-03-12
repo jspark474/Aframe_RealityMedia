@@ -155,12 +155,14 @@ AFRAME.registerComponent("grab-magnet-target", {
       if (!this.oldParent) return;
       delete this.targetEl.dataset.noMagnet;
       delete el.dataset.oldGrabber;
-      if (el.dataset.grabNoRestore === undefined) {
+      if (el.dataset.preserveTransform === undefined) {
         el.object3D.quaternion.copy(this.oldQuaternion);
         el.object3D.position.copy(this.oldPosition);
       } else {
         // Keep in place in the new parent
         this.oldParent.worldToLocal(el.object3D.getWorldPosition(el.object3D.position));
+        this.oldParent.getWorldQuaternion(tempQuaternion).invert();
+        el.object3D.getWorldQuaternion(el.object3D.quaternion).multiply(tempQuaternion);
       }
       this.oldParent.add(el);
       this.targetEl = null;
