@@ -127,7 +127,7 @@ AFRAME.registerComponent("grab-magnet-target", {
       this.targetEl = target;
       if (pickUp !== undefined) {
         const oldGrabber = el.dataset.oldGrabber;
-        if (oldGrabber) document.getElementById(oldGrabber).components["grab-magnet-target"].grabEnd();
+        if (oldGrabber) document.getElementById(oldGrabber).components["grab-magnet-target"].grabEnd(e);
         el.dataset.oldGrabber = this.el.id;
 
         target.dataset.noMagnet = "";
@@ -144,7 +144,7 @@ AFRAME.registerComponent("grab-magnet-target", {
           el.object3D.position.sub(tempVector3);
         }
       }
-      el.emit('grabbed', Object.assign({by: this.el}, e.detail));
+      el.emit('grabbed', Object.assign({by: this.el}, e && e.detail));
     }
   },
   grabEnd(e) {
