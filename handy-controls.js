@@ -844,15 +844,19 @@
       this.elArrays = { left: [], right: [], none: [] };
       this.elMaps = { left: new Map(), right: new Map(), none: new Map() };
       this.magnetEls = new Map();
+      this.magnetQuerySelectors = new Map();
+      this.magnetTargets = new Map();
 
       function reconstructElMaps() {
         for (const handedness of handednesses) {
           self.elArrays[handedness].splice(0);
           self.elMaps[handedness].clear();
           self.magnetEls.clear();
+          self.magnetTargets.clear();
+          self.magnetQuerySelectors.clear();
         }
 
-        const els = Array.from(self.el.querySelectorAll(`[data-left],[data-right],[data-none]`));
+        const els = Array.from(self.el.children).filter(el=>el.dataset.left||el.dataset.right||el.dataset.none);
         for (const el of els) {
           for (const handedness of handednesses) {
             if (el.dataset[handedness] !== undefined) {
@@ -862,13 +866,19 @@
               poseElArray.push(el);
               self.elMaps[handedness].set(poseName, poseElArray);
 
-              if (el.dataset.magnet) self.magnetEls.set(handedness, el);
+              if (el.dataset.magnet) {
+                self.magnetEls.set(handedness, el);
+                self.magnetTargets.set(el, null);
+                self.magnetQuerySelectors.set(el, el.dataset.magnet);
+              }
             }
           }
         }
       }
       reconstructElMaps();
+      // if the children of this element change then rebuild the lists
       new MutationObserver(reconstructElMaps).observe(this.el, { childList: true });
+      // If any of the hands change position rebuild it
       new MutationObserver(function (changes) {
         if (changes.find(change => (
           change.attributeName === 'data-none' ||
@@ -877,18 +887,33 @@
         )) reconstructElMaps();
       }).observe(this.el, { attributes: true, subtree: true });
 
+      // if elements are changed check to make sure they are still in the magnet lists
+      new MutationObserver(function observeFunction(changes) {
+        for (const change of changes) {
+          for (const [el, qS] of self.magnetQuerySelectors) {
+            if (this.magnetTargets.get(el) === null) continue;
+            const isAlreadyMagnetic = this.magnetTargets.get(el).includes(change.target);
+            if (isAlreadyMagnetic !== change.target.matches(qS)) self.magnetTargets.set(el, null);
+          }
+        }
+      }).observe(this.el.sceneEl, { attributes: true, subtree: true });
+
+      // if elements are added or removed in the document then refresh all the magnet lists
       new MutationObserver(function observeFunction() {
-        self.dirtyMagnetTargets = true;
-      }).observe(this.el.sceneEl, { attributes: true, subtree: true, childList: true });
-      this.dirtyMagnetTargets = true;
+        for (const [el] of self.magnetTargets) {
+          self.magnetTargets.set(el, null);
+        }
+      }).observe(this.el.sceneEl, { childList: true, subtree: true });
     },
 
-    getMagnetTargets(selector) {
-      if (this.dirtyMagnetTargets) {
-        this.dirtyMagnetTargets = false;
-        this.magnetTargets = Array.from(document.querySelectorAll(selector)).sort((a,b)=>Number(b.dataset.magnetPriority || 1)-Number(a.dataset.magnetPriority || 1));
+    getMagnetTargets(el) {
+      const magnetTargets = this.magnetTargets.get(el);
+      if (magnetTargets === null) {
+        const magnetTargets = Array.from(document.querySelectorAll(this.magnetQuerySelectors.get(el))).sort((a,b)=>Number(b.dataset.magnetPriority || 1)-Number(a.dataset.magnetPriority || 1));
+        this.magnetTargets.set(el, magnetTargets);
+        return magnetTargets;
       }
-      return this.magnetTargets;
+      return magnetTargets;
     },
 
     async gltfToJoints(src, name) {
