@@ -1010,6 +1010,7 @@
     },
 
     tick() {
+      const self = this;
       const session = this.el.sceneEl.xrSession;
       if (!session) return;
       const renderer = this.el.sceneEl.renderer;
