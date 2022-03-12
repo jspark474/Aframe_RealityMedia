@@ -153,7 +153,7 @@ AFRAME.registerComponent("grab-magnet-target", {
       if (this.oldParent) {
         delete this.targetEl.dataset.noMagnet;
         delete el.dataset.oldGrabber;
-        if (el.dataset.preserveTransform === undefined) {
+        if (el.dataset.resetTransform !== undefined) {
           el.object3D.quaternion.copy(this.oldQuaternion);
           el.object3D.position.copy(this.oldPosition);
         } else {
