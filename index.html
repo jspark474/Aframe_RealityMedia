@@ -78,9 +78,9 @@
       <a-entity xr-follow>
         <a-gltf-model id="sword" src="#sword-gltf" shadow="receive:false;"
                       data-pick-up data-preserve-transform class="magnet"
-                      position="-0.2 -0.4 -0.2" rotation="-30 180 0" scale="0.6,0.6,1"
-                      animation__restore_position="startEvents:released;property:object3D.position;to:-0.2 -0.4 -0.2;easing:easeInBack;autoplay:false;"
-                      animation__restore_rotation="startEvents:released;property:object3D.rotation;to:0 45 0;easing:easeInBack;autoplay:false;"
+                      position="-0.2 -0.4 -0.9" rotation="-30 180 0" scale="0.6,0.6,1"
+                      animation__restore_position="startEvents:released;stopEvents:grabbed;property:position;to:-0.2 -0.4 -0.2;easing:easeInBack;"
+                      animation__restore_rotation="startEvents:released;stopEvents:grabbed;property:rotation;to:0 45 0;easing:easeInBack;"
         ></a-gltf-model>
         <a-gltf-model shadow="receive:false;" data-pick-up id="watergun" src="#watergun-gltf" class="magnet" position="0.2 -0.4 -0.2" rotation="30 180 0" linear-constraint="axis:0 1 0;min:-0.15;max:0;part:Slider;">
           <a-entity id="watergun-slider-magnet" mixin="handle-visual" rotation="-74 0 0" attach-to-model="Slider"></a-entity>
