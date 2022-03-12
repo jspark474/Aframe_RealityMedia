@@ -122,53 +122,54 @@ AFRAME.registerComponent("grab-magnet-target", {
       const target = document.getElementById(targetId);
       const pickUp = target.dataset.pickUp;
       const el = pickUp === 'parent' ? target.parentNode : target;
-      el.emit('grabbed', Object.assign({by: this.el}, e.detail));
       this.isGrabbing = true;
       this.grabbedEl = el;
       this.targetEl = target;
-      if (pickUp === undefined) return;
+      if (pickUp !== undefined) {
+        const oldGrabber = el.dataset.oldGrabber;
+        if (oldGrabber) document.getElementById(oldGrabber).components["grab-magnet-target"].grabEnd();
+        el.dataset.oldGrabber = this.el.id;
 
-      const oldGrabber = el.dataset.oldGrabber;
-      if (oldGrabber) document.getElementById(oldGrabber).components["grab-magnet-target"].grabEnd();
-      el.dataset.oldGrabber = this.el.id;
-
-      target.dataset.noMagnet = "";
-      this.oldParent = el.parentNode;
-      this.el.add(el);
-      this.oldQuaternion.copy(el.object3D.quaternion);
-      el.object3D.quaternion.identity();
-      this.oldPosition.copy(el.object3D.position);
-      el.object3D.position.set(0,0,0);
-      if (pickUp === 'parent') {
-        tempQuaternion.copy(target.object3D.quaternion).invert();
-        tempVector3.copy(target.object3D.position).applyQuaternion(tempQuaternion);
-        el.object3D.applyQuaternion(tempQuaternion);
-        el.object3D.position.sub(tempVector3);
+        target.dataset.noMagnet = "";
+        this.oldParent = el.parentNode;
+        this.el.add(el);
+        this.oldQuaternion.copy(el.object3D.quaternion);
+        el.object3D.quaternion.identity();
+        this.oldPosition.copy(el.object3D.position);
+        el.object3D.position.set(0,0,0);
+        if (pickUp === 'parent') {
+          tempQuaternion.copy(target.object3D.quaternion).invert();
+          tempVector3.copy(target.object3D.position).applyQuaternion(tempQuaternion);
+          el.object3D.applyQuaternion(tempQuaternion);
+          el.object3D.position.sub(tempVector3);
+        }
       }
+      el.emit('grabbed', Object.assign({by: this.el}, e.detail));
     }
   },
   grabEnd(e) {
     if (this.isGrabbing) {
       const el = this.grabbedEl;
-      el.emit('released', Object.assign({by: this.el}, e.detail));
-      this.isGrabbing = false;
-      if (!this.oldParent) return;
-      delete this.targetEl.dataset.noMagnet;
-      delete el.dataset.oldGrabber;
-      if (el.dataset.preserveTransform === undefined) {
-        el.object3D.quaternion.copy(this.oldQuaternion);
-        el.object3D.position.copy(this.oldPosition);
-      } else {
-        // Keep in place in the new parent
-        this.oldParent.object3D.worldToLocal(el.object3D.getWorldPosition(el.object3D.position));
-        
-        this.oldParent.object3D.getWorldQuaternion(tempQuaternion).invert();
-        el.object3D.getWorldQuaternion(el.object3D.quaternion).premultiply(tempQuaternion);
+      if (this.oldParent) {
+        delete this.targetEl.dataset.noMagnet;
+        delete el.dataset.oldGrabber;
+        if (el.dataset.preserveTransform === undefined) {
+          el.object3D.quaternion.copy(this.oldQuaternion);
+          el.object3D.position.copy(this.oldPosition);
+        } else {
+          // Keep in place in the new parent
+          this.oldParent.object3D.worldToLocal(el.object3D.getWorldPosition(el.object3D.position));
+
+          this.oldParent.object3D.getWorldQuaternion(tempQuaternion).invert();
+          el.object3D.getWorldQuaternion(el.object3D.quaternion).premultiply(tempQuaternion);
+        }
+        this.oldParent.add(el);
+        this.oldParent = null;
       }
-      this.oldParent.add(el);
-      this.targetEl = null;
-      this.oldParent = null;
+      this.isGrabbing = false;
       this.grabbedEl = null;
+      this.targetEl = null;
+      el.emit('released', Object.assign({by: this.el}, e.detail));
     }
   },
   tick () {
