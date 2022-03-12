@@ -143,6 +143,7 @@ AFRAME.registerComponent("grab-magnet-target", {
           el.object3D.applyQuaternion(tempQuaternion);
           el.object3D.position.sub(tempVector3);
         }
+        el.emit('pickup', Object.assign({by: this.el}, e && e.detail));
       }
       el.emit('grabbed', Object.assign({by: this.el}, e && e.detail));
     }
@@ -165,11 +166,12 @@ AFRAME.registerComponent("grab-magnet-target", {
         }
         this.oldParent.add(el);
         this.oldParent = null;
+        el.emit('putdown', Object.assign({by: this.el}, e && e.detail));
       }
       this.isGrabbing = false;
       this.grabbedEl = null;
       this.targetEl = null;
-      el.emit('released', Object.assign({by: this.el}, e.detail));
+      el.emit('released', Object.assign({by: this.el}, e && e.detail));
     }
   },
   tick () {
