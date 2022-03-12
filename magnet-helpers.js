@@ -122,7 +122,7 @@ AFRAME.registerComponent("grab-magnet-target", {
       const target = document.getElementById(targetId);
       const pickUp = target.dataset.pickUp;
       const el = pickUp === 'parent' ? target.parentNode : target;
-      el.emit('grabbed', Object.assign({by: this.el}, e.details));
+      el.emit('grabbed', Object.assign({by: this.el}, e.detail));
       this.isGrabbing = true;
       this.grabbedEl = el;
       this.targetEl = target;
@@ -150,7 +150,7 @@ AFRAME.registerComponent("grab-magnet-target", {
   grabEnd(e) {
     if (this.isGrabbing) {
       const el = this.grabbedEl;
-      el.emit('released', Object.assign({by: this.el}, e.details));
+      el.emit('released', Object.assign({by: this.el}, e.detail));
       this.isGrabbing = false;
       if (!this.oldParent) return;
       delete this.targetEl.dataset.noMagnet;
