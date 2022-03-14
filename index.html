@@ -168,13 +168,14 @@
         ammo-restitution="1.5">
       </a-box>
       <a-gltf-model id="pot" toggle-physics shadow="receive:false;" src="#stew-gltf" position="-2 1.2 0.8" ammo-body-from-model="type:dynamic;mass:2;" ammo-shape-from-model="type:cylinder;offset:0 0.2 0;">
-        <a-entity id="stew-handle-1" data-pick-up="parent" class="magnet-left magnet-right" mixin="handle-visual" position="0 0.35 -0.35" rotation="0 90 0"></a-entity>
-        <a-entity id="stew-handle-2" data-pick-up="parent" class="magnet-left magnet-right" mixin="handle-visual" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
+        <a-entity id="stew-handle-1" data-magnet-range="0.2,0.1,360,180" data-pick-up="parent" class="magnet-left magnet-right" mixin="handle-visual" position="0 0.35 -0.35" rotation="0 90 0"></a-entity>
+        <a-entity id="stew-handle-2" data-magnet-range="0.2,0.1,360,180" data-pick-up="parent" class="magnet-left magnet-right" mixin="handle-visual" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
       </a-gltf-model>
       <a-gltf-model id="table" shadow="receive:true;" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0" scale="1.5 1.5 1.5" ammo-body-from-model="type: static;" ammo-shape-from-model="type: box;offset:0 0.4 0;" ammo-restitution="1.5"></a-gltf-model>
       <a-gltf-model id="clock" shadow="receive:true;" src="#clock-gltf" position="-5 0 1.8" rotation="0 51 0" ammo-body-from-model="type:dynamic;mass:15;" ammo-shape-from-model="type: box;offset:0 1.1 0;" ammo-restitution="1.5"></a-gltf-model>
       <a-gltf-model class="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
       <a-gltf-model src="#building-glb"
+        id="building"
         lightmap="src:#bake;intensity: 1.5; filter:Window,Ceiling,floor;"
         depthwrite="true"
         window-replace="Glass"

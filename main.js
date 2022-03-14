@@ -123,6 +123,11 @@ window.addEventListener("DOMContentLoaded", function() {
   const message = document.getElementById("dom-overlay-message");
   const arContainerEl = document.getElementById("my-ar-objects");
   const cameraRig = document.getElementById("cameraRig");
+  const building = document.getElementById("building");
+  
+  building.addEventListener('object3dset', function () {
+    if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
+  }, {once: true});
   
   const labels = Array.from(document.querySelectorAll('.pose-label'));
   for (const el of labels) {
@@ -156,10 +161,6 @@ window.addEventListener("DOMContentLoaded", function() {
     if (e.target === watergunSlider) {
       watergun.setAttribute('linear-constraint', 'target', '');
     }
-  });
-  
-  sceneEl.addEventListener('object3dset', function () {
-    if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
   });
 
   // If the user taps on any buttons or interactive elements we may add then prevent
