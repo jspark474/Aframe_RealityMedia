@@ -54,6 +54,19 @@ AFRAME.registerComponent("exit-on", {
   }
 });
 
+AFRAME.registerComponent("toggle-physics", {
+  init () {
+    this.onPickup = function () { this.setAttribute('ammo-body', 'type', 'kinematic'); }
+    this.onPutDown = function () { this.setAttribute('ammo-body', 'type', 'dynamic'); }
+    this.el.addEventListener('pickup', this.onPickup);
+    this.el.addEventListener('putdown', this.onPutDown);
+  },
+  remove () {
+    this.el.removeEventListener('pickup', this.onPickup);
+    this.el.removeEventListener('putdown', this.onPutDown);
+  }
+});
+
 window.addEventListener("DOMContentLoaded", function() {
   const sceneEl = document.querySelector("a-scene");
   const message = document.getElementById("dom-overlay-message");
@@ -92,14 +105,6 @@ window.addEventListener("DOMContentLoaded", function() {
     if (e.target === watergunSlider) {
       watergun.setAttribute('linear-constraint', 'target', '');
     }
-  });
-  
-  const pot = document.getElementById('pot');
-  pot.addEventListener('pickup', function () {
-    pot.setAttribute('ammo-body', 'type', 'kinematic');
-  });
-  pot.addEventListener('putdown', function () {
-    pot.setAttribute('ammo-body', 'type', 'dynamic');
   });
   
   sceneEl.addEventListener('object3dset', function () {

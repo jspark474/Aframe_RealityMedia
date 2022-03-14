@@ -1203,9 +1203,9 @@
             const magnetRangeData = el.dataset.magnetRange;
             if (magnetRangeData) [magnetRange,fadeEnd,angleRange,angleEnd] = magnetRangeData.split(',').map(n => Number(n));
             magnetRange = magnetRange || 0.2;
-            fadeEnd = fadeEnd || 0.1;
+            fadeEnd = fadeEnd === undefined ? 0.1 : fadeEnd;
             angleRange = angleRange || 120;
-            angleEnd = angleEnd || 80;
+            angleEnd = angleEnd === undefined ? 80 : angleEnd;
             const d =  el.object3D.getWorldPosition(tempVector3_B).sub(tempVector3_A).length();
             if (d < magnetRange) {
               const Θ = (180/Math.PI) * el.object3D.getWorldQuaternion(tempQuaternion_A).premultiply(tempQuaternion_C).angleTo(magnetEl.object3D.quaternion);

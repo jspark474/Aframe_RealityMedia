@@ -55,9 +55,6 @@ AFRAME.registerComponent('linear-constraint', {
   }
 });
 
-
-
-
 AFRAME.registerComponent("attach-to-model", {
   schema: {
     default: ''
