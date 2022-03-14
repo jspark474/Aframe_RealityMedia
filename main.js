@@ -94,6 +94,13 @@ window.addEventListener("DOMContentLoaded", function() {
     }
   });
   
+  const pot = document.getElementById('pot');
+  pot.addEventListener('pickup', function () {
+    pot.setAttribute('ammo-body', 'type', 'kinematic');
+  });
+  pot.addEventListener('putdown', function () {
+    pot.setAttribute('ammo-body', 'type', 'dynamic');
+  });
   
   sceneEl.addEventListener('object3dset', function () {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;

@@ -129,8 +129,6 @@ AFRAME.registerComponent("grab-magnet-target", {
         const oldGrabber = el.dataset.oldGrabber;
         if (oldGrabber) document.getElementById(oldGrabber).components["grab-magnet-target"].grabEnd(e);
         el.dataset.oldGrabber = this.el.id;
-
-        target.dataset.noMagnet = "";
         this.oldParent = el.parentNode;
         this.el.add(el);
         this.oldQuaternion.copy(el.object3D.quaternion);
