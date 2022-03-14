@@ -60,14 +60,15 @@ AFRAME.registerComponent("ammo-shape-wait", {
     default: ''
   },
   init () {
-    this.onPickup = function () { this.setAttribute('ammo-body', 'type', 'kinematic'); }
-    this.onPutDown = function () { this.setAttribute('ammo-body', 'type', 'dynamic'); }
-    this.el.addEventListener('pickup', this.onPickup);
-    this.el.addEventListener('putdown', this.onPutDown);
+    const details = this.data;
+    this.onLoad = function () {
+      this.setAttribute('ammo-shape', details);
+      this.removeAttribute('ammo-shape-wait');
+    }
+    this.el.addEventListener('object3dset', this.onLoad);
   },
   remove () {
-    this.el.removeEventListener('pickup', this.onPickup);
-    this.el.removeEventListener('putdown', this.onPutDown);
+    this.el.removeEventListener('object3dset', this.onLoad);
   }
 });
 AFRAME.registerComponent("toggle-physics", {
