@@ -59,7 +59,7 @@
       <a-asset-item id="sword-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/scimitar.glb?v=1645454049799"></a-asset-item>
       <a-asset-item id="watergun-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watergun.glb?v=1646916260646"></a-asset-item>
       <a-asset-item id="stew-gltf" src="https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/pot-stew/model.gltf"></a-asset-item>
-      <a-asset-item id="table-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/table-wood/model.gltf"></a-asset-item>
+      <a-asset-item id="table-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/small_wooden_table_01_1k-v1.glb?v=1647263187998"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700" crossorigin="anonymous">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"></a-mixin>
@@ -168,9 +168,7 @@
         <a-entity id="stew-handle-1" data-pick-up="parent" class="magnet-left magnet-right" mixin="handle-visual" position="0 0.35 -0.35" rotation="0 90 0"></a-entity>
         <a-entity id="stew-handle-2" data-pick-up="parent" class="magnet-left magnet-right" mixin="handle-visual" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
       </a-gltf-model>
-      <a-gltf-model id="table" shadow="receive:true;" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0">
-        <a-box class="navmesh" material="side:double;color:lightgreen;" visible="false" geometry="width:3;depth:1.7;height:1.2;" position="0 0.1 0" ammo-body="type: static;" ammo-shape="type: box" ammo-restitution="1.5"></a-box>
-      </a-gltf-model>
+      <a-gltf-model id="table" shadow="receive:true;" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0" scale="1.5 1.5 1.5" ammo-body="type: static;" ammo-shape-wait="type: box;fit:manual;halfExtents:1 0.7 0.4;" ammo-restitution="1.5"></a-gltf-model>
       <a-gltf-model class="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
       <a-gltf-model src="#building-glb"
         lightmap="src:#bake;intensity: 1.5; filter:Window,Ceiling,floor;"
