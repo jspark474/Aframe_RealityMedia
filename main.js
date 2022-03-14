@@ -93,7 +93,12 @@ AFRAME.registerComponent("ammo-body-from-model", {
 AFRAME.registerComponent("toggle-physics", {
   init () {
     this.onPickup = function () { this.setAttribute('ammo-body', 'type', 'kinematic'); }
-    this.onPutDown = function () { this.setAttribute('ammo-body', 'type', 'dynamic'); }
+    this.onPutDown = function (e) {
+      this.setAttribute('ammo-body', 'type', 'dynamic');
+      if (e.detail.frame && e.detail.inputSource) {
+        const pose = e.detail.frame.getPose(e.detail.inputSource.gripSpace);
+      }
+    }
     this.el.addEventListener('pickup', this.onPickup);
     this.el.addEventListener('putdown', this.onPutDown);
   },
