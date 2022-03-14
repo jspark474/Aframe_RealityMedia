@@ -54,7 +54,7 @@ AFRAME.registerComponent("exit-on", {
   }
 });
 
-AFRAME.registerComponent("ammo-shape-wait", {
+AFRAME.registerComponent("ammo-shape-from-model", {
   schema: {
     type: 'string',
     default: ''
@@ -63,7 +63,7 @@ AFRAME.registerComponent("ammo-shape-wait", {
     const details = this.data;
     this.onLoad = function () {
       this.setAttribute('ammo-shape', details);
-      this.removeAttribute('ammo-shape-wait');
+      this.removeAttribute('ammo-shape-from-model');
     }
     this.el.addEventListener('object3dset', this.onLoad);
   },
@@ -71,6 +71,25 @@ AFRAME.registerComponent("ammo-shape-wait", {
     this.el.removeEventListener('object3dset', this.onLoad);
   }
 });
+AFRAME.registerComponent("ammo-body-from-model", {
+  schema: {
+    type: 'string',
+    default: ''
+  },
+  init () {
+    const details = this.data;
+    this.onLoad = function () {
+      this.setAttribute('ammo-body', details);
+      this.removeAttribute('ammo-body-from-model');
+    }
+    this.el.addEventListener('object3dset', this.onLoad);
+  },
+  remove () {
+    this.el.removeEventListener('object3dset', this.onLoad);
+  }
+});
+
+
 AFRAME.registerComponent("toggle-physics", {
   init () {
     this.onPickup = function () { this.setAttribute('ammo-body', 'type', 'kinematic'); }
