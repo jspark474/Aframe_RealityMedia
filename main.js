@@ -54,18 +54,18 @@ AFRAME.registerComponent("exit-on", {
   }
 });
 
-// AFRAME.registerComponent("toggle-physics", {
-//   init () {
-//     this.onPickup = function () { this.setAttribute('ammo-body', 'type', 'kinematic'); }
-//     this.onPutDown = function () { this.setAttribute('ammo-body', 'type', 'dynamic'); }
-//     this.el.addEventListener('pickup', this.onPickup);
-//     this.el.addEventListener('putdown', this.onPutDown);
-//   },
-//   remove () {
-//     this.el.removeEventListener('pickup', this.onPickup);
-//     this.el.removeEventListener('putdown', this.onPutDown);
-//   }
-// });
+AFRAME.registerComponent("toggle-physics", {
+  init () {
+    this.onPickup = function () { this.setAttribute('ammo-body', 'type', 'kinematic'); }
+    this.onPutDown = function () { this.setAttribute('ammo-body', 'type', 'dynamic'); }
+    this.el.addEventListener('pickup', this.onPickup);
+    this.el.addEventListener('putdown', this.onPutDown);
+  },
+  remove () {
+    this.el.removeEventListener('pickup', this.onPickup);
+    this.el.removeEventListener('putdown', this.onPutDown);
+  }
+});
 
 window.addEventListener("DOMContentLoaded", function() {
   const sceneEl = document.querySelector("a-scene");
