@@ -115,8 +115,8 @@
         <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
         
         <!-- These get drawn towards grabable objects, moving the whole hand and the attached elements-->
-        <a-entity id="right-magnet" data-right="grip" data-magnet=".magnet-right .magnet" grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;"></a-entity>
-        <a-entity id="left-magnet" data-left="grip"  data-magnet=".magnet-left .magnet"  grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;"></a-entity>
+        <a-entity id="right-magnet" data-right="grip" data-magnet="magnet-right magnet" grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;"></a-entity>
+        <a-entity id="left-magnet" data-left="grip"  data-magnet="magnet-left magnet"  grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;"></a-entity>
     
         <!-- markers to let us know the real location of the hands -->
         <a-sphere id="right-no-magnet" data-right="grip" data-no-magnet radius="0.01" color="red"></a-sphere>

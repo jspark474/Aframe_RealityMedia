@@ -119,16 +119,25 @@ AFRAME.registerComponent("grab-magnet-target", {
   grabStart(e) {
     const targetId = this.el.dataset.magnetTarget;
     if (this.isGrabbing === false && targetId) {
+      const magnetClasses = this.el.dataset.magnet.split(' ');
       const target = document.getElementById(targetId);
       const pickUp = target.dataset.pickUp;
       const el = pickUp === 'parent' ? target.parentNode : target;
       this.isGrabbing = true;
       this.grabbedEl = el;
       this.targetEl = target;
+      this.removedClasses = [];
       if (pickUp !== undefined) {
+        for (const classname of magnetClasses) {
+          if (el.classList.contains(classname)) {
+            el.classList.remove(classname);
+            this.removedClasses.push(classname);
+          }
+        }
         const oldGrabber = el.dataset.oldGrabber;
         if (oldGrabber) document.getElementById(oldGrabber).components["grab-magnet-target"].grabEnd(e);
         el.dataset.oldGrabber = this.el.id;
+
         this.oldParent = el.parentNode;
         this.el.add(el);
         this.oldQuaternion.copy(el.object3D.quaternion);
@@ -150,7 +159,9 @@ AFRAME.registerComponent("grab-magnet-target", {
     if (this.isGrabbing) {
       const el = this.grabbedEl;
       if (this.oldParent) {
-        delete this.targetEl.dataset.noMagnet;
+        for (const classname of this.removedClasses.splice(0)) {
+          el.classList.add(classname);
+        }
         delete el.dataset.oldGrabber;
         if (el.dataset.resetTransform !== undefined) {
           el.object3D.quaternion.copy(this.oldQuaternion);
