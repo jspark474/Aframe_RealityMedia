@@ -1,5 +1,5 @@
 /* jshint esversion: 9 */
-/* global THREE, AFRAME */
+/* global THREE, AFRAME, Ammo */
 
 AFRAME.registerComponent("hide-on-hit-test-start", {
   init: function() {
@@ -97,6 +97,16 @@ AFRAME.registerComponent("toggle-physics", {
       this.setAttribute('ammo-body', 'type', 'dynamic');
       if (e.detail.frame && e.detail.inputSource) {
         const pose = e.detail.frame.getPose(e.detail.inputSource.gripSpace);
+        if (pose.angularVelocity) {
+          const velocity = new Ammo.btVector3(pose.angularVelocity.x,pose.angularVelocity.y,pose.angularVelocity.z);
+          this.el.body.setAngularVelocity(velocity);
+          Ammo.destroy(velocity);
+        }
+        if (pose.linearVelocity) {
+          const velocity = new Ammo.btVector3(pose.linearVelocity.x,pose.linearVelocity.y,pose.linearVelocity.z);
+          this.el.body.setLinearVelocity(velocity);
+          Ammo.destroy(velocity);
+        }
       }
     }
     this.el.addEventListener('pickup', this.onPickup);

@@ -40,7 +40,7 @@
 
 <body>
 	<a-scene
-    physics="driver: ammo; debug: true; debugDrawMode: 1;"
+    physics="driver: ammo; debug: false; debugDrawMode: 1;"
 		webxr="overlayElement:#dom-overlay;"
 		background="color:skyblue;"
 		reflection="directionalLight:#dirlight;"
@@ -103,12 +103,6 @@
         <a-gltf-model src="#watch-gltf" data-left="wrist" position="-1000 0 0">
           <a-sphere radius="0.02" position="0 0.02 0" sphere-collider="radius:0.02;objects:[data-right$=-tip];" exit-on="hitend" visible="false"></a-sphere>
         </a-gltf-model>
-        <a-entity data-right="ray" mixin="blink" blink-controls>
-          <a-entity position="0 0 -0.22" class="pose-label" text="value: Hello World; align: center;"></a-entity>
-        </a-entity>
-        <a-entity data-left="ray" mixin="blink" blink-controls>
-          <a-entity position="0 0 -0.22" class="pose-label" text="value: Hello World; align: center;"></a-entity>
-        </a-entity>
         <a-entity data-left="ring-finger-phalanx-proximal">
           <a-torus position="0 0 -0.03" radius="0.008" radius-tubular="0.001" scale="1 1 1.5" material="color:gold;metalness:1;roughness:0;"></a-torus>
         </a-entity>
