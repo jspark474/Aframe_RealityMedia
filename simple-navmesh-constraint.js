@@ -36,6 +36,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     const tempVec = new THREE.Vector3();
     const scanPattern = [
       [0,1], // Default the next location
+      [0,0.5], // Check that the path to that location was fine
       [30,0.4], // A little to the side shorter range
       [-30,0.4], // A little to the side shorter range
       [60,0.2], // Moderately to the side short range
@@ -65,7 +66,6 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
       if (nextPosition.distanceTo(this.lastPosition) === 0) return;
       
       let didHit = false;
-      
       // So that it does not get stuck it takes as few samples around the user and finds the most appropriate
       scanPatternLoop:
       for (const [angle, distance] of scanPattern) {
@@ -78,6 +78,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         raycaster.set(tempVec, down);
         raycaster.far = this.data.fall > 0 ? this.data.fall + maxYVelocity : Infinity;
         raycaster.intersectObjects(this.objects, true, results);
+        
         if (results.length) {
           // If it hit something we want to avoid then ignore it and stop looking
           for (const result of results) {
