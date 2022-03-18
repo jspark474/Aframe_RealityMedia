@@ -49,9 +49,11 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     const maxYVelocity = 0.5;
     const results = [];
     let yVel = 0;
+    let firstTry = true;
     
     return function tick(time, delta) {
       if (this.lastPosition === null) {
+        firstTry = true;
         this.lastPosition = new THREE.Vector3();
         this.el.object3D.getWorldPosition(this.lastPosition);
       }
@@ -102,7 +104,11 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         
       }
       
-      if (!didHit) {
+      if (didHit) {
+        firstTry = false;
+      }
+      
+      if (!firstTry && !didHit) {
         this.el.object3D.position.copy(this.lastPosition);
         this.el.object3D.parent.worldToLocal(this.el.object3D.position);
       }
