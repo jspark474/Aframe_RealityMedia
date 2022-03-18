@@ -79,7 +79,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         if (results.length) {
           // If it hit something we want to avoid then ignore it and stop looking
           for (const result of results) {
-            if(this.excludes.includes(result.object.el)) break scanPatternLoop;
+            if(this.excludes.includes(result.object.el)) continue scanPatternLoop;
           }
           const hitPos = results[0].point;
           hitPos.y += this.data.height;
@@ -92,11 +92,10 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
           el.object3D.position.copy(hitPos);
           this.el.object3D.parent.worldToLocal(this.el.object3D.position);
           this.lastPosition.copy(hitPos);
-          results.splice(0);
           didHit = true;
           break;
         }
-        
+        results.splice(0);
       }
       
       if (!didHit) {
