@@ -79,9 +79,13 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
         if (results.length) {
           // If it hit something we want to avoid then ignore it and stop looking
           for (const result of results) {
-            if(this.excludes.includes(result.object.el)) continue scanPatternLoop;
+            if(this.excludes.includes(result.object.el)) {
+              results.splice(0);
+              continue scanPatternLoop;
+            }
           }
           const hitPos = results[0].point;
+          results.splice(0);
           hitPos.y += this.data.height;
           if (nextPosition.y - (hitPos.y - yVel*2) > 0.01) {
             yVel += Math.max(gravity * delta * 0.001, -maxYVelocity);
@@ -95,7 +99,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
           didHit = true;
           break;
         }
-        results.splice(0);
+        
       }
       
       if (!didHit) {
