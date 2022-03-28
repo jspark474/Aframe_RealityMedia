@@ -124,6 +124,7 @@ window.addEventListener("DOMContentLoaded", function() {
   const arContainerEl = document.getElementById("my-ar-objects");
   const cameraRig = document.getElementById("cameraRig");
   const building = document.getElementById("building");
+  const ladder = document.getElementById("ladder");
   
   building.addEventListener('object3dset', function () {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
@@ -162,6 +163,10 @@ window.addEventListener("DOMContentLoaded", function() {
       watergun.setAttribute('linear-constraint', 'target', '');
     }
   });
+  
+  ladder.addEventListener('grabbed', function () {
+    
+  })
 
   // If the user taps on any buttons or interactive elements we may add then prevent
   // Any WebXR select events from firing
