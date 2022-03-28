@@ -124,7 +124,8 @@ window.addEventListener("DOMContentLoaded", function() {
   const arContainerEl = document.getElementById("my-ar-objects");
   const cameraRig = document.getElementById("cameraRig");
   const building = document.getElementById("building");
-  const ladder = document.getElementById("ladder");
+  const ladderL = document.getElementById("ladder-left-hand");
+  const ladderR = document.getElementById("ladder-right-hand");
   
   building.addEventListener('object3dset', function () {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
@@ -164,9 +165,11 @@ window.addEventListener("DOMContentLoaded", function() {
     }
   });
   
-  ladder.addEventListener('grabbed', function () {
-    
-  })
+  function ladderGrab(e) {
+    console.log(e.target);
+  }
+  ladderL.addEventListener('grabbed', ladderGrab);
+  ladderR.addEventListener('grabbed', ladderGrab);
 
   // If the user taps on any buttons or interactive elements we may add then prevent
   // Any WebXR select events from firing
