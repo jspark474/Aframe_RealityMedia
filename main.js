@@ -124,8 +124,6 @@ window.addEventListener("DOMContentLoaded", function() {
   const arContainerEl = document.getElementById("my-ar-objects");
   const cameraRig = document.getElementById("cameraRig");
   const building = document.getElementById("building");
-  const ladderL = document.getElementById("ladder-left-hand");
-  const ladderR = document.getElementById("ladder-right-hand");
   
   building.addEventListener('object3dset', function () {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
@@ -141,35 +139,51 @@ window.addEventListener("DOMContentLoaded", function() {
     });
   }
   
-  const watergun = document.getElementById("watergun");
-  const watergunSlider = watergun.firstElementChild;
-  watergun.addEventListener('grabbed', function (e) {
-    const by = e.detail.by;
-    if (e.target === watergun) {
-      if (by.dataset.right) watergunSlider.className = 'magnet-left';
-      if (by.dataset.left) watergunSlider.className = 'magnet-right';
-    }
-    if (e.target === watergunSlider) {
-      if (by.dataset.right) watergun.setAttribute('linear-constraint', 'target', '#right-no-magnet');
-      if (by.dataset.left) watergun.setAttribute('linear-constraint', 'target', '#left-no-magnet');
-    }
-  });
-  watergun.addEventListener('released', function (e) {
-    const by = e.detail.by;
-    if (e.target === watergun) {
-      watergunSlider.className = '';
-      watergun.setAttribute('linear-constraint', 'target', '');
-    }
-    if (e.target === watergunSlider) {
-      watergun.setAttribute('linear-constraint', 'target', '');
-    }
-  });
-  
-  function ladderGrab(e) {
-    console.log(e.target);
+  watergun: {
+    const watergun = document.getElementById("watergun");
+    const watergunSlider = watergun.firstElementChild;
+    watergun.addEventListener('grabbed', function (e) {
+      const by = e.detail.by;
+      if (e.target === watergun) {
+        if (by.dataset.right) watergunSlider.className = 'magnet-left';
+        if (by.dataset.left) watergunSlider.className = 'magnet-right';
+      }
+      if (e.target === watergunSlider) {
+        if (by.dataset.right) watergun.setAttribute('linear-constraint', 'target', '#right-no-magnet');
+        if (by.dataset.left) watergun.setAttribute('linear-constraint', 'target', '#left-no-magnet');
+      }
+    });
+    watergun.addEventListener('released', function (e) {
+      const by = e.detail.by;
+      if (e.target === watergun) {
+        watergunSlider.className = '';
+        watergun.setAttribute('linear-constraint', 'target', '');
+      }
+      if (e.target === watergunSlider) {
+        watergun.setAttribute('linear-constraint', 'target', '');
+      }
+    });
   }
-  ladderL.addEventListener('grabbed', ladderGrab);
-  ladderR.addEventListener('grabbed', ladderGrab);
+  
+  ladder: {
+    const ladderL = document.getElementById("ladder-left-hand");
+    const ladderR = document.getElementById("ladder-right-hand");
+    let ladderHands = 0;
+    let holdingLadder = false;
+    function ladderRelease(e) {
+      if (ladderHands === 0) return console.log('This should never happen');
+      ladderHands--;
+      holdingLadder = !!ladderHands;
+    }
+    function ladderGrab(e) {
+      ladderHands++;
+      holdingLadder = true;
+    }
+    ladderL.addEventListener('grabbed', ladderGrab);
+    ladderR.addEventListener('grabbed', ladderGrab);
+    ladderL.addEventListener('released', ladderRelease);
+    ladderR.addEventListener('released', ladderRelease);
+  }
 
   // If the user taps on any buttons or interactive elements we may add then prevent
   // Any WebXR select events from firing
