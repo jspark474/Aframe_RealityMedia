@@ -165,7 +165,11 @@ window.addEventListener("DOMContentLoaded", function() {
     });
   }
   
+  
+  // Convert to component for tick.
   ladder: {
+    const startingRigPosition = new THREE.Vector3();
+    const startingHandPosition = new THREE.Vector3();
     const ladderL = document.getElementById("ladder-left-hand");
     const ladderR = document.getElementById("ladder-right-hand");
     let ladderHands = 0;
@@ -176,6 +180,9 @@ window.addEventListener("DOMContentLoaded", function() {
       holdingLadder = !!ladderHands;
     }
     function ladderGrab(e) {
+      if (ladderHands === 0) {
+        startingRigPosition.copy(cameraRig.position);
+      }
       ladderHands++;
       holdingLadder = true;
     }
