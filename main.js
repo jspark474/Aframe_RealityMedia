@@ -134,11 +134,10 @@ AFRAME.registerComponent("ladder", {
     this.startingHandPosition = new THREE.Vector3();
     this.ladderHands = 0;
     this.holdingLadder = false;
-    
-    // ladderL.addEventListener('grabbed', ladderGrab);
-    // ladderR.addEventListener('grabbed', ladderGrab);
-    // ladderL.addEventListener('released', ladderRelease);
-    // ladderR.addEventListener('released', ladderRelease);
+    this.grabbables.forEach(el => {
+      el.addEventListener('grabbed', el);
+      el.addEventListener('released', el);
+    });
   },
   ladderRelease(e) {
     if (this.ladderHands === 0) return console.log('This should never happen');
@@ -151,9 +150,6 @@ AFRAME.registerComponent("ladder", {
     }
     this.ladderHands++;
     this.holdingLadder = true;
-  },
-  update () {
-    
   },
   tick () {
     
