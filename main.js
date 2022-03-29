@@ -118,6 +118,50 @@ AFRAME.registerComponent("toggle-physics", {
   }
 });
 
+AFRAME.registerComponent("ladder", {
+  schema: {
+    cameraRig: {
+      type: 'selector'
+    },
+    grabbables: {
+      type: 'selectorAll'
+    }
+  },
+  init () {
+    this.ladderGrab = this.ladderGrab.bind(this);
+    this.ladderRelease = this.ladderRelease.bind(this);
+    this.startingRigPosition = new THREE.Vector3();
+    this.startingHandPosition = new THREE.Vector3();
+    this.ladderHands = 0;
+    this.holdingLadder = false;
+    
+    // ladderL.addEventListener('grabbed', ladderGrab);
+    // ladderR.addEventListener('grabbed', ladderGrab);
+    // ladderL.addEventListener('released', ladderRelease);
+    // ladderR.addEventListener('released', ladderRelease);
+  },
+  ladderRelease(e) {
+    if (this.ladderHands === 0) return console.log('This should never happen');
+    this.ladderHands--;
+    this.holdingLadder = !!this.ladderHands;
+  },
+  ladderGrab(e) {
+    if (this.ladderHands === 0) {
+      this.startingRigPosition.copy(this.cameraRig.position);
+    }
+    this.ladderHands++;
+    this.holdingLadder = true;
+  },
+  update () {
+    
+  },
+  tick () {
+    
+  },
+  remove () {
+  }
+});
+
 window.addEventListener("DOMContentLoaded", function() {
   const sceneEl = document.querySelector("a-scene");
   const message = document.getElementById("dom-overlay-message");
@@ -163,33 +207,6 @@ window.addEventListener("DOMContentLoaded", function() {
         watergun.setAttribute('linear-constraint', 'target', '');
       }
     });
-  }
-  
-  
-  // Convert to component for tick.
-  ladder: {
-    const startingRigPosition = new THREE.Vector3();
-    const startingHandPosition = new THREE.Vector3();
-    const ladderL = document.getElementById("ladder-left-hand");
-    const ladderR = document.getElementById("ladder-right-hand");
-    let ladderHands = 0;
-    let holdingLadder = false;
-    function ladderRelease(e) {
-      if (ladderHands === 0) return console.log('This should never happen');
-      ladderHands--;
-      holdingLadder = !!ladderHands;
-    }
-    function ladderGrab(e) {
-      if (ladderHands === 0) {
-        startingRigPosition.copy(cameraRig.position);
-      }
-      ladderHands++;
-      holdingLadder = true;
-    }
-    ladderL.addEventListener('grabbed', ladderGrab);
-    ladderR.addEventListener('grabbed', ladderGrab);
-    ladderL.addEventListener('released', ladderRelease);
-    ladderR.addEventListener('released', ladderRelease);
   }
 
   // If the user taps on any buttons or interactive elements we may add then prevent
