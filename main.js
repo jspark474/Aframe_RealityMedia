@@ -134,7 +134,7 @@ AFRAME.registerComponent("ladder", {
     this.startingHandPosition = new THREE.Vector3();
     this.ladderHands = 0;
     this.holdingLadder = false;
-    this.grabbables.forEach(el => {
+    if (this.data.grabbables) this.data.grabbables.forEach(el => {
       el.addEventListener('grabbed', el);
       el.addEventListener('released', el);
     });

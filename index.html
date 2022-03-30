@@ -160,15 +160,13 @@
     </a-entity>
 
     <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
-		<a-light id="dirlight" shadow-camera-automatic="targets:[ar-shadow-helper],#table,#ladder;" intensity="0.8" light="castShadow:true;type:directional" position="0 3 -6"></a-light>
-    <a-entity ar-shadow-helper="target:#my-ar-objects;light:#dirlight;"
-    >
-      <a-plane rotation="-90 0 0" shadow="cast:false;receive:true;" position="0 0.25 0" material="shader:shadow; depthWrite:false; opacity:0.9;"></a-plane>
+		<a-light id="dirlight" shadow-camera-automatic="[ar-shadow-helper],#table,#ladder" intensity="0.8" light="castShadow:true;type:directional" position="0 3 -6"></a-light>
+    <a-entity ar-shadow-helper="target:#my-ar-objects;light:#dirlight;" visible="false">
+      <a-plane rotation="-90 0 0" shadow="cast:false;receive:true;" position="0 0.01 0" material="shader:shadow; depthWrite:false; opacity:0.9;"></a-plane>
     </a-entity>
 
-
     <a-entity hide-on-enter-ar position="0 -0.2 0" environment="lighting:none;shadow:true;preset: osiris;"></a-entity>
-		<a-entity rotation="0 -45 0" position="0 0 0" hide-on-enter-ar>
+		<a-entity rotation="0 -50 0" position="0 0 0" hide-on-enter-ar>
       <a-box 
         position="-5.148 -0.1 -0.355"
         visible="false"
@@ -185,7 +183,7 @@
         <a-plane rotation="-90 0 0" width="1.2" height="0.6" class="navmesh-hole" visible="false"></a-plane>
       </a-gltf-model>
   
-      <a-gltf-model id="ladder" ladder shadow src="#ladder-gltf" position="-4.98177 -0.01925 -2.97802" rotation="-4.96238746362806 -62.929673512603706 0.6165025875607658" ammo-body-from-model="type: static;" ammo-shape-from-model="type: box;offset:0 1.25 0;" ammo-restitution="1.5">
+      <a-gltf-model id="ladder" ladder="grabbables:;" shadow src="#ladder-gltf" position="-4.98177 -0.01925 -2.97802" rotation="-4.96238746362806 -62.929673512603706 0.6165025875607658" ammo-body-from-model="type: static;" ammo-shape-from-model="type: box;offset:0 1.25 0;" ammo-restitution="1.5">
         <a-plane rotation="-90 0 0" width="1.2" height="0.6" class="navmesh-hole" visible="false"></a-plane>
         <a-entity position="-0.25 0.07 0" linear-constraint="target:#left-no-magnet;axis:0 1 0;max:2.5;step:0.2;">
           <a-entity data-magnet-range="0.2,0.1,360,300" class="magnet-left" rotation="0 90 0" linear-constraint="target:#left-no-magnet;axis:1 0 0;max:0.5;"></a-entity>

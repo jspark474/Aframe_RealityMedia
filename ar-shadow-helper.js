@@ -1,4 +1,6 @@
 /* global AFRAME, THREE */
+
+
 (function () {
 "use strict";
 
