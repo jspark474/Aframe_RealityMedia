@@ -1065,7 +1065,7 @@
         } else if (handMesh)  {
           handMesh.visible = false;
 
-          for (const el of this.el.children){
+          for (const el of allEls){
             el.object3D.visible = false;
           }
         }
