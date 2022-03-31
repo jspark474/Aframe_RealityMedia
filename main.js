@@ -151,15 +151,14 @@ AFRAME.registerComponent("ladder", {
   },
   ladderGrab(e) {
     this.activeHand = e.detail.byNoMagnet;
+    this.startingHandPosition.copy(this.activeHand.object3D.position);
     this.startingRigPosition.copy(this.cameraRig.object3D.position);
-    this.activeHand.object3D.getWorldPosition(this.startingHandPosition);
     this.ladderHands++;
     this.holdingLadder = true;
   },
   tick () {
     if (this.activeHand) {
-      this.activeHand.object3D.getWorldPosition(this.cameraRig.object3D.position);
-      this.cameraRig.object3D.position.subVectors(this.startingHandPosition,this.cameraRig.object3D.position);
+      this.cameraRig.object3D.position.subVectors(this.startingHandPosition, this.activeHand.object3D.position);
       this.cameraRig.object3D.position.add(this.startingRigPosition);
     }
   },
