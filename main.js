@@ -121,7 +121,7 @@ AFRAME.registerComponent("toggle-physics", {
 AFRAME.registerComponent("ladder", {
   schema: {
     cameraRig: {
-      type: 'selector'
+      default: ''
     },
     grabbables: {
       default: ''
@@ -135,7 +135,10 @@ AFRAME.registerComponent("ladder", {
     this.activeHand = null;
     this.ladderHands = 0;
     this.holdingLadder = false;
-    if (this.data.grabbables)  {
+    this.grabbables = [];
+    this.cameraRig = document.querySelector(this.data.cameraRig);
+    if (this.data.grabbables) for (const el of this.el.querySelectorAll(this.data.grabbables)) {
+      this.grabbables.push(el);
       el.addEventListener('grabbed', this.ladderGrab);
       el.addEventListener('released', this.ladderRelease);
     }
@@ -156,12 +159,12 @@ AFRAME.registerComponent("ladder", {
   tick () {
     if (this.activeHand) {
       this.activeHand.object3D.getWorldPosition(this.cameraRig.object3D.position);
-      this.cameraRig.object3D.position.subVectors(this.startingRigPosition,this.cameraRig.object3D.position);
+      this.cameraRig.object3D.position.subVectors(this.startingHandPosition,this.cameraRig.object3D.position);
       this.cameraRig.object3D.position.add(this.startingRigPosition);
     }
   },
   remove () {
-    if (this.data.grabbables) this.data.grabbables.forEach(el => {
+    this.grabbables.forEach(el => {
       el.removeEventListener('grabbed', this.ladderGrab);
       el.removeEventListener('released', this.ladderRelease);
     });
