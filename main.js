@@ -132,29 +132,38 @@ AFRAME.registerComponent("ladder", {
     this.ladderRelease = this.ladderRelease.bind(this);
     this.startingRigPosition = new THREE.Vector3();
     this.startingHandPosition = new THREE.Vector3();
+    this.activeHand = null;
     this.ladderHands = 0;
     this.holdingLadder = false;
     if (this.data.grabbables) this.data.grabbables.forEach(el => {
-      el.addEventListener('grabbed', el);
-      el.addEventListener('released', el);
+      el.addEventListener('grabbed', this.ladderGrab);
+      el.addEventListener('released', this.ladderRelease);
     });
   },
   ladderRelease(e) {
     if (this.ladderHands === 0) return console.log('This should never happen');
     this.ladderHands--;
     this.holdingLadder = !!this.ladderHands;
-    if (ladderHands ==)
+    this.activeHand = null;
   },
   ladderGrab(e) {
+    this.activeHand = e.target;
     this.startingRigPosition.copy(this.cameraRig.object3D.position);
-    e.target.object3D.getWorldPosition(this.startingHandPosition);
+    this.activeHand.object3D.getWorldPosition(this.startingHandPosition);
     this.ladderHands++;
     this.holdingLadder = true;
   },
   tick () {
-    
+    if (this.activeHand)
+    this.activeHand.object3D.getWorldPosition(this.cameraRig.object3D.position);
+    this.cameraRig.object3D.position.subVectors(this.startingRigPosition,this.cameraRig.object3D.position);
+    this.cameraRig.object3D.position.add(this.startingRigPosition);
   },
   remove () {
+    if (this.data.grabbables) this.data.grabbables.forEach(el => {
+      el.removeEventListener('grabbed', el);
+      el.removeEventListener('released', el);
+    });
   }
 });
 
