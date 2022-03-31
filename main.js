@@ -202,7 +202,7 @@ window.addEventListener("DOMContentLoaded", function() {
         if (by.dataset.left) watergunSlider.className = 'magnet-right';
       }
       if (e.target === watergunSlider) {
-        watergun.setAttribute('linear-constraint', 'target', e.detail.byNoMagnet.id);
+        watergun.setAttribute('linear-constraint', 'target', '#' + e.detail.byNoMagnet.id);
       }
     });
     watergun.addEventListener('released', function (e) {
