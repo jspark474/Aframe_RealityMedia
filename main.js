@@ -201,8 +201,8 @@ window.addEventListener("DOMContentLoaded", function() {
         if (by.dataset.left) watergunSlider.className = 'magnet-right';
       }
       if (e.target === watergunSlider) {
-        if (by.dataset.right) watergun.setAttribute('linear-constraint', 'target', '#right-no-magnet');
-        if (by.dataset.left) watergun.setAttribute('linear-constraint', 'target', '#left-no-magnet');
+        if (by.dataset.right) watergun.setAttribute('linear-constraint', 'target', e.detail.byNoMagnet.id);
+        if (by.dataset.left) watergun.setAttribute('linear-constraint', 'target', e.detail.byNoMagnet.id);
       }
     });
     watergun.addEventListener('released', function (e) {
