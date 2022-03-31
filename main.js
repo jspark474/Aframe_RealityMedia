@@ -143,11 +143,11 @@ AFRAME.registerComponent("ladder", {
     if (this.ladderHands === 0) return console.log('This should never happen');
     this.ladderHands--;
     this.holdingLadder = !!this.ladderHands;
+    if (ladderHands ==)
   },
   ladderGrab(e) {
-    if (this.ladderHands === 0) {
-      this.startingRigPosition.copy(this.cameraRig.position);
-    }
+    this.startingRigPosition.copy(this.cameraRig.object3D.position);
+    e.target.object3D.getWorldPosition(this.startingHandPosition);
     this.ladderHands++;
     this.holdingLadder = true;
   },
