@@ -150,7 +150,7 @@ AFRAME.registerComponent("ladder", {
     this.activeHand = null;
   },
   ladderGrab(e) {
-    this.activeHand = e.target;
+    this.activeHand = e.detail.byNoMagnet;
     this.startingRigPosition.copy(this.cameraRig.object3D.position);
     this.activeHand.object3D.getWorldPosition(this.startingHandPosition);
     this.ladderHands++;
