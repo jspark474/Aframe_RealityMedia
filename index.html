@@ -14,10 +14,10 @@
 	<script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-extras@master/src/misc/sphere-collider.js"></script>
   <script src="https://mixedreality.mozilla.org/ammo.js/builds/ammo.wasm.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.0.4/build/handy-controls.min.js"></script>
+<!--   <script src="https://cdn.jsdelivr.net/npm/handy-work@3.0.4/build/handy-controls.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/handy-work@3.0.4/build/magnet-helpers.min.js"></script>
 <!--   <script src="https://unpkg.com/aframe-inspector@1.3.x/dist/aframe-inspector.min.js"></script> -->
-<!--   <script src="handy-controls.js"></script> -->
+  <script src="handy-controls.js"></script>
   <script src="ar-shadow-helper.js"></script>
   <script src="ar-cursor.js"></script>
   <script src="simple-navmesh-constraint.js"></script>
@@ -134,12 +134,12 @@
         </a-entity>
         
         <!-- These get drawn towards grabable objects, moving the whole hand and the attached elements-->
-        <a-entity id="right-magnet" geometry="shape:sphere;radius:0.05;" data-right="grip" data-magnet="magnet-right" grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;noMagnetEl:#right-no-magnet;"></a-entity>
         <a-entity id="left-magnet" data-left="grip"  data-magnet="magnet-left"  grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;noMagnetEl:#left-no-magnet;"></a-entity>
+        <a-entity id="right-magnet" geometry="shape:sphere;radius:0.05;" data-right="grip" data-magnet="magnet-right" grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;noMagnetEl:#right-no-magnet;"></a-entity>
     
         <!-- markers to let us know the real location of the hands, you probably want to make them visible="false" or just make them empty <a-entities> -->
-        <a-sphere id="right-no-magnet" data-right="grip" data-no-magnet radius="0.04" color="green"></a-sphere>
         <a-sphere id="left-no-magnet" data-left="grip" data-no-magnet radius="0.04" color="red"></a-sphere>
+        <a-sphere id="right-no-magnet" data-right="grip" data-no-magnet radius="0.04" color="green"></a-sphere>
         
         <!-- Invisible objects at the tips of each finger for physics or intersections -->
         <a-sphere data-right="index-finger-tip" radius="0.004" visible="false" ammo-body="type: kinematic;" ammo-shape="type:sphere;"></a-sphere>
