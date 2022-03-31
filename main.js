@@ -142,9 +142,15 @@ AFRAME.registerComponent("ladder", {
     }
   },
   ladderRelease(e) {
-    const activeHand = e.detail.byNoMagnet;
+    const oldActiveHand = e.detail.byNoMagnet;
     let index;
-    while ((index=this.ladderHands.indexOf(activeHand))!==-1) this.ladderHands.splice(index,1);
+    while ((index=this.ladderHands.indexOf(oldActiveHand))!==-1) this.ladderHands.splice(index,1);
+    
+    const activeHand = this.ladderHands[0];
+    if (activeHand) {
+      this.startingHandPosition.copy(activeHand.object3D.position);
+      this.startingRigPosition.copy(this.cameraRig.object3D.position);
+    }
   },
   ladderGrab(e) {
     const activeHand = e.detail.byNoMagnet;
@@ -157,6 +163,11 @@ AFRAME.registerComponent("ladder", {
     const activeHand = this.ladderHands[0];
     if (activeHand) {
       this.cameraRig.object3D.position.subVectors(this.startingHandPosition, activeHand.object3D.position);
+      
+      // dunno why need to invert x,z but it makes it work better
+      this.cameraRig.object3D.position.x*=-1;
+      this.cameraRig.object3D.position.z*=-1;
+      
       this.cameraRig.object3D.position.add(this.startingRigPosition);
     }
   },
