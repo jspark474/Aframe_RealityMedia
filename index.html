@@ -14,8 +14,8 @@
 	<script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-extras@master/src/misc/sphere-collider.js"></script>
   <script src="https://mixedreality.mozilla.org/ammo.js/builds/ammo.wasm.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.0/build/handy-controls.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.0/build/magnet-helpers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.1/build/handy-controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.1/build/magnet-helpers.min.js"></script>
 <!--   <script src="https://unpkg.com/aframe-inspector@1.3.x/dist/aframe-inspector.min.js"></script> -->
 <!--   <script src="handy-controls.js"></script> -->
   <script src="ar-shadow-helper.js"></script>
@@ -185,6 +185,10 @@
       <a-gltf-model id="table" shadow="receive:true;" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0" scale="1.5 1.5 1.5" ammo-body-from-model="type: static;" ammo-shape-from-model="type: box;offset:0 0.4 0;" ammo-restitution="1.5">
         <a-plane rotation="-90 0 0" width="1.2" height="0.6" class="navmesh-hole" visible="false"></a-plane>
       </a-gltf-model>
+      
+      <a-box position="-1.657 0.893 0.421" scale="0.2 0.2 0.2">
+        <a-cylinder radius="0.45" linear-constratint=""></a-cylinder>
+      </a-box>
   
       <a-gltf-model id="ladder" ladder="grabbables:#ladder-left-hand,#ladder-right-hand;cameraRig:#cameraRig;" shadow src="#ladder-gltf" position="-4.98177 -0.01925 -2.97802" rotation="-4.9623 -62.929 0.6165" ammo-body-from-model="type: static;" ammo-shape-from-model="type: box;offset:0 1.25 0;" ammo-restitution="1.5">
         <a-plane rotation="-90 0 0" width="1.2" height="0.6" class="navmesh-hole" visible="false"></a-plane>
