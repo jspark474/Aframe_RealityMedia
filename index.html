@@ -126,10 +126,10 @@
         
         <!-- The direction hands are facing, we will also attach labels to show the currently detected pose or controller button -->
         <!-- These also do teleportaion for Blink controls in VR -->
-        <a-entity data-right="ray" mixin="blink" blink-controls>
+        <a-entity data-right="ray" mixin="blink" blink-controls="rotateOnTeleport:false;">
           <a-entity position="0 0 -0.22" visible="false" class="pose-label" text="value: Hello World; align: center;"></a-entity>
         </a-entity>
-        <a-entity data-left="ray" mixin="blink" blink-controls>
+        <a-entity data-left="ray" mixin="blink" blink-controls="rotateOnTeleport:false;">
           <a-entity position="0 0 -0.22" visible="false" class="pose-label" text="value: Hello World; align: center;"></a-entity>
         </a-entity>
         
