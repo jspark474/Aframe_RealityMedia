@@ -132,7 +132,7 @@ to the **non-magnet** version of the hand element with the data-magnet property.
 			if (
 				this.data.downEventName &&
 				t <= this.data.downEventThreshold &&
-				this.oldT > this.data.upEventThreshold
+				this.oldT > this.data.downEventThreshold
 			) {
 				this.el.emit(this.data.downEventName);
 			}
