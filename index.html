@@ -191,7 +191,7 @@
           animation__press="startEvents:press;property:components.material.material.color;type:color;to:green;dur:100;"
           animation__release="startEvents:release;property:components.material.material.color;type:color;to:grey;dur:100;"
       >
-        <a-entity position="0 0.3 0" class="magnet-left" linear-constraint="target:[data-no-magnet];axis:0 1 0;min:-0.18;max:0;radius:0.1;useFixedValueIfOutOfRange:true;valueIfOutOfRange:0;downEventName:press;downEventThreshold:-0.18;upEventName:release;upEventThreshold:0;">
+        <a-entity position="0 0.3 0" class="magnet-left magnet-right" linear-constraint="target:[data-no-magnet];axis:0 1 0;min:-0.18;max:0;radius:0.1;useFixedValueIfOutOfRange:true;valueIfOutOfRange:0;downEventName:press;downEventThreshold:-0.18;upEventName:release;upEventThreshold:0;">
           <a-cylinder radius="0.09" height="0.2" position="0 -0.1 0" color="hotpink"></a-cylinder>
         </a-entity>
       </a-box>
