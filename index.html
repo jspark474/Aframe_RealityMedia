@@ -188,7 +188,7 @@
       
       <!-- Button test -->
       <a-box position="-1.657 0.893 0.421" width="0.2" height="0.2" depth="0.2">
-        <a-entity position="0 0.3 0" class="magnet-left" linear-constraint="target:#left-no-magnet;axis:0 1 0;min:-0.18;max:0;radius:0.1;useFixedValueIfOutOfRange:true;valueIfOutOfRange:0;downEventName:press;downEventThreshold:-0.18;upEventName:release;upEventThreshold:0;">
+        <a-entity position="0 0.3 0" class="magnet-left" linear-constraint="target:[data-no-magnet];axis:0 1 0;min:-0.18;max:0;radius:0.1;useFixedValueIfOutOfRange:true;valueIfOutOfRange:0;downEventName:press;downEventThreshold:-0.18;upEventName:release;upEventThreshold:0;">
           <a-cylinder radius="0.09" height="0.2" position="0 -0.1 0" color="hotpink" animation__press="startEvents:press;property:color;to:green;" animation__release="startEvents:release;property:color;to:hotpink;"></a-cylinder>
         </a-entity>
       </a-box>
