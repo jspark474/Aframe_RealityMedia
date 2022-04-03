@@ -45,16 +45,19 @@ AFRAME.registerComponent("match-position-by-id", {
     default: ''
   },
   tick() {
-    let obj;
     if (this.data === 'xr-camera') {
-      const scene = this.el.sceneEl;
-      const cameraObject = scene.camera;
-      const camera = scene.is('vr-mode') ? scene.renderer.xr.getCamera(cameraObject) : cameraObject;
-      obj = camera;
+      const obj = this.el.sceneEl.renderer.xr.getCameraPose();
+      if (obj) {
+        this.el.object3D.position.copy(obj.transform.position);
+        this.el.object3D.quaternion.copy(obj.transform.orientation);
+      }
     } else {
-      obj = document.getElementById(this.data).object3D;
+      const obj = document.getElementById(this.data).object3D;
+      if (obj) {
+        this.el.object3D.position.copy(obj.position);
+        this.el.object3D.quaternion.copy(obj.quaternion);
+      }
     }
-    if (obj) this.el.object3D.position.copy(obj.position);
   }
 });
 
