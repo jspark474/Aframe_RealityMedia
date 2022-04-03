@@ -40,6 +40,22 @@ AFRAME.registerComponent("xr-follow", {
   }
 });
 
+AFRAME.registerComponent("match-local-position", {
+  schema: {
+    el:
+  },
+  init() {
+  },
+  tick() {
+    const scene = this.el.sceneEl;
+    const cameraObject = scene.camera;
+    const camera = scene.is('vr-mode') ? scene.renderer.xr.getCamera(cameraObject) : cameraObject;
+    const object3D = this.el.object3D;
+    camera.getWorldPosition(object3D.position);
+    object3D.parent.worldToLocal(object3D.position);
+  }
+});
+
 AFRAME.registerComponent("exit-on", {
   schema: {
     default: 'click'
