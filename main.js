@@ -40,19 +40,21 @@ AFRAME.registerComponent("xr-follow", {
   }
 });
 
-AFRAME.registerComponent("match-local-position", {
+AFRAME.registerComponent("match-position-by-id", {
   schema: {
-    el:
-  },
-  init() {
+    default: ''
   },
   tick() {
-    const scene = this.el.sceneEl;
-    const cameraObject = scene.camera;
-    const camera = scene.is('vr-mode') ? scene.renderer.xr.getCamera(cameraObject) : cameraObject;
-    const object3D = this.el.object3D;
-    camera.getWorldPosition(object3D.position);
-    object3D.parent.worldToLocal(object3D.position);
+    let obj;
+    if (this.data === 'xr-camera') {
+      const scene = this.el.sceneEl;
+      const cameraObject = scene.camera;
+      const camera = scene.is('vr-mode') ? scene.renderer.xr.getCamera(cameraObject) : cameraObject;
+      obj = camera;
+    } else {
+      obj = document.getElementById(this.data).object3D;
+    }
+    if (obj) this.el.object3D.position.copy(obj.position);
   }
 });
 

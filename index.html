@@ -15,7 +15,7 @@
   <script src="https://mixedreality.mozilla.org/ammo.js/builds/ammo.wasm.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.5/build/handy-controls.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.5/build/magnet-helpers.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.5/build/magnet-helpers.min.js"></script>
 <!--   <script src="https://unpkg.com/aframe-inspector@1.3.x/dist/aframe-inspector.min.js"></script> -->
 <!--   <script src="handy-controls.js"></script> -->
   <script src="ar-shadow-helper.js"></script>
@@ -185,6 +185,13 @@
       <a-gltf-model id="table" shadow="receive:true;" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0" scale="1.5 1.5 1.5" ammo-body-from-model="type: static;" ammo-shape-from-model="type: box;offset:0 0.4 0;" ammo-restitution="1.5">
         <a-plane rotation="-90 0 0" width="1.2" height="0.6" class="navmesh-hole" visible="false"></a-plane>
       </a-gltf-model>
+    
+      // Make a mirror for the user's avatar
+      <a-entity position="-3 0 -0.2">
+        <a-box scale="0.3 0.3 0.3" color="skyblue" match-position-by-id="xr-camera"></a-box>
+        <a-box scale="0.2 0.2 0.2" color="hotpink" match-position-by-id="left-magnet"></a-box>
+        <a-box scale="0.2 0.2 0.2" color="yellow" match-position-by-id="right-magnet"></a-box>
+      </a-entity>
       
       <!-- Button test -->
       <a-box position="-1.657 0.893 0.421" width="0.2" height="0.2" depth="0.2" color="grey"
