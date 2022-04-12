@@ -22,7 +22,6 @@
   <script src="ar-cursor.js"></script>
   <script src="simple-navmesh-constraint.js"></script>
   <script src="model-utils.js"></script>
-  <script src="aframe-lensflare.js"></script>
   
   <!-- Our custom behaviour -->
 	<script src="main.js"></script>
@@ -163,9 +162,7 @@
     </a-entity>
 
     <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
-		<a-light id="dirlight" shadow-camera-automatic="[ar-shadow-helper],#table,#ladder" intensity="0.8" light="castShadow:true;type:directional" position="0 3 -6">
-      <a-entity lens-flare lens-flare-element></a-entity>
-    </a-light>
+		<a-light id="dirlight" shadow-camera-automatic="[ar-shadow-helper],#table,#ladder" intensity="0.8" light="castShadow:true;type:directional" position="0 3 -6"></a-light>
     <a-entity ar-shadow-helper="target:#my-ar-objects;light:#dirlight;" visible="false">
       <a-plane rotation="-90 0 0" shadow="cast:false;receive:true;" position="0 0.01 0" material="shader:shadow; depthWrite:false; opacity:0.9;"></a-plane>
     </a-entity>
