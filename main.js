@@ -113,23 +113,24 @@ AFRAME.registerComponent("ammo-body-from-model", {
 
 AFRAME.registerComponent("toggle-physics", {
   init () {
-    this.onPickup = function () { this.setAttribute('ammo-body', 'type', 'kinematic'); }
+    this.onPickup = function () { this.el.setAttribute('ammo-body', 'type', 'kinematic'); }.bind(this);
     this.onPutDown = function (e) {
-      this.setAttribute('ammo-body', 'type', 'dynamic');
+      const referenceSpace = this.el.sceneEl.renderer.xr.getReferenceSpace();
+      this.el.setAttribute('ammo-body', 'type', 'dynamic');
       if (e.detail.frame && e.detail.inputSource) {
-        const pose = e.detail.frame.getPose(e.detail.inputSource.gripSpace);
-        if (pose.angularVelocity) {
+        const pose = e.detail.frame.getPose(e.detail.inputSource.gripSpace, referenceSpace);
+        if (pose && pose.angularVelocity) {
           const velocity = new Ammo.btVector3(pose.angularVelocity.x,pose.angularVelocity.y,pose.angularVelocity.z);
           this.el.body.setAngularVelocity(velocity);
           Ammo.destroy(velocity);
         }
-        if (pose.linearVelocity) {
+        if (pose && pose.linearVelocity) {
           const velocity = new Ammo.btVector3(pose.linearVelocity.x,pose.linearVelocity.y,pose.linearVelocity.z);
           this.el.body.setLinearVelocity(velocity);
           Ammo.destroy(velocity);
         }
       }
-    }
+    }.bind(this);
     this.el.addEventListener('pickup', this.onPickup);
     this.el.addEventListener('putdown', this.onPutDown);
   },
