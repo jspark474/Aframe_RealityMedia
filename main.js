@@ -161,14 +161,14 @@ bodyBits:
         
         // The intersection of the spheres form a circle radius r
         // Place the elbow temporarily at the center of the circle
-        $o.position.copy(tempVectorShoulderPos).addScaledVector(normal, d1);
+        const c0 = $o.position.copy(tempVectorShoulderPos).addScaledVector(normal, d1);
         
-        // We have a plane with normal that contains p0
-        // We want to place the object where a vector n from the origin intersects the plane
-        // n.x x + n.y y + n.z z = p0.n
-        // Sub in vector equation p=tn
-        // t * n.x * n.x + t * n.y * n.y + t * n.z * n.z = p0.n
-        // equivalent to  t * n.length() = p0.n
+        // We have a plane with normal that contains c0
+        // We want to place the object where a vector n from the objects original position (p0) intersects the plane
+        // n dot p = c0.n
+        // Sub in vector equation p=tn + p0
+        // t n.n + p0.n = c0.n
+        // t = n.(p0 - c0)/
       }
     }
   });
