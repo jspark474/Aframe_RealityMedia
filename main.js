@@ -141,10 +141,23 @@ bodyBits:
         
         const d=tempVector3.subVectors(tempVectorShoulderPos,tempVectorHandPos).length();
         
-        // if arm is stretched longer than bones then elbow is placed halfway
-        if (d > r1 + r2) {
-          $0.position.lerpVectors(tempVectorShoulderPos,tempVectorHandPos,r1());
+        // if arm is stretched longer than bones then elbow is placed proportionally
+        if (d >= r1 + r2) {
+          $o.position.lerpVectors(tempVectorShoulderPos,tempVectorHandPos,r1/(r1+r2));
+          return
         }
+        
+        // One bone sphere is inside the other, i.e. hand is placed on shoulder
+        // and one bone is smaller than the other and do not intersect
+        if (Math.max(r1,r2) >= (d + Math.min(r1,r2))) {
+          // this weird so do nothing
+          return
+        }
+        
+        // The usual situation the two spheres intersesct so find the circle at the intersection point.
+        const d1 = 0.5*(d+r1*r1-r2*r2)/d;
+        const normal = tempVector3.subVectors(tempVectorShoulderPos,tempVectorHandPos);
+        
       }
     }
   });
