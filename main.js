@@ -45,19 +45,24 @@ AFRAME.registerComponent("match-position-by-id", {
     default: ''
   },
   tick() {
+    let obj;
+    
     if (this.data === 'xr-camera') {
-      const obj = this.el.sceneEl.renderer.xr.getCameraPose();
-      if (obj) {
-        this.el.object3D.position.copy(obj.transform.position);
-        this.el.object3D.quaternion.copy(obj.transform.orientation);
+      const xrCamera = this.el.sceneEl.renderer.xr.getCameraPose();
+      if (xrCamera) {
+        this.el.object3D.position.copy(xrCamera.transform.position);
+        this.el.object3D.quaternion.copy(xrCamera.transform.orientation);
+        return;
       }
+      obj = this.el.sceneEl.camera;
     } else {
-      const obj = document.getElementById(this.data).object3D;
-      if (obj) {
-        this.el.object3D.position.copy(obj.position);
-        this.el.object3D.quaternion.copy(obj.quaternion);
-      }
+      obj = document.getElementById(this.data).object3D;
     }
+    if (obj) {
+      this.el.object3D.position.copy(obj.position);
+      this.el.object3D.quaternion.copy(obj.quaternion);
+    }
+
   }
 });
 
