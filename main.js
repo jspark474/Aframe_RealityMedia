@@ -110,11 +110,11 @@ bodyBits:
       hand: {
         default: ''
       },
-      armLength: {
-        default: 0.6
+      foreArmLength: {
+        default: 0.3
       },
-      armRatio: {
-        default: 1
+      upperArmLength: {
+        default: 0.3
       }
     },  
     update() {
@@ -136,8 +136,15 @@ bodyBits:
         this.shoulder.getWorldPosition(tempVectorShoulderPos);
         $o.parent.worldToLocal(tempVectorShoulderPos);
         
-        const r1 = this.data.armLength*0.5*this.data.armRatio;
-        const r2 = this.data.armLength*0.5*(1-this.data.armRatio);
+        const r1 = this.data.upperArmLength;
+        const r2 = this.data.foreArmLength;
+        
+        const d=tempVector3.subVectors(tempVectorShoulderPos,tempVectorHandPos).length();
+        
+        // if arm is stretched longer than bones then elbow is placed halfway
+        if (d > r1 + r2) {
+          $0.position.lerpVectors(tempVectorShoulderPos,tempVectorHandPos,r1());
+        }
       }
     }
   });
