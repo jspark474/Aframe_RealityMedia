@@ -66,7 +66,7 @@ bodyBits:
   const tempVector3 = new THREE.Vector3();
   const tempQuaternionA = new THREE.Quaternion();
   const tempQuaternionB = new THREE.Quaternion();
-  const zAxis = new THREE.Vector3(0,0,-1);
+  const zAxis = new THREE.Vector3(0,0,1);
   AFRAME.registerComponent("torso", {
     schema: {
       head: {
@@ -94,7 +94,49 @@ bodyBits:
         tempVector3.y=0;
         tempVector3.normalize();
         
-        $o.quaternion.setFromUnitVectors(zAxis, tempVector3);
+        $o.quaternion.setFromUnitVectors(tempVector3, zAxis);
+      }
+    }
+  });
+  
+  const tempVectorOldPos = new THREE.Vector3();
+  const tempVectorShoulderPos = new THREE.Vector3();
+  const tempVectorHandPos = new THREE.Vector3();
+  AFRAME.registerComponent("elbow", {
+    schema: {
+      shoulder: {
+        default: ''
+      },
+      hand: {
+        default: ''
+      },
+      armLength: {
+        default: 0.6
+      },
+      armRatio: {
+        default: 1
+      }
+    },  
+    update() {
+      this.hand = document.querySelector(this.data.hand);
+      if (this.hand) this.hand = this.hand.object3D;
+      this.shoulder = document.querySelector(this.data.shoulder);
+      if (this.shoulder) this.shoulder = this.shoulder.object3D;
+    },
+    tick() {
+      if (this.shoulder && this.hand) {
+        const $o = this.el.object3D;
+        tempVectorOldPos.copy($o.position);
+        
+        // Local hand position
+        this.hand.getWorldPosition(tempVectorHandPos);
+        $o.parent.worldToLocal(tempVectorHandPos);
+        
+        // Local Shoulder position
+        this.shoulder.getWorldPosition(tempVectorShoulderPos);
+        $o.parent.worldToLocal(tempVectorShoulderPos);
+        
+        
       }
     }
   });
