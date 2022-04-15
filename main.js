@@ -66,6 +66,35 @@ AFRAME.registerComponent("match-position-by-id", {
   }
 });
 
+lookAt:
+{
+  const tempVector3 = new THREE.Vector3();
+  AFRAME.registerComponent("look-at", {
+    schema: {
+      type: 'selector'
+    },
+    tick() {
+      if (this.data) {
+        this.data.object3D.getWorldPosition(tempVector3);
+        this.el.object3D.lookAt(tempVector3);
+      }
+
+    }
+  });
+  AFRAME.registerComponent("place-at", {
+    schema: {
+      type: 'selector'
+    },
+    tick() {
+      if (this.data) {
+        this.data.object3D.getWorldPosition(this.el.object3D.position);
+        this.el.object3D.parent.worldToLocal(this.el.object3D.position);
+      }
+
+    }
+  });
+}
+
 bodyBits:
 {
   const tempVector3 = new THREE.Vector3();
@@ -172,6 +201,7 @@ bodyBits:
         // if arm is stretched longer than bones then elbow is placed proportionally
         if (d >= r1 + r2) {
           $o.position.lerpVectors(tempVectorShoulderPos,tempVectorHandPos,r1/(r1+r2));
+          $o.lookAt(tempVectorHandPos);
           return
         }
         
