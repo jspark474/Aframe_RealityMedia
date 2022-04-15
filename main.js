@@ -118,7 +118,7 @@ bodyBits:
       const pp = p.parent;
       const o = this.el.object3D;
       pp.getWorldQuaternion(tempQuaternionA).invert();
-      o.getWorldQuaternion(p.quaternion).premultiply(tempQuaternionB);
+      o.getWorldQuaternion(p.quaternion).premultiply(tempQuaternionA);
       o.getWorldPosition(p.position);
       pp.worldToLocal(p.position);
       this.part.scale.copy(o.scale);
@@ -203,6 +203,8 @@ bodyBits:
         
         // move elbow inline with elbow plane and place it on the circle
         $o.position.addScaledVector(normal, t).sub(c0).setLength(r).add(c0);
+        
+        $o.lookAt(tempVectorHandPos);
       }
     }
   });
