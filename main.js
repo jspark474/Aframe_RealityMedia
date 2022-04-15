@@ -213,6 +213,23 @@ AFRAME.registerComponent("ammo-shape-from-model", {
     this.el.removeEventListener('object3dset', this.onLoad);
   }
 });
+
+AFRAME.registerComponent('control-part', {
+  schema: {
+    default: ''
+  },
+  tick() {
+    if (!this.data) return;
+    this.part = this.part || this.el.parentNode.object3D.getObjectByName('face');
+    if (!this.part) return;
+    
+    const o = this.el.object3D;
+    this.part.quaternion.copy(o.quaternion);
+    this.part.position.copy(o.position);
+    this.part.scale.copy(o.scale);
+  }
+})
+
 AFRAME.registerComponent("ammo-body-from-model", {
   schema: {
     type: 'string',

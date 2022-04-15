@@ -201,7 +201,9 @@
         <a-sphere radius="0.05" color="hotpink" elbow="shoulder:#avatar-mirror-shoulder-left;hand:#avatar-mirror-hand-left;"></a-sphere>
         <a-sphere radius="0.05" color="yellow" elbow="shoulder:#avatar-mirror-shoulder-right;hand:#avatar-mirror-hand-right;"></a-sphere>
         
-        <a-gltf-model src="#avatar-gltf"></a-gltf-model>
+        <a-gltf-model src="#avatar-gltf">
+          <a-entity match-position-by-id="xr-camera" control-part="face"></a-entity>
+        </a-gltf-model>
       </a-entity>
       
       <!-- Button test -->
