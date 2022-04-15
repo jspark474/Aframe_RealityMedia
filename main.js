@@ -156,8 +156,19 @@ bodyBits:
         
         // The usual situation the two spheres intersesct so find the circle at the intersection point.
         const d1 = 0.5*(d+r1*r1-r2*r2)/d;
-        const normal = tempVector3.subVectors(tempVectorShoulderPos,tempVectorHandPos);
+        const normal = tempVector3.subVectors(tempVectorShoulderPos,tempVectorHandPos).normalize();
+        const r = Math.sqrt(r1*r1-d1*d1);
         
+        // The intersection of the spheres form a circle radius r
+        // Place the elbow temporarily at the center of the circle
+        $o.position.copy(tempVectorShoulderPos).addScaledVector(normal, d1);
+        
+        // We have a plane with normal that contains p0
+        // We want to place the object where a vector n from the origin intersects the plane
+        // n.x x + n.y y + n.z z = p0.n
+        // Sub in vector equation p=tn
+        // t * n.x * n.x + t * n.y * n.y + t * n.z * n.z = p0.n
+        // equivalent to  t * n.length() = p0.n
       }
     }
   });
