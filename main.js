@@ -136,7 +136,8 @@ bodyBits:
         this.shoulder.getWorldPosition(tempVectorShoulderPos);
         $o.parent.worldToLocal(tempVectorShoulderPos);
         
-        
+        const r1 = this.data.armLength*0.5*this.data.armRatio;
+        const r2 = this.data.armLength*0.5*(1-this.data.armRatio);
       }
     }
   });
