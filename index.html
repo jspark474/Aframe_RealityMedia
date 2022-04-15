@@ -193,8 +193,12 @@
           <a-sphere id="avatar-mirror-shoulder-left" color="lightgreen" radius="0.11" position="-0.175 -0.1 0"></a-sphere>
           <a-sphere id="avatar-mirror-shoulder-right" color="lightred" radius="0.11" position="0.175 -0.1 0"></a-sphere>
         </a-entity>
-        <a-box scale="0.1 0.1 0.2" color="hotpink" match-position-by-id="left-magnet"></a-box>
-        <a-box scale="0.1 0.1 0.2" color="yellow" match-position-by-id="right-magnet"></a-box>
+        
+        <a-box id="avatar-mirror-hand-left" scale="0.1 0.1 0.2" color="hotpink" match-position-by-id="left-magnet"></a-box>
+        <a-box id="avatar-mirror-hand-right" scale="0.1 0.1 0.2" color="yellow" match-position-by-id="right-magnet"></a-box>
+        
+        <a-box scale="0.1 0.1 0.1" color="hotpink" elbow="shoulder:#avatar-mirror-shoulder-left;hand:#avatar-mirror-hand-left;"></a-box>
+        <a-box scale="0.1 0.1 0.1" color="yellow" elbow="shoulder:#avatar-mirror-shoulder-right;hand:#avatar-mirror-hand-right;"></a-box>
       </a-entity>
       
       <!-- Button test -->
