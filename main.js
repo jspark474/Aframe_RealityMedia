@@ -99,9 +99,9 @@ bodyBits:
     }
   });
   
-  const tempVectorOldPos = new THREE.Vector3();
   const tempVectorShoulderPos = new THREE.Vector3();
   const tempVectorHandPos = new THREE.Vector3();
+  const c0 = new THREE.Vector3();
   AFRAME.registerComponent("elbow", {
     schema: {
       shoulder: {
@@ -123,10 +123,9 @@ bodyBits:
       this.shoulder = document.querySelector(this.data.shoulder);
       if (this.shoulder) this.shoulder = this.shoulder.object3D;
     },
-    tick() {
+    tick(time,delta) {
       if (this.shoulder && this.hand) {
         const $o = this.el.object3D;
-        tempVectorOldPos.copy($o.position);
         
         // Local hand position
         this.hand.getWorldPosition(tempVectorHandPos);
@@ -160,15 +159,26 @@ bodyBits:
         const r = Math.sqrt(r1*r1-d1*d1);
         
         // The intersection of the spheres form a circle radius r
-        // Place the elbow temporarily at the center of the circle
-        const c0 = $o.position.copy(tempVectorShoulderPos).addScaledVector(normal, d1);
+        // with center c0
+        c0.position.copy(tempVectorShoulderPos).addScaledVector(normal, d1);
         
         // We have a plane with normal that contains c0
         // We want to place the object where a vector n from the objects original position (p0) intersects the plane
         // n dot p = c0.n
         // Sub in vector equation p=tn + p0
         // t n.n + p0.n = c0.n
-        // t = n.(p0 - c0)/
+        // t = n.p0 - n.c0 / (n.n) // (n.n) is one if normalized so we can ignore
+        // p[new] = p0 + t n
+        
+        const t = normal.dot($o.position) - normal.dot(c0);
+        
+        // move elbow inline with elbow plane
+        $o.position.addScaledVector(normal, t);
+        
+        // add a little gravity
+        // $o.position.y -= 9.8 * delta;
+        
+        
       }
     }
   });
