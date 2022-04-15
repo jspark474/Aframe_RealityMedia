@@ -62,6 +62,7 @@
       <a-asset-item id="table-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/small_wooden_table_01_1k-v1.glb?v=1647263187998"></a-asset-item>
       <a-asset-item id="clock-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/vintage_grandfather_clock_01_1k-v2.glb?v=1647265174189"></a-asset-item>
       <a-asset-item id="ladder-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/ladder.glb?v=1648465045608"></a-asset-item>
+      <a-asset-item id="avatar-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/box20avatar-v1.glb?v=1650038630062"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700" crossorigin="anonymous">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"></a-mixin>
@@ -190,15 +191,17 @@
         <a-box id="avatar-mirror-head" scale="0.3 0.3 0.3" color="skyblue" match-position-by-id="xr-camera"></a-box>
         <a-entity torso="head:#avatar-mirror-head;">
           <a-box width="0.35" height="0.2" depth="0.2" position="0 -0.1 0"></a-box>
-          <a-sphere id="avatar-mirror-shoulder-left" color="lightgreen" radius="0.11" position="-0.175 -0.1 0"></a-sphere>
-          <a-sphere id="avatar-mirror-shoulder-right" color="lightred" radius="0.11" position="0.175 -0.1 0"></a-sphere>
+          <a-sphere id="avatar-mirror-shoulder-left" color="hotpink" radius="0.11" position="-0.175 -0.1 0"></a-sphere>
+          <a-sphere id="avatar-mirror-shoulder-right" color="yellow" radius="0.11" position="0.175 -0.1 0"></a-sphere>
         </a-entity>
         
         <a-box id="avatar-mirror-hand-left" scale="0.1 0.1 0.2" color="hotpink" match-position-by-id="left-magnet"></a-box>
         <a-box id="avatar-mirror-hand-right" scale="0.1 0.1 0.2" color="yellow" match-position-by-id="right-magnet"></a-box>
         
-        <a-box scale="0.1 0.1 0.1" color="hotpink" elbow="shoulder:#avatar-mirror-shoulder-left;hand:#avatar-mirror-hand-left;"></a-box>
-        <a-box scale="0.1 0.1 0.1" color="yellow" elbow="shoulder:#avatar-mirror-shoulder-right;hand:#avatar-mirror-hand-right;"></a-box>
+        <a-sphere radius="0.05" color="hotpink" elbow="shoulder:#avatar-mirror-shoulder-left;hand:#avatar-mirror-hand-left;"></a-sphere>
+        <a-sphere radius="0.05" color="yellow" elbow="shoulder:#avatar-mirror-shoulder-right;hand:#avatar-mirror-hand-right;"></a-sphere>
+        
+        <a-gltf-model src="#avatar-gltf"></a-gltf-model>
       </a-entity>
       
       <!-- Button test -->
