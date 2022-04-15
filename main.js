@@ -62,15 +62,23 @@ AFRAME.registerComponent("match-position-by-id", {
 });
 
 AFRAME.registerComponent("torso", {
-  head: {
-    default: ''
-  },
+  schema: {
+    head: {
+      default: ''
+    },
+    neckLength: {
+      default: 0.2
+    }
+  },  
   update() {
     this.head = document.querySelector(this.data.head);
+    if (this.head) this.head = this.head.object3D;
   },
   tick() {
     if (this.head) {
-      this.el.object3D.position.copy();
+      this.head.getWorldPosition(this.el.object3D.position);
+      this.el.object3D.position.y -= this.data.neckLength;
+      this.el.object3D.parent.worldToLocal(this.el.object3D.position);
     }
   }
 });
