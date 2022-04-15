@@ -61,6 +61,20 @@ AFRAME.registerComponent("match-position-by-id", {
   }
 });
 
+AFRAME.registerComponent("torso", {
+  head: {
+    default: ''
+  },
+  update() {
+    this.head = document.querySelector(this.data.head);
+  },
+  tick() {
+    if (this.head) {
+      this.el.object3D.position.copy();
+    }
+  }
+});
+
 AFRAME.registerComponent("exit-on", {
   schema: {
     default: 'click'

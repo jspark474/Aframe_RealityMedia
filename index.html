@@ -187,7 +187,12 @@
     
       // Make a mirror for the user's avatar
       <a-entity scale="1 1 -1" rotation="0 90 0" position="-3 0 1.5">
-        <a-box scale="0.3 0.3 0.3" color="skyblue" match-position-by-id="xr-camera"></a-box>
+        <a-box id="avatar-mirror-head" scale="0.3 0.3 0.3" color="skyblue" match-position-by-id="xr-camera"></a-box>
+        <a-entity torso="head:#avatar-mirror-head;">
+          <a-box width="0.35" height="0.2" depth="0.2" position="0 -0.1 0"></a-box>
+          <a-sphere id="avatar-mirror-shoulder-left" color="lightgreen" radius="0.11" position="-0.175 -0.1 0"></a-sphere>
+          <a-sphere id="avatar-mirror-shoulder-right" color="lightred" radius="0.11" position="0.175 -0.1 0"></a-sphere>
+        </a-entity>
         <a-box scale="0.1 0.1 0.2" color="hotpink" match-position-by-id="left-magnet"></a-box>
         <a-box scale="0.1 0.1 0.2" color="yellow" match-position-by-id="right-magnet"></a-box>
       </a-entity>
