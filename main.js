@@ -98,6 +98,26 @@ bodyBits:
       }
     }
   });
+
+  AFRAME.registerComponent('control-part', {
+    schema: {
+      default: ''
+    },
+    tick() {
+      if (!this.data) return;
+      this.part = this.part || this.el.parentNode.object3D.getObjectByName('face');
+      if (!this.part) return;
+
+      const p = this.part;
+      const pp = p.parent;
+      const o = this.el.object3D;
+      pp.getWorldQuaternion(tempQuaternionA).invert();
+      o.getWorldQuaternion(p.quaternion).premultiply(tempQuaternionB);
+      o.getWorldPosition(p.position);
+      pp.worldToLocal(p.position);
+      this.part.scale.copy(o.scale);
+    }
+  });
   
   const tempVectorShoulderPos = new THREE.Vector3();
   const tempVectorHandPos = new THREE.Vector3();
@@ -214,21 +234,6 @@ AFRAME.registerComponent("ammo-shape-from-model", {
   }
 });
 
-AFRAME.registerComponent('control-part', {
-  schema: {
-    default: ''
-  },
-  tick() {
-    if (!this.data) return;
-    this.part = this.part || this.el.parentNode.object3D.getObjectByName('face');
-    if (!this.part) return;
-    
-    const o = this.el.object3D;
-    this.part.quaternion.copy(o.quaternion);
-    this.part.position.copy(o.position);
-    this.part.scale.copy(o.scale);
-  }
-})
 
 AFRAME.registerComponent("ammo-body-from-model", {
   schema: {
