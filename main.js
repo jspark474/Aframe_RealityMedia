@@ -61,27 +61,33 @@ AFRAME.registerComponent("match-position-by-id", {
   }
 });
 
-AFRAME.registerComponent("torso", {
-  schema: {
-    head: {
-      default: ''
+bodyBits:
+{
+  const tempVector3 = new THREE.Vector3();
+  AFRAME.registerComponent("torso", {
+    schema: {
+      head: {
+        default: ''
+      },
+      neckLength: {
+        default: 0.2
+      }
+    },  
+    update() {
+      this.head = document.querySelector(this.data.head);
+      if (this.head) this.head = this.head.object3D;
     },
-    neckLength: {
-      default: 0.2
+    tick() {
+      if (this.head) {
+        this.head.getWorldPosition(this.el.object3D.position);
+        this.el.object3D.position.y -= this.data.neckLength;
+        this.el.object3D.parent.worldToLocal(this.el.object3D.position);
+        
+        tempVector3
+      }
     }
-  },  
-  update() {
-    this.head = document.querySelector(this.data.head);
-    if (this.head) this.head = this.head.object3D;
-  },
-  tick() {
-    if (this.head) {
-      this.head.getWorldPosition(this.el.object3D.position);
-      this.el.object3D.position.y -= this.data.neckLength;
-      this.el.object3D.parent.worldToLocal(this.el.object3D.position);
-    }
-  }
-});
+  });
+}
 
 AFRAME.registerComponent("exit-on", {
   schema: {
