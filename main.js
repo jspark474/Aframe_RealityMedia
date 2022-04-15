@@ -128,7 +128,7 @@ bodyBits:
         const $o = this.el.object3D;
         
         // add a little gravity
-        $o.position.y -= 9.8 * delta;
+        $o.position.y -= 0.1 * 9.8 * delta/1000;
         
         // Local hand position
         this.hand.getWorldPosition(tempVectorHandPos);
@@ -158,7 +158,8 @@ bodyBits:
         
         // The usual situation the two spheres intersesct so find the circle at the intersection point.
         const d1 = 0.5*(d+(r1*r1-r2*r2)/d);
-        const normal = tempVector3.subVectors(tempVectorShoulderPos,tempVectorHandPos).normalize();
+        const normal = tempVector3.subVectors(tempVectorShoulderPos,tempVectorHandPos);
+        const normalLength = normal.length();
         const r = Math.sqrt(r1*r1-d1*d1);
         
         // The intersection of the spheres form a circle radius r
@@ -170,14 +171,15 @@ bodyBits:
         // n dot p = c0.n
         // Sub in vector equation p=tn + p0
         // t n.n + p0.n = c0.n
-        // t = n.p0 - n.c0 / (n.n) // (n.n) is one if normalized so we can ignore
+        // t = n.p0 - n.c0 / (n.n)
         // p[new] = p0 + t n
         
-        const t = normal.dot($o.position) - normal.dot(c0);
+        const t = (normal.dot($o.position) - normal.dot(c0))/normalLength;
         
         // move elbow inline with elbow plane and place it on the circle
-        $o.position.addScaledVector(normal, t).sub(c0).setLength(r).add(c0);
+        $o.position.addScaledVector(normal, t/normalLength).sub(c0).setLength(r).add(c0);
         
+        $o.position.copy(c0);
         
       }
     }
