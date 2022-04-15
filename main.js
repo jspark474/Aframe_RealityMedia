@@ -64,6 +64,9 @@ AFRAME.registerComponent("match-position-by-id", {
 bodyBits:
 {
   const tempVector3 = new THREE.Vector3();
+  const tempQuaternionA = new THREE.Quaternion();
+  const tempQuaternionB = new THREE.Quaternion();
+  const zAxis = new THREE.Vector3(0,0,-1);
   AFRAME.registerComponent("torso", {
     schema: {
       head: {
@@ -79,11 +82,19 @@ bodyBits:
     },
     tick() {
       if (this.head) {
-        this.head.getWorldPosition(this.el.object3D.position);
-        this.el.object3D.position.y -= this.data.neckLength;
-        this.el.object3D.parent.worldToLocal(this.el.object3D.position);
+        const $o = this.el.object3D;
+        this.head.getWorldPosition($o.position);
+        $o.position.y -= this.data.neckLength;
+        $o.parent.worldToLocal($o.position);
+        $o.parent.getWorldQuaternion(tempQuaternionB).invert();
+        this.head.getWorldQuaternion(tempQuaternionA).premultiply(tempQuaternionB);
         
-        tempVector3
+        tempVector3.copy(zAxis);
+        tempVector3.applyQuaternion(tempQuaternionA);
+        tempVector3.y=0;
+        tempVector3.normalize();
+        
+        $o.quaternion.setFromUnitVectors(zAxis, tempVector3);
       }
     }
   });
