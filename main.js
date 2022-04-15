@@ -72,8 +72,9 @@ bodyBits:
       head: {
         default: ''
       },
-      neckLength: {
-        default: 0.2
+      offset: {
+        type: 'vec3',
+        default: "0 0.2 0"
       }
     },  
     update() {
@@ -84,7 +85,7 @@ bodyBits:
       if (this.head) {
         const $o = this.el.object3D;
         this.head.getWorldPosition($o.position);
-        $o.position.y -= this.data.neckLength;
+        $o.position.sub(this.data.offset);
         $o.parent.worldToLocal($o.position);
         $o.parent.getWorldQuaternion(tempQuaternionB).invert();
         this.head.getWorldQuaternion(tempQuaternionA).premultiply(tempQuaternionB);
@@ -105,7 +106,7 @@ bodyBits:
     },
     tick() {
       if (!this.data) return;
-      this.part = this.part || this.el.parentNode.object3D.getObjectByName('face');
+      this.part = this.part || this.el.parentNode.object3D.getObjectByName(this.data);
       if (!this.part) return;
 
       const p = this.part;

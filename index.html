@@ -187,19 +187,19 @@
       </a-gltf-model>
     
       // Make a mirror for the user's avatar
-      <a-entity scale="1 1 -1" rotation="0 90 0" position="-3 0 1.5">
+      <a-entity scale="1 1 -1" rotation="0 90 0" position="-1 0 0.75">
 <!--         <a-box id="avatar-mirror-head" scale="0.3 0.3 0.3" color="skyblue" match-position-by-id="xr-camera"></a-box> -->
         
         <a-gltf-model src="#avatar-gltf">
           <a-entity id="avatar-mirror-head" match-position-by-id="xr-camera" control-part="face"></a-entity>
-          <a-entity torso="head:#avatar-mirror-head;" control-part="spine002">
-            <a-box scale="0.1 0.1 0.1"></a-box>
+          <a-entity torso="head:#avatar-mirror-head;offset:0 0.4 0.3;" control-part="spine002">
+            
           </a-entity>
         </a-gltf-model>
         
         <a-entity torso="head:#avatar-mirror-head;">
-          <a-sphere id="avatar-mirror-shoulder-left" color="hotpink" radius="0.11" position="-0.175 -0.1 0"></a-sphere>
-          <a-sphere id="avatar-mirror-shoulder-right" color="yellow" radius="0.11" position="0.175 -0.1 0"></a-sphere>
+<!--           <a-sphere id="avatar-mirror-shoulder-left" color="hotpink" radius="0.11" position="-0.175 -0.1 0"></a-sphere>
+          <a-sphere id="avatar-mirror-shoulder-right" color="yellow" radius="0.11" position="0.175 -0.1 0"></a-sphere> -->
         </a-entity>
         
         <a-box id="avatar-mirror-hand-left" scale="0.1 0.1 0.2" color="hotpink" match-position-by-id="left-magnet"></a-box>
