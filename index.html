@@ -62,7 +62,7 @@
       <a-asset-item id="table-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/small_wooden_table_01_1k-v1.glb?v=1647263187998"></a-asset-item>
       <a-asset-item id="clock-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/vintage_grandfather_clock_01_1k-v2.glb?v=1647265174189"></a-asset-item>
       <a-asset-item id="ladder-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/ladder.glb?v=1648465045608"></a-asset-item>
-      <a-asset-item id="avatar-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/box%20avatar.glb?v=1650060894372"></a-asset-item>
+      <a-asset-item id="avatar-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/box%20avatar.glb?v=1650063124437"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700" crossorigin="anonymous">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"></a-mixin>
@@ -188,17 +188,17 @@
     
       // Make a mirror for the user's avatar
       <a-gltf-model src="#avatar-gltf" position="-2 0 0.75" rotation="0 90 0">
-        <a-entity id="avatar-mirror-head" match-position-by-id="xr-camera" control-part="face"></a-entity>
-        <a-entity torso="head:#avatar-mirror-head;offset:0 0.4 0.0;" control-part="torso">
+        <a-entity id="avatar-mirror-head" match-position-by-id="xr-camera" control-part_="face"></a-entity>
+        <a-entity torso="head:#avatar-mirror-head;offset:0 0.4 0.0;" control-part_="torso">
           <a-sphere radius="0.03" id="avatar-mirror-shoulder-left" position="-0.19 0.25 0"></a-sphere>
           <a-sphere radius="0.03" id="avatar-mirror-shoulder-right" position="0.19 0.25 0"></a-sphere>
         </a-entity>
-        <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-hand-left" match-position-by-id="left-magnet" control-part="handL"></a-sphere>
-        <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-hand-right" match-position-by-id="right-magnet" control-part="handR"></a-sphere>
-        <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-elbow-left" elbow="shoulder:#avatar-mirror-shoulder-left;hand:#avatar-mirror-hand-left;" control-part="forearmL"></a-sphere>
-        <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-elbow-right" elbow="shoulder:#avatar-mirror-shoulder-right;hand:#avatar-mirror-hand-right;" control-part="forearmR"></a-sphere>
-        <a-sphere radius="0.02" color="hotpink" look-at="#avatar-mirror-elbow-left" place-at="#avatar-mirror-shoulder-left" control-part="upper_armL"></a-sphere>
-        <a-sphere radius="0.02" color="hotpink" look-at="#avatar-mirror-elbow-right" place-at="#avatar-mirror-shoulder-right" control-part="upper_armR"></a-sphere>
+        <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-hand-left" match-position-by-id="left-magnet" control-part_="handL"></a-sphere>
+        <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-hand-right" match-position-by-id="right-magnet" control-part_="handR"></a-sphere>
+        <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-elbow-left" look-at="#avatar-mirror-hand-left" elbow="shoulder:#avatar-mirror-shoulder-left;hand:#avatar-mirror-hand-left;" control-part_="forearmL"></a-sphere>
+        <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-elbow-right" look-at="#avatar-mirror-hand-right" elbow="shoulder:#avatar-mirror-shoulder-right;hand:#avatar-mirror-hand-right;" control-part_="forearmR"></a-sphere>
+        <a-sphere radius="0.02" color="hotpink" look-at="#avatar-mirror-elbow-left" place-at="#avatar-mirror-shoulder-left" control-part_="upper_armL"></a-sphere>
+        <a-sphere radius="0.02" color="hotpink" look-at="#avatar-mirror-elbow-right" place-at="#avatar-mirror-shoulder-right" control-part_="upper_armR"></a-sphere>
       </a-gltf-model>
       
       <!-- Button test -->

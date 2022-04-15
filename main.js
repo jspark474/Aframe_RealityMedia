@@ -201,7 +201,6 @@ bodyBits:
         // if arm is stretched longer than bones then elbow is placed proportionally
         if (d >= r1 + r2) {
           $o.position.lerpVectors(tempVectorShoulderPos,tempVectorHandPos,r1/(r1+r2));
-          $o.lookAt(tempVectorHandPos);
           return
         }
         
@@ -233,8 +232,6 @@ bodyBits:
         
         // move elbow inline with elbow plane and place it on the circle
         $o.position.addScaledVector(normal, t).sub(c0).setLength(r).add(c0);
-        
-        $o.lookAt(tempVectorHandPos);
       }
     }
   });
