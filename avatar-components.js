@@ -90,6 +90,7 @@ bodyBits:
   
   const tempVectorShoulderPos = new THREE.Vector3();
   const tempVectorHandPos = new THREE.Vector3();
+  const normal = new THREE.Vector3();
   const c0 = new THREE.Vector3();
   AFRAME.registerComponent("elbow", {
     multiple: true,
@@ -183,7 +184,7 @@ bodyBits:
         
         // The usual situation the two spheres intersesct so find the circle at the intersection point.
         const d1 = 0.5*(d+(r1*r1-r2*r2)/d);
-        const normal = tempVector3.subVectors(tempVectorHandPos, tempVectorShoulderPos).normalize();
+        normal.subVectors(tempVectorHandPos, tempVectorShoulderPos).normalize();
         const r = Math.sqrt(r1*r1-d1*d1);
         
         // The intersection of the spheres form a circle radius r
@@ -198,7 +199,7 @@ bodyBits:
         // t = n.p0 - n.c0 / (n.n)
         // p[new] = p0 + t n
         
-        const t = normal.dot(tempVector3.copy($o.position).sub(c0));
+        const t = normal.dot(tempVector3.copy(c0).sub($o.position));
         
         // move elbow inline with elbow plane and place it on the circle
         $o.position.addScaledVector(normal, t).sub(c0).setLength(r).add(c0);
