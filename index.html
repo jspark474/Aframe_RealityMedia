@@ -190,8 +190,8 @@
       <a-gltf-model src="#avatar-gltf" position="-2 0 0.75" rotation="0 90 0">
         <a-entity id="avatar-mirror-head" match-position-by-id="xr-camera" control-part="part:face"></a-entity>
         <a-entity torso="head:#avatar-mirror-head;offset:0 0.3 0.0;" control-part="part:torso">
-          <a-sphere radius="0.02" color="hotpink" look-at="#avatar-mirror-elbow-left" place-at="#avatar-mirror-shoulder-left" control-part="part:upper_armL;"></a-sphere>
-          <a-sphere radius="0.02" color="hotpink" look-at="#avatar-mirror-elbow-right" place-at="#avatar-mirror-shoulder-right" control-part="part:upper_armR;"></a-sphere>
+          <a-sphere radius="0.02" color="hotpink" position="0 0.2 0" look-at="#avatar-mirror-elbow-left" id="avatar-mirror-shoulder-left" control-part="part:upper_armL;levels:2;"></a-sphere>
+          <a-sphere radius="0.02" color="hotpink" position="0 0.2 0" look-at="#avatar-mirror-elbow-right" id="avatar-mirror-shoulder-right" control-part="part:upper_armR;levels:2;"></a-sphere>
         </a-entity>
         <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-hand-left" match-position-by-id="left-magnet" control-part="part:handL"></a-sphere>
         <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-hand-right" match-position-by-id="right-magnet" control-part="part:handR"></a-sphere>

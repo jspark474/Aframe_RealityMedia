@@ -136,11 +136,20 @@ bodyBits:
 
   AFRAME.registerComponent('control-part', {
     schema: {
-      default: ''
+      part: {
+        default: ''
+      },
+      levels: {
+        default:1
+      }
     },
     tick() {
-      if (!this.data) return;
-      this.part = this.part || this.el.parentNode.object3D.getObjectByName(this.data);
+      if (!this.data.part) return;
+      if (!this.part) {
+        let parent = this.el;
+        for (let i=0;i<this.data.levels;i++) parent = parent.parentNode;
+        this.part = parent.object3D.getObjectByName(this.data.part);
+      }
       if (!this.part) return;
 
       const p = this.part;
