@@ -27,29 +27,47 @@ AFRAME.registerComponent("match-position-by-id", {
   }
 });
 
+
+
 lookAt:
 {
   const tempVector3 = new THREE.Vector3();
-  AFRAME.registerComponent("look-at", {
+  AFRAME.registerComponent("bone-look-at", {
     schema: {
-      type: 'selector'
-    },
-    tick() {
-      if (this.data) {
-        this.data.object3D.getWorldPosition(tempVector3);
-        this.el.object3D.lookAt(tempVector3);
+      part: {
+        default: ''
+      },
+      at: {
+        default: ''
       }
-
-    }
-  });
-  AFRAME.registerComponent("place-at", {
-    schema: {
-      type: 'selector'
     },
     tick() {
-      if (this.data) {
-        this.data.object3D.getWorldPosition(this.el.object3D.position);
-        this.el.object3D.parent.worldToLocal(this.el.object3D.position);
+      if (!this.part && this.data.part) {
+        if (this.data.part.indexOf('part__') === 0) {
+          const partName = this.data.part.slice(6);
+          this.part = this.el.object3D.getObjectByName(partName);
+        } else {
+          this.part = document.querySelector(this.data.part);
+          if (this.part) this.part = this.part.object3D;
+        }
+      }
+      if (!this.at && this.data.at) {
+        if (this.data.at.indexOf('part__') === 0) {
+          const partName = this.data.at.slice(6);
+          this.at = this.el.object3D.getObjectByName(partName);
+        } else {
+          this.at = document.querySelector(this.data.at);
+          if (this.at) this.at = this.at.object3D;
+        }
+      }
+      
+      if (this.part && this.at) {
+        this.part.updateMatrixWorld()
+        const direction = tempVector3.copy(this.at.position).normalize()
+        const pitch = Math.asin(direction.y)// + bone.offset
+        const yaw = Math.atan2(direction.x, direction.z); //Beware cos(pitch)==0, catch this exception!
+        const roll = 0;
+        this.part.rotation.set(roll, yaw, pitch);
       }
 
     }
