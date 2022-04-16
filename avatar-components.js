@@ -105,7 +105,7 @@ bodyBits:
         default: ''
       },
       foreArmLength: {
-        default: 0.35
+        default: 0.3
       },
       upperArmLength: {
         default: 0.3
