@@ -67,10 +67,6 @@ bodyBits:
       head: {
         default: ''
       },
-      offset: {
-        type: 'vec3',
-        default: "0 0.2 0"
-      },
       torso: {
         default: ''
       }
@@ -78,6 +74,7 @@ bodyBits:
     update() {
       this.head = null;
       this.torso = null;
+      this.offset = null;
     },
     tick() {
       if (!this.head && this.data.head) {
@@ -102,10 +99,15 @@ bodyBits:
           this.torso = this.el.object3D;
         }
       }
-      if (this.head) {
-        const $o = this.el.object3D;
+      if (this.head && this.torso) {
+        if (!this.offset) {
+          this.offset = new THREE.Vector3();
+          this.offset.subVectors(this.head.position, this.torso.position);
+        }
+        
+        const $o = this.torso;
         this.head.getWorldPosition($o.position);
-        $o.position.sub(this.data.offset);
+        $o.position.sub(this.offset);
         $o.parent.worldToLocal($o.position);
         $o.parent.getWorldQuaternion(tempQuaternionB).invert();
         this.head.getWorldQuaternion(tempQuaternionA).premultiply(tempQuaternionB);

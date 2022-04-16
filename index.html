@@ -189,14 +189,13 @@
     
       // Make a mirror for the user's avatar
       <a-gltf-model
-        src="#avatar-gltf" position="-2 0 0.75" rotation="0 90 0"
-        elbow__right="shoulder:part__upper_armR;hand:part__handR;elbow:part__forearmR;"
-        elbow__left="shoulder:part__upper_armL;hand:part__handL;elbow:part__forearmR;"
-        torso="head:#avatar-mirror-head;torso:part__torso;"
+        rotation="0 270 0"
+        src="#avatar-gltf" position="-2 0 0.75"
+        torso="head:part__face;torso:part__torso;"
       >
         <a-entity id="avatar-mirror-head" match-position-by-id="xr-camera" control-part="part:face"></a-entity>
-        <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-hand-left" match-position-by-id="left-magnet" control-part="part:handL"></a-sphere>
-        <a-sphere radius="0.02" color="hotpink" id="avatar-mirror-hand-right" match-position-by-id="right-magnet" control-part="part:handR"></a-sphere>
+        <a-sphere id="avatar-mirror-hand-left" radius="0.02" color="hotpink" match-position-by-id="left-magnet" control-part="part:handL"></a-sphere>
+        <a-sphere id="avatar-mirror-hand-right" radius="0.02" color="hotpink" match-position-by-id="right-magnet" control-part="part:handR"></a-sphere>
       </a-gltf-model>
       
       <!-- Button test -->
