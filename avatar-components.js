@@ -199,22 +199,14 @@ bodyBits:
         
         shoulderRotation:
         {
-          this.shoulder.updateMatrixWorld()
-          const direction = tempVector3.copy(this.elbow.position).normalize();
-          const pitch = Math.asin(direction.y)// + bone.offset
-          const yaw = Math.atan2(direction.x, direction.z); //Beware cos(pitch)==0, catch this exception!
-          const roll = 0;
-          this.shoulder.rotation.set(roll, yaw, pitch);
+          tempVector3.copy(this.elbow.position).normalize();
+          this.shoulder.quaternion.setFromUnitVectors(yAxis, tempVector3);
         }
         
         elbowRotation:
         {
-          this.elbow.updateMatrixWorld()
-          const direction = tempVector3.copy(this.elbow.position).normalize();
-          const pitch = Math.asin(direction.y)// + bone.offset
-          const yaw = Math.atan2(direction.x, direction.z); //Beware cos(pitch)==0, catch this exception!
-          const roll = 0;
-          this.elbow.rotation.set(roll, yaw, pitch);
+          tempVector3.copy(this.hand.position).normalize();
+          this.elbow.quaternion.setFromUnitVectors(yAxis, tempVector3);
         }
       }
     }
@@ -227,6 +219,9 @@ bodyBits:
       },
       levels: {
         default:1
+      },
+      yAxis: {
+        default: false
       }
     },
     tick() {
@@ -243,6 +238,12 @@ bodyBits:
       const o = this.el.object3D;
       pp.getWorldQuaternion(tempQuaternionA).invert();
       o.getWorldQuaternion(p.quaternion).premultiply(tempQuaternionA);
+      
+      if (this.data.yAxis) {
+        tempVector3.copy(zAxis).applyQuaternion(o.quaternion);
+        o.quaternion.setFromUnitVectors(yAxis, tempVector3);
+      }
+      
       o.getWorldPosition(p.position);
       pp.worldToLocal(p.position);
       this.part.scale.copy(o.scale);

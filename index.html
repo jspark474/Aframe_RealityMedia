@@ -196,8 +196,8 @@
         elbow__left="shoulder:part__upper_armL;hand:part__handL;elbow:part__forearmL;"
       >
         <a-entity id="avatar-mirror-head" match-position-by-id="xr-camera" control-part="part:face"></a-entity>
-        <a-sphere id="avatar-mirror-hand-left" radius="0.02" color="hotpink" match-position-by-id="left-magnet" control-part="part:handL"></a-sphere>
-        <a-sphere id="avatar-mirror-hand-right" radius="0.02" color="hotpink" match-position-by-id="right-magnet" control-part="part:handR"></a-sphere>
+        <a-sphere id="avatar-mirror-hand-left" radius="0.02" color="hotpink" match-position-by-id="left-magnet" control-part="part:handL;yAxis:true;"></a-sphere>
+        <a-sphere id="avatar-mirror-hand-right" radius="0.02" color="hotpink" match-position-by-id="right-magnet" control-part="part:handR;yAxis:true;"></a-sphere>
       </a-gltf-model>
       
       <!-- Button test -->
