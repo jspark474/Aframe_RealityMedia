@@ -33,6 +33,7 @@ bodyBits:
   const tempQuaternionA = new THREE.Quaternion();
   const tempQuaternionB = new THREE.Quaternion();
   const zAxis = new THREE.Vector3(0,0,1);
+  const yAxis = new THREE.Vector3(0,1,0);
   AFRAME.registerComponent("torso", {
     schema: {
       head: {
@@ -80,15 +81,7 @@ bodyBits:
         this.torso.position.sub(this.offset);
         this.torso.parent.worldToLocal(this.torso.position);
 
-        this.torso.parent.getWorldQuaternion(tempQuaternionB).invert();
-        this.head.getWorldQuaternion(tempQuaternionA).premultiply(tempQuaternionB);
-        
-        tempVector3.copy(zAxis);
-        tempVector3.applyQuaternion(tempQuaternionA);
-        tempVector3.y=0;
-        tempVector3.normalize();
-        
-        this.torso.quaternion.setFromUnitVectors(tempVector3, zAxis);
+        this.torso.rotation.y = this.head.rotation.y;
       }
     }
   });
