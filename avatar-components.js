@@ -81,7 +81,9 @@ bodyBits:
         this.torso.position.sub(this.offset);
         this.torso.parent.worldToLocal(this.torso.position);
 
-        // this.torso.rotation.y = this.head.rotation.y;
+        tempVector3.copy(zAxis).applyQuaternion(this.head.quaternion);
+        tempVector3.y=0;
+        this.torso.quaternion.setFromUnitVectors(zAxis, tempVector3);
       }
     }
   });
