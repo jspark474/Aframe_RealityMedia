@@ -81,7 +81,7 @@ bodyBits:
         this.torso.position.sub(this.offset);
         this.torso.parent.worldToLocal(this.torso.position);
 
-        this.torso.rotation.y = this.head.rotation.y;
+        // this.torso.rotation.y = this.head.rotation.y;
       }
     }
   });
