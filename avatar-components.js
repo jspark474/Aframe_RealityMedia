@@ -27,53 +27,6 @@ AFRAME.registerComponent("match-position-by-id", {
   }
 });
 
-
-
-lookAt:
-{
-  const tempVector3 = new THREE.Vector3();
-  AFRAME.registerComponent("bone-look-at", {
-    schema: {
-      part: {
-        default: ''
-      },
-      at: {
-        default: ''
-      }
-    },
-    tick() {
-      if (!this.part && this.data.part) {
-        if (this.data.part.indexOf('part__') === 0) {
-          const partName = this.data.part.slice(6);
-          this.part = this.el.object3D.getObjectByName(partName);
-        } else {
-          this.part = document.querySelector(this.data.part);
-          if (this.part) this.part = this.part.object3D;
-        }
-      }
-      if (!this.at && this.data.at) {
-        if (this.data.at.indexOf('part__') === 0) {
-          const partName = this.data.at.slice(6);
-          this.at = this.el.object3D.getObjectByName(partName);
-        } else {
-          this.at = document.querySelector(this.data.at);
-          if (this.at) this.at = this.at.object3D;
-        }
-      }
-      
-      if (this.part && this.at) {
-        this.part.updateMatrixWorld()
-        const direction = tempVector3.copy(this.at.position).normalize()
-        const pitch = Math.asin(direction.y)// + bone.offset
-        const yaw = Math.atan2(direction.x, direction.z); //Beware cos(pitch)==0, catch this exception!
-        const roll = 0;
-        this.part.rotation.set(roll, yaw, pitch);
-      }
-
-    }
-  });
-}
-
 bodyBits:
 {
   const tempVector3 = new THREE.Vector3();
@@ -123,11 +76,11 @@ bodyBits:
           this.offset.subVectors(this.head.position, this.torso.position);
         }
         
-        const $o = this.torso;
-        this.head.getWorldPosition($o.position);
-        $o.position.sub(this.offset);
-        $o.parent.worldToLocal($o.position);
-        $o.parent.getWorldQuaternion(tempQuaternionB).invert();
+        this.head.getWorldPosition(this.torso.position);
+        this.torso.position.sub(this.offset);
+        this.torso.parent.worldToLocal(this.torso.position);
+
+        this.torso.parent.getWorldQuaternion(tempQuaternionB).invert();
         this.head.getWorldQuaternion(tempQuaternionA).premultiply(tempQuaternionB);
         
         tempVector3.copy(zAxis);
@@ -135,37 +88,8 @@ bodyBits:
         tempVector3.y=0;
         tempVector3.normalize();
         
-        $o.quaternion.setFromUnitVectors(tempVector3, zAxis);
+        this.torso.quaternion.setFromUnitVectors(tempVector3, zAxis);
       }
-    }
-  });
-
-  AFRAME.registerComponent('control-part', {
-    schema: {
-      part: {
-        default: ''
-      },
-      levels: {
-        default:1
-      }
-    },
-    tick() {
-      if (!this.data.part) return;
-      if (!this.part) {
-        let parent = this.el;
-        for (let i=0;i<this.data.levels;i++) parent = parent.parentNode;
-        this.part = parent.object3D.getObjectByName(this.data.part);
-      }
-      if (!this.part) return;
-
-      const p = this.part;
-      const pp = p.parent;
-      const o = this.el.object3D;
-      pp.getWorldQuaternion(tempQuaternionA).invert();
-      o.getWorldQuaternion(p.quaternion).premultiply(tempQuaternionA);
-      o.getWorldPosition(p.position);
-      pp.worldToLocal(p.position);
-      this.part.scale.copy(o.scale);
     }
   });
   
@@ -279,7 +203,56 @@ bodyBits:
         
         // move elbow inline with elbow plane and place it on the circle
         $o.position.addScaledVector(normal, t).sub(c0).setLength(r).add(c0);
+        
+        shoulderRotation:
+        {
+          this.shoulder.updateMatrixWorld()
+          const direction = tempVector3.copy(this.elbow.position).normalize();
+          const pitch = Math.asin(direction.y)// + bone.offset
+          const yaw = Math.atan2(direction.x, direction.z); //Beware cos(pitch)==0, catch this exception!
+          const roll = 0;
+          this.shoulder.rotation.set(roll, yaw, pitch);
+        }
+        
+        elbowRotation:
+        {
+          this.elbow.updateMatrixWorld()
+          const direction = tempVector3.copy(this.elbow.position).normalize();
+          const pitch = Math.asin(direction.y)// + bone.offset
+          const yaw = Math.atan2(direction.x, direction.z); //Beware cos(pitch)==0, catch this exception!
+          const roll = 0;
+          this.elbow.rotation.set(roll, yaw, pitch);
+        }
       }
+    }
+  });
+
+  AFRAME.registerComponent('control-part', {
+    schema: {
+      part: {
+        default: ''
+      },
+      levels: {
+        default:1
+      }
+    },
+    tick() {
+      if (!this.data.part) return;
+      if (!this.part) {
+        let parent = this.el;
+        for (let i=0;i<this.data.levels;i++) parent = parent.parentNode;
+        this.part = parent.object3D.getObjectByName(this.data.part);
+      }
+      if (!this.part) return;
+
+      const p = this.part;
+      const pp = p.parent;
+      const o = this.el.object3D;
+      pp.getWorldQuaternion(tempQuaternionA).invert();
+      o.getWorldQuaternion(p.quaternion).premultiply(tempQuaternionA);
+      o.getWorldPosition(p.position);
+      pp.worldToLocal(p.position);
+      this.part.scale.copy(o.scale);
     }
   });
 }
