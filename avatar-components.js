@@ -70,13 +70,38 @@ bodyBits:
       offset: {
         type: 'vec3',
         default: "0 0.2 0"
+      },
+      torso: {
+        default: ''
       }
     },  
     update() {
-      this.head = document.querySelector(this.data.head);
-      if (this.head) this.head = this.head.object3D;
+      this.head = null;
+      this.torso = null;
     },
     tick() {
+      if (!this.head && this.data.head) {
+        if (this.data.head.indexOf('part__') === 0) {
+          const partName = this.data.head.slice(6);
+          this.head = this.el.object3D.getObjectByName(partName);
+        } else {
+          this.head = document.querySelector(this.data.head);
+          if (this.head) this.head = this.head.object3D;
+        }
+      }
+      if (!this.torso) {
+        if (this.data.torso) {
+          if (this.data.torso.indexOf('part__') === 0) {
+            const partName = this.data.torso.slice(6);
+            this.torso = this.el.object3D.getObjectByName(partName);
+          } else {
+            this.torso = document.querySelector(this.data.torso);
+            if (this.torso) this.torso = this.torso.object3D;
+          }
+        } else {
+          this.torso = this.el.object3D;
+        }
+      }
       if (this.head) {
         const $o = this.el.object3D;
         this.head.getWorldPosition($o.position);
@@ -128,6 +153,7 @@ bodyBits:
   const tempVectorHandPos = new THREE.Vector3();
   const c0 = new THREE.Vector3();
   AFRAME.registerComponent("elbow", {
+    multiple: true,
     schema: {
       shoulder: {
         default: ''
@@ -156,7 +182,7 @@ bodyBits:
           const partName = this.data.hand.slice(6);
           this.hand = this.el.object3D.getObjectByName(partName);
         } else {
-          document.querySelector(this.data.hand);
+          this.hand = document.querySelector(this.data.hand);
           if (this.hand) this.hand = this.hand.object3D;
         }
       }
@@ -165,7 +191,7 @@ bodyBits:
           const partName = this.data.shoulder.slice(6);
           this.shoulder = this.el.object3D.getObjectByName(partName);
         } else {
-          document.querySelector(this.data.shoulder);
+          this.shoulder = document.querySelector(this.data.shoulder);
           if (this.shoulder) this.shoulder = this.shoulder.object3D;
         }
       }
@@ -174,7 +200,7 @@ bodyBits:
           const partName = this.data.elbow.slice(6);
           this.elbow = this.el.object3D.getObjectByName(partName);
         } else {
-          document.querySelector(this.data.elbow);
+          this.elbow = document.querySelector(this.data.elbow);
           if (this.elbow) this.elbow = this.elbow.object3D;
         }
       }
