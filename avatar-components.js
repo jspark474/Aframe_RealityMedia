@@ -107,7 +107,7 @@ bodyBits:
         default: 0.35
       },
       upperArmLength: {
-        default: 0.25
+        default: 0.3
       }
     },  
     update() {
@@ -239,8 +239,8 @@ bodyBits:
       o.getWorldQuaternion(p.quaternion).premultiply(tempQuaternionA);
       
       if (this.data.yAxis) {
-        tempVector3.set(0,0,1).applyQuaternion(o.quaternion);
-        o.quaternion.setFromUnitVectors(yAxis, tempVector3);
+        tempVector3.set(0,1,0).applyQuaternion(o.quaternion);
+        o.quaternion.setFromUnitVectors(tempVector3, zAxis);
       }
       
       o.getWorldPosition(p.position);
