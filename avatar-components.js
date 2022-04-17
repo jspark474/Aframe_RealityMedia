@@ -109,6 +109,10 @@ bodyBits:
       },
       upperArmLength: {
         default: 0.3
+      },
+      bias: {
+        type: 'vec3',
+        default: new THREE.Vector3(0, -0.1, 0)
       }
     },  
     update() {
@@ -150,7 +154,7 @@ bodyBits:
         const $o = this.elbow;
         
         // add a little gravity
-        $o.position.y -= 0.1 * 9.8 * delta/1000;
+        $o.position.addScaledVector(this.data.bias, 9.8 * delta/1000);
         
         // Local hand position
         this.hand.getWorldPosition(tempVectorHandPos);
