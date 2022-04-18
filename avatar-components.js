@@ -10,8 +10,6 @@ avatarStuff:
   const tempQuaternionB = new THREE.Quaternion();
   const tempVectorShoulderPos = new THREE.Vector3();
   const tempVectorHandPos = new THREE.Vector3();
-  const tempVectorWorldHandPos = new THREE.Vector3();
-  const tempCalculatedElbowPos = new THREE.Vector3();
   const normal = new THREE.Vector3();
   const c0 = new THREE.Vector3();
 
@@ -68,6 +66,10 @@ avatarStuff:
       }
     }
   });
+  
+  function pointBoneAt(boneToPoint, globalPosition) {
+    
+  }
   
   
   AFRAME.registerComponent("elbow", {
@@ -133,8 +135,8 @@ avatarStuff:
         this.elbow.position.addScaledVector(this.data.bias, 9.8 * delta/1000);
 
         // Local hand position
-        this.hand.getWorldPosition(tempVectorWorldHandPos);
-        this.elbow.parent.worldToLocal(tempVectorHandPos.copy(tempVectorWorldHandPos));
+        this.hand.getWorldPosition(tempVectorHandPos);
+        this.elbow.parent.worldToLocal(tempVectorHandPos);
 
         // Local Shoulder position
         this.shoulder.getWorldPosition(tempVectorShoulderPos);
@@ -179,15 +181,8 @@ avatarStuff:
           this.elbow.position.addScaledVector(normal, t).sub(c0).setLength(r).add(c0);
         }
 
-        // Hand world position is tempVectorWorldHandPos
-        this.elbow.getWorldPosition(tempCalculatedElbowPos);
-        
         this.shoulder.quaternion.setFromUnitVectors(yAxis, tempVector3.subVectors(this.elbow.position, tempVectorShoulderPos).normalize());
-        this.elbow.parent.worldToLocal(this.elbow.position.copy(tempCalculatedElbowPos)); // Fix the position of the elbow
-        this.hand.parent.worldToLocal(this.hand.position.copy(tempVectorWorldHandPos)); // Fix the position of the hand after shoulder moved
-        this.elbow.parent.worldToLocal(tempVectorHandPos.copy(tempVectorWorldHandPos)); // Update the position of the tempVectorHandPos
         this.elbow.quaternion.setFromUnitVectors(yAxis, tempVector3.subVectors(tempVectorHandPos, this.elbow.position).normalize());
-        this.hand.parent.worldToLocal(this.hand.position.copy(tempVectorWorldHandPos)); // Fix the position of the hand after elbow moved
       }
     }
   });
