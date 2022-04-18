@@ -3,13 +3,14 @@
 
 avatarStuff:
 {
+  const zAxis = new THREE.Vector3(0,0,1);
+  const yAxis = new THREE.Vector3(0,1,0);
   const tempVector3 = new THREE.Vector3();
   const tempQuaternionA = new THREE.Quaternion();
   const tempQuaternionB = new THREE.Quaternion();
-  const zAxis = new THREE.Vector3(0,0,1);
-  const yAxis = new THREE.Vector3(0,1,0);
   const tempVectorShoulderPos = new THREE.Vector3();
   const tempVectorHandPos = new THREE.Vector3();
+  const tempCalculatedElbowPos = new THREE.Vector3();
   const normal = new THREE.Vector3();
   const c0 = new THREE.Vector3();
 
@@ -147,43 +148,41 @@ avatarStuff:
 
         const d=tempVector3.subVectors(tempVectorShoulderPos,tempVectorHandPos).length();
 
-        // if arm is stretched longer than bones then elbow is placed proportionally
+          // if arm is stretched longer than bones then elbow is placed proportionally
         if (d >= r1 + r2) {
           this.elbow.position.lerpVectors(tempVectorShoulderPos,tempVectorHandPos,r1/(r1+r2));
-          this.shoulder.quaternion.setFromUnitVectors(yAxis, tempVector3.subVectors(this.elbow.position, tempVectorShoulderPos).normalize());
-          this.elbow.quaternion.setFromUnitVectors(yAxis, tempVector3.subVectors(tempVectorHandPos, this.elbow.position).normalize());
+          
+          // if one arm is positioned exactly within the other i.e. the hand is touching the shoulder more than the bones should allow
+        } else if (Math.max(r1,r2) >= (d + Math.min(r1,r2))) {
+          // this situation is weird so do nothing
           return
+          
+          // The regular usual situation
+        } else {
+          // The usual situation find where the two spheres intersesct so find the circle at the intersection point joint lies on this circle
+          const d1 = 0.5*(d+(r1*r1-r2*r2)/d); // distance between the center points
+          normal.subVectors(tempVectorHandPos, tempVectorShoulderPos).normalize(); // Normal Vector of the plane containing the circle
+          const r = Math.sqrt(r1*r1-d1*d1); // radius of the circle
+
+          // The intersection of the spheres form a circle radius r
+          // with center c0
+          c0.copy(tempVectorShoulderPos).addScaledVector(normal, d1);
+
+          // We have a plane with normal that contains c0
+          // We want to place the object where a vector n from the objects original position (p0) intersects the plane
+          // n dot p = c0.n
+          // Sub in vector equation p=tn + p0
+          // t n.n + p0.n = c0.n
+          // t = n.p0 - n.c0 / (n.n)
+          // p[new] = p0 + t n
+
+          const t = normal.dot(tempVector3.copy(c0).sub(this.elbow.position));
+
+          // move elbow inline with elbow plane and place it on the circle
+          this.elbow.position.addScaledVector(normal, t).sub(c0).setLength(r).add(c0);
         }
 
-        // One bone sphere is inside the other, i.e. hand is placed on shoulder
-        // and one bone is smaller than the other and do not intersect
-        if (Math.max(r1,r2) >= (d + Math.min(r1,r2))) {
-          // this weird so do nothing
-          return
-        }
-
-        // The usual situation the two spheres intersesct so find the circle at the intersection point.
-        const d1 = 0.5*(d+(r1*r1-r2*r2)/d);
-        normal.subVectors(tempVectorHandPos, tempVectorShoulderPos).normalize();
-        const r = Math.sqrt(r1*r1-d1*d1);
-
-        // The intersection of the spheres form a circle radius r
-        // with center c0
-        c0.copy(tempVectorShoulderPos).addScaledVector(normal, d1);
-
-        // We have a plane with normal that contains c0
-        // We want to place the object where a vector n from the objects original position (p0) intersects the plane
-        // n dot p = c0.n
-        // Sub in vector equation p=tn + p0
-        // t n.n + p0.n = c0.n
-        // t = n.p0 - n.c0 / (n.n)
-        // p[new] = p0 + t n
-
-        const t = normal.dot(tempVector3.copy(c0).sub(this.elbow.position));
-
-        // move elbow inline with elbow plane and place it on the circle
-        this.elbow.position.addScaledVector(normal, t).sub(c0).setLength(r).add(c0);
-
+        this.elbow.getWorldPosition(tempCalculatedElbowPos);
         this.shoulder.quaternion.setFromUnitVectors(yAxis, tempVector3.subVectors(this.elbow.position, tempVectorShoulderPos).normalize());
         this.elbow.quaternion.setFromUnitVectors(yAxis, tempVector3.subVectors(tempVectorHandPos, this.elbow.position).normalize());
       }
