@@ -67,10 +67,6 @@ avatarStuff:
     }
   });
   
-  function pointBoneAt(boneToPoint, globalPosition) {
-    
-  }
-  
   
   AFRAME.registerComponent("elbow", {
     multiple: true,
