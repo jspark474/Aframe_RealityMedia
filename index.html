@@ -14,8 +14,8 @@
 	<script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-extras@master/src/misc/sphere-collider.js"></script>
   <script src="https://mixedreality.mozilla.org/ammo.js/builds/ammo.wasm.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.5/build/handy-controls.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.5/build/magnet-helpers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.6/build/handy-controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.6/build/magnet-helpers.min.js"></script>
   <script src="ar-shadow-helper.js"></script>
   <script src="ar-cursor.js"></script>
   <script src="simple-navmesh-constraint.js"></script>
@@ -62,7 +62,7 @@
       <a-asset-item id="ladder-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/ladder.glb?v=1648465045608"></a-asset-item>
       <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700" crossorigin="anonymous">
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
-      <a-mixin id="blink" blink-controls="cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"></a-mixin>
+      <a-mixin id="blink" blink-controls="rotateOnTeleport:false;cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"></a-mixin>
       <a-mixin id="handle-visual" geometry="width:0.05;height:0.05;depth:0.2"></a-mixin>
     </a-assets>
 
@@ -118,15 +118,15 @@
         </a-entity>
         
         <!-- Use the finger tips for teleporting when the user points -->
-        <a-entity data-right="index-finger-tip" mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
-        <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="rotateOnTeleport:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;"></a-entity>
+        <a-entity data-right="index-finger-tip" mixin="blink" blink-controls="startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;endEvents:pose_cancel_point;"></a-entity>
+        <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;endEvents:pose_cancel_point;"></a-entity>
         
         <!-- The direction hands are facing, we will also attach labels to show the currently detected pose or controller button -->
         <!-- These also do teleportaion for Blink controls in VR -->
-        <a-entity data-right="ray" mixin="blink" blink-controls="rotateOnTeleport:false;">
+        <a-entity data-right="ray" mixin="blink">
           <a-entity position="0 0 -0.22" visible="false" class="pose-label" text="value: Hello World; align: center;"></a-entity>
         </a-entity>
-        <a-entity data-left="ray" mixin="blink" blink-controls="rotateOnTeleport:false;">
+        <a-entity data-left="ray" mixin="blink">
           <a-entity position="0 0 -0.22" visible="false" class="pose-label" text="value: Hello World; align: center;"></a-entity>
         </a-entity>
         
