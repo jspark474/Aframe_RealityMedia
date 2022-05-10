@@ -225,16 +225,18 @@
     <h1>
       Hello World
     </h1>
-    <section style="display: inline-block; background: lavenderblush; color: #333333; border-radius: 1em; padding: 1em; margin:0; accent-color: hotpink;" id="my-interface">
-      <h2>Settings</h2>
-      <fieldset style="border:0 none;border-top: 1px solid grey;">
-        <legend>Controller Locomotion</legend>
-        <input onclick="handleRadio(this)" type="radio" id="color-red" name="color" value="red" checked><label for="color-red"> Red</label>
-        <input onclick="handleRadio(this)" type="radio" id="color-blue" name="color" value="blue"><label for="color-blue"> Blue</label>
-      </fieldset>
-      <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button>
-    </section>
-		<div id="dom-overlay-message">Enter AR or VR to start.</div>
+		<div class="overlay-footer">
+      <section style="display: inline-block; background: lavenderblush; color: #333333; border-radius: 1em; padding: 1em; margin:0; accent-color: hotpink;" id="my-interface">
+        <h2>Settings</h2>
+        <fieldset style="border:none;">
+          <legend>Controller Locomotion</legend>
+          <input onclick="handleRadio(this)" type="radio" id="color-red" name="color" value="red" checked><label for="color-red"> Red</label>
+          <input onclick="handleRadio(this)" type="radio" id="color-blue" name="color" value="blue"><label for="color-blue"> Blue</label>
+        </fieldset>
+        <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button>
+      </section>
+      <div id="dom-overlay-message">Enter AR or VR to start.</div>
+    </div>
 	</div>
   
   <div class="glitchButton" style="position: absolute; top: 1em; right: 1em;"></div><script src="https://button.glitch.me/button.js"></script>
