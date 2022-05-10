@@ -26,6 +26,12 @@ AFRAME.registerComponent("origin-on-ar-start", {
   }
 });
 
+// TODO!!
+function toggleThumbstick(detail) {
+  const type = detail.value;
+  console.log(type);
+}
+
 
 AFRAME.registerComponent("match-position-by-id", {
   schema: {

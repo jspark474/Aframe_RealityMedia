@@ -12,7 +12,10 @@
   <script>window.module = {exports:{}}</script><!-- Dirty hack to get the sphere collider loading :-( -->
 	<script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-extras@master/src/misc/sphere-collider.js"></script>
   <script src="https://mixedreality.mozilla.org/ammo.js/builds/ammo.wasm.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
+<!--   <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script> -->
+  
+    <script src="https://cdn.jsdelivr.net/gh/diarmidmackenzie/christmas-scene@4a6a774bdf46ff6245632716c57bd23b19c5cbc4/research/physics-benchmarks/benchmark1-physx.html"></script>
+    <script src="../../lib/physics.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AdaRoseCannon/aframe-blink-controls@main/dist/aframe-blink-controls.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.6/build/handy-controls.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.6/build/magnet-helpers.min.js"></script>
@@ -229,9 +232,9 @@
       <section style="display: inline-block; background: lavenderblush; color: #333333; border-radius: 1em; padding: 1em; margin:0; accent-color: hotpink;" id="my-interface">
         <h2>Settings</h2>
         <fieldset style="border:none;">
-          <legend>Controller Locomotion</legend>
-          <input onclick="handleRadio(this)" type="radio" id="color-red" name="color" value="red" checked><label for="color-red"> Red</label>
-          <input onclick="handleRadio(this)" type="radio" id="color-blue" name="color" value="blue"><label for="color-blue"> Blue</label>
+          <legend>Thumbstick Behaviour</legend>
+          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-teleport" name="color" value="teleport" checked><label for="thumbstick-teleport"> Teleport</label>
+          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-move" name="thumbstick" value="move"><label for="thumbstick-move"> Move</label>
         </fieldset>
         <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button>
       </section>
