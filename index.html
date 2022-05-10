@@ -16,6 +16,7 @@
   <script src="https://cdn.jsdelivr.net/gh/AdaRoseCannon/aframe-blink-controls@main/dist/aframe-blink-controls.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.6/build/handy-controls.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.6/build/magnet-helpers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-htmlmesh@1.0.0/build/aframe-html.min.js"></script>
   <script src="ar-shadow-helper.js"></script>
   <script src="ar-cursor.js"></script>
   <script src="simple-navmesh-constraint.js"></script>
@@ -123,10 +124,10 @@
         
         <!-- The direction hands are facing, we will also attach labels to show the currently detected pose or controller button -->
         <!-- These also do teleportaion for Blink controls in VR -->
-        <a-entity data-right="ray" mixin="blink">
+        <a-entity data-right="ray" mixin="blink" html-pointer="" raycaster="objects:[html];far:0.3;showLine:false;lineColor:black;">
           <a-entity position="0 0 -0.22" visible="false" class="pose-label" text="value: Hello World; align: center;"></a-entity>
         </a-entity>
-        <a-entity data-left="ray" mixin="blink">
+        <a-entity data-left="ray" mixin="blink" html-pointer="" raycaster="objects:[html];far:0.3;showLine:false;lineColor:black;">
           <a-entity position="0 0 -0.22" visible="false" class="pose-label" text="value: Hello World; align: center;"></a-entity>
         </a-entity>
         
@@ -135,8 +136,10 @@
         <a-entity id="right-magnet" data-right="grip" data-magnet="magnet-right" grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;noMagnetEl:#right-no-magnet;"></a-entity>
     
         <!-- markers to let us know the real location of the hands, you probably want to make them visible="false" or just make them empty <a-entities> -->
-        <a-sphere id="left-no-magnet" data-left="grip" data-no-magnet radius="0.01" color="red"></a-sphere>
-        <a-sphere id="right-no-magnet" data-right="grip" data-no-magnet radius="0.01" color="green"></a-sphere>
+        <a-entity id="left-no-magnet" data-left="grip" data-no-magnet>
+          <a-entity html="#my-interface" position="-0.142 -0.0166 -0.02928" rotation="-80 90 0" scale="0.7 0.7 0.7"></a-entity>
+        </a-entity>
+        <a-entity id="right-no-magnet" data-right="grip" data-no-magnet></a-entity>
         
         <!-- Invisible objects at the tips of each finger for physics or intersections -->
         <a-sphere data-right="index-finger-tip" radius="0.004" visible="false" ammo-body="type: kinematic;" ammo-shape="type:sphere;"></a-sphere>
@@ -222,6 +225,15 @@
     <h1>
       Hello World
     </h1>
+    <section style="display: inline-block; background: lavenderblush; color: #333333; border-radius: 1em; padding: 1em; margin:0; accent-color: hotpink;" id="my-interface">
+      <h2>Settings</h2>
+      <fieldset style="border:0 none;border-top: 1px solid grey;">
+        <legend>Controller Locomotion</legend>
+        <input onclick="handleRadio(this)" type="radio" id="color-red" name="color" value="red" checked><label for="color-red"> Red</label>
+        <input onclick="handleRadio(this)" type="radio" id="color-blue" name="color" value="blue"><label for="color-blue"> Blue</label>
+      </fieldset>
+      <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button>
+    </section>
 		<div id="dom-overlay-message">Enter AR or VR to start.</div>
 	</div>
   
