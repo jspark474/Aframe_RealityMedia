@@ -68,7 +68,12 @@
       <a-mixin id="handle-visual" geometry="width:0.05;height:0.05;depth:0.2"></a-mixin>
     </a-assets>
 
-    <a-entity id="cameraRig" simple-navmesh-constraint="navmesh:.navmesh;fall:0.5;height:0;exclude:.navmesh-hole;" movement-controls="speed:0.15;camera:#head;" position="-1 0 1" rotation="0 45 0" origin-on-ar-start>
+    <a-entity
+      id="cameraRig"
+      simple-navmesh-constraint="navmesh:.navmesh;fall:0.5;height:0;exclude:.navmesh-hole;"
+      movement-controls="speed:0.15;camera:#head;"
+      position="-1 0 1" rotation="0 45 0" origin-on-ar-start
+    >
       <!-- camera -->
       <a-entity id="head"
         camera="near:0.01;"
@@ -228,8 +233,8 @@
         <h2>Settings</h2>
         <fieldset style="border:none;">
           <legend>Thumbstick Behaviour</legend>
-          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-teleport" name="thumbstick" value="teleport" checked><label for="thumbstick-teleport"> Teleport</label>
-          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-move" name="thumbstick" value="move"><label for="thumbstick-move"> Move</label>
+          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-teleport" name="thumbstick" value="teleport"><label for="thumbstick-teleport"> Teleport</label>
+          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-move" name="thumbstick" value="move" checked><label for="thumbstick-move"> Move</label>
         </fieldset>
         <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button>
       </section>
