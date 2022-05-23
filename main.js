@@ -201,16 +201,17 @@ window.addEventListener("DOMContentLoaded", function() {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
   }, {once: true});
   
-  const rayPointers = ['[data-right="ray"]', '[data-right="left"]'].map(s => document.querySelector(s));
+  const rayPointers = ['[data-right="ray"]', '[data-left="ray"]'].map(s => document.querySelector(s));
   window.toggleThumbstick = function toggleThumbstick(detail) {
     const type = detail.value;
-    
-    if (value === 'move') {
-      
+    if (type === 'move') {
+      cameraRig.setAttribute('movement-controls', 'enabled', true);
+      for (const p of rayPointers) p.removeAttribute('mixin');
     }
-    
-    
-    console.log(type);
+    if (type === 'teleport') {
+      cameraRig.setAttribute('movement-controls', 'enabled', false);
+      for (const p of rayPointers) p.setAttribute('mixin', 'blink');
+    }
   }
   
   const labels = Array.from(document.querySelectorAll('.pose-label'));
