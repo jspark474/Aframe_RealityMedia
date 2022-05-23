@@ -11,7 +11,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
   <script>window.module = {exports:{}}</script><!-- Dirty hack to get the sphere collider loading :-( -->
 	<script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-extras@master/src/misc/sphere-collider.js"></script>
-	<script src="https://cdn.jsdelivr.net/gh/Hypnos-phi/aframe-extras@37fd255/dist/aframe-extras.controls.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/Hypnos-phi/aframe-extras@d08cf88/dist/aframe-extras.controls.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/diarmidmackenzie/christmas-scene@4a6a774bdf46ff6245632716c57bd23b19c5cbc4/lib/physx.release.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/diarmidmackenzie/christmas-scene@4a6a774bdf46ff6245632716c57bd23b19c5cbc4/lib/physics.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AdaRoseCannon/aframe-blink-controls@573383a/dist/aframe-blink-controls.min.js"></script>
@@ -233,11 +233,28 @@
         <h2>Settings</h2>
         <fieldset style="border:none;">
           <legend>Thumbstick Behaviour</legend>
-          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-teleport" name="thumbstick" value="teleport"><label for="thumbstick-teleport"> Teleport</label>
-          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-move" name="thumbstick" value="move" checked><label for="thumbstick-move"> Move</label>
+          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-teleport" name="thumbstick" value="teleport" checked><label for="thumbstick-teleport"> Teleport</label>
+          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-move" name="thumbstick" value="move"><label for="thumbstick-move"> Move</label>
         </fieldset>
         <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button>
       </section>
+      <script>
+      function toggleThumbstick(detail) {
+        const rayPointers = ['[data-right="ray"]', '[data-left="ray"]'].map(s => document.querySelector(s));
+        const type = detail.value;
+        if (type === 'move') {
+
+          // Hack fix for when the camera rig is rotated.
+          cameraRig.object3D.rotation.y = 0;
+          cameraRig.setAttribute('movement-controls', 'enabled', true);
+          for (const p of rayPointers) p.removeAttribute('mixin');
+        }
+        if (type === 'teleport') {
+          cameraRig.setAttribute('movement-controls', 'enabled', false);
+          for (const p of rayPointers) p.setAttribute('mixin', 'blink');
+        }
+      }
+      </script>
       <div id="dom-overlay-message">Enter AR or VR to start.</div>
     </div>
 	</div>

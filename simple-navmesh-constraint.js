@@ -5,6 +5,9 @@
 */
 AFRAME.registerComponent('simple-navmesh-constraint', {
   schema: {
+    enabled: {
+      default: true
+    },
     navmesh: {
       default: ''
     },
@@ -36,6 +39,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
   },
 
   tick: (function () {
+    if (this.data.enabled === false) return;
     const nextPosition = new THREE.Vector3();
     const tempVec = new THREE.Vector3();
     const scanPattern = [

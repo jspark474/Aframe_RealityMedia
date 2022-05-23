@@ -201,22 +201,6 @@ window.addEventListener("DOMContentLoaded", function() {
     if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
   }, {once: true});
   
-  const rayPointers = ['[data-right="ray"]', '[data-left="ray"]'].map(s => document.querySelector(s));
-  window.toggleThumbstick = function toggleThumbstick(detail) {
-    const type = detail.value;
-    if (type === 'move') {
-      
-      // Hack fix for when the camera rig is rotated.
-      // cameraRig.object3D.rotation.y = 0;
-      cameraRig.setAttribute('movement-controls', 'enabled', true);
-      for (const p of rayPointers) p.removeAttribute('mixin');
-    }
-    if (type === 'teleport') {
-      cameraRig.setAttribute('movement-controls', 'enabled', false);
-      for (const p of rayPointers) p.setAttribute('mixin', 'blink');
-    }
-  }
-  
   const labels = Array.from(document.querySelectorAll('.pose-label'));
   for (const el of labels) {
     el.parentNode.addEventListener('pose', function (event) {
