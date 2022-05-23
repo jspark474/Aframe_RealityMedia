@@ -39,7 +39,6 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
   },
 
   tick: (function () {
-    if (this.data.enabled === false) return;
     const nextPosition = new THREE.Vector3();
     const tempVec = new THREE.Vector3();
     const scanPattern = [
@@ -61,6 +60,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     let firstTry = true;
     
     return function tick(time, delta) {
+      if (this.data.enabled === false) return;
       if (this.lastPosition === null) {
         firstTry = true;
         this.lastPosition = new THREE.Vector3();

@@ -164,6 +164,9 @@ AFRAME.registerComponent("ladder", {
     if (activeHand) {
       this.startingHandPosition.copy(activeHand.object3D.position);
       this.startingRigPosition.copy(this.cameraRig.object3D.position);
+    } else {
+      // Turn on the navmesh if no hands on the ladder
+      this.cameraRig.setAttribute('simple-navmesh-constraint', 'enabled', true);
     }
   },
   ladderGrab(e) {
@@ -172,6 +175,8 @@ AFRAME.registerComponent("ladder", {
     this.startingRigPosition.copy(this.cameraRig.object3D.position);
     this.ladderHands.unshift(activeHand);
     this.holdingLadder = true;
+    // Turn off the navmesh if holding the ladder
+    this.cameraRig.setAttribute('simple-navmesh-constraint', 'enabled', false);
   },
   tick () {
     const activeHand = this.ladderHands[0];

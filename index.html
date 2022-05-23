@@ -238,22 +238,36 @@
         </fieldset>
         <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button>
       </section>
+      
+      <!-- HTML form logic -->
       <script>
-      function toggleThumbstick(detail) {
-        const rayPointers = ['[data-right="ray"]', '[data-left="ray"]'].map(s => document.querySelector(s));
-        const type = detail.value;
-        if (type === 'move') {
+        let movementType = 'teleport';
+        function toggleThumbstick(detail) {
+          const rayPointers = ['[data-right="ray"]', '[data-left="ray"]'].map(s => document.querySelector(s));
+          const type = detail.value;
+          movementType = type;
+          if (type === 'move') {
 
-          // Hack fix for when the camera rig is rotated.
-          cameraRig.object3D.rotation.y = 0;
+            // Hack fix for when the camera rig is rotated.
+            cameraRig.object3D.rotation.y = 0;
+            cameraRig.setAttribute('movement-controls', 'enabled', true);
+            for (const p of rayPointers) p.removeAttribute('mixin');
+          }
+          if (type === 'teleport') {
+            cameraRig.setAttribute('movement-controls', 'enabled', false);
+            for (const p of rayPointers) p.setAttribute('mixin', 'blink');
+          }
+        }
+        // If the user is teleporting disable movement-controls in XR
+        const sceneEl = document.querySelector("a-scene");
+        sceneEl.addEventListener("enter-vr", function() {
+          if (movementType === 'teleport') {
+            cameraRig.setAttribute('movement-controls', 'enabled', false);
+          }
+        });
+        sceneEl.addEventListener("exit-vr", function() {
           cameraRig.setAttribute('movement-controls', 'enabled', true);
-          for (const p of rayPointers) p.removeAttribute('mixin');
-        }
-        if (type === 'teleport') {
-          cameraRig.setAttribute('movement-controls', 'enabled', false);
-          for (const p of rayPointers) p.setAttribute('mixin', 'blink');
-        }
-      }
+        });
       </script>
       <div id="dom-overlay-message">Enter AR or VR to start.</div>
     </div>
