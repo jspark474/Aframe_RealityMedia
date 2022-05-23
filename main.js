@@ -205,6 +205,9 @@ window.addEventListener("DOMContentLoaded", function() {
   window.toggleThumbstick = function toggleThumbstick(detail) {
     const type = detail.value;
     if (type === 'move') {
+      
+      // Hack fix for when the camera rig is rotated.
+      // cameraRig.object3D.rotation.y = 0;
       cameraRig.setAttribute('movement-controls', 'enabled', true);
       for (const p of rayPointers) p.removeAttribute('mixin');
     }
