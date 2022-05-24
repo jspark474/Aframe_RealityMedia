@@ -73,7 +73,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
 
       this.xzOrigin.object3D.getWorldPosition(nextPosition);
       if (this.data.xzOrigin) nextPosition.y -= this.xzOrigin.object3D.position.y;
-      if (nextPosition.distanceTo(this.lastPosition) === 0) return;
+      if (nextPosition.distanceTo(this.lastPosition) <= 0.01) return;
       
       let didHit = false;
       // So that it does not get stuck it takes as few samples around the user and finds the most appropriate
