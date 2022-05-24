@@ -20,7 +20,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     exclude: {
       default: ''
     },
-    origin: {
+    xzOrigin: {
       default: ''
     }
   },
@@ -35,7 +35,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     } else {
       this.objects = els.map(el => el.object3D).concat(this.excludes.map(el => el.object3D));
     }
-    this.origin = this.data.origin ? this.el.querySelector(this.data.origin) : this.el;
+    this.xzOrigin = this.data.xzOrigin ? this.el.querySelector(this.data.xzOrigin) : this.el;
   },
 
   tick: (function () {
@@ -64,13 +64,15 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
       if (this.lastPosition === null) {
         firstTry = true;
         this.lastPosition = new THREE.Vector3();
-        this.origin.object3D.getWorldPosition(this.lastPosition);
+        this.xzOrigin.object3D.getWorldPosition(this.lastPosition);
+        if (this.data.xzOrigin) this.lastPosition.y -= this.xzOrigin.object3D.position.y;
       }
       
       const el = this.el;
       if (this.objects.length === 0) return;
 
-      this.origin.object3D.getWorldPosition(nextPosition);
+      this.xzOrigin.object3D.getWorldPosition(nextPosition);
+      if (this.data.xzOrigin) nextPosition.y -= this.xzOrigin.object3D.position.y;
       if (nextPosition.distanceTo(this.lastPosition) === 0) return;
       
       let didHit = false;
@@ -105,8 +107,9 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
             yVel = 0;
           }
           tempVec.copy(hitPos);
-          this.origin.object3D.parent.worldToLocal(tempVec);
-          tempVec.sub(this.origin.object3D.position);
+          this.xzOrigin.object3D.parent.worldToLocal(tempVec);
+          tempVec.sub(this.xzOrigin.object3D.position);
+          if (this.data.xzOrigin) tempVec.y += this.xzOrigin.object3D.position.y;
           this.el.object3D.position.add(tempVec);
           
           this.lastPosition.copy(hitPos);
