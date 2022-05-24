@@ -20,13 +20,9 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     exclude: {
       default: ''
     },
-    center: {
+    origin: {
       default: ''
     }
-  },
-  
-  init: function () {
-    
   },
   
   update: function () {
@@ -39,7 +35,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     } else {
       this.objects = els.map(el => el.object3D).concat(this.excludes.map(el => el.object3D));
     }
-    this.center = this.data.center ? this.el.querySelector(this.data.center) : this.el;
+    this.origin = this.data.origin ? this.el.querySelector(this.data.origin) : this.el;
   },
 
   tick: (function () {
@@ -68,13 +64,13 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
       if (this.lastPosition === null) {
         firstTry = true;
         this.lastPosition = new THREE.Vector3();
-        this.center.object3D.getWorldPosition(this.lastPosition);
+        this.origin.object3D.getWorldPosition(this.lastPosition);
       }
       
       const el = this.el;
       if (this.objects.length === 0) return;
 
-      this.center.object3D.getWorldPosition(nextPosition);
+      this.origin.object3D.getWorldPosition(nextPosition);
       if (nextPosition.distanceTo(this.lastPosition) === 0) return;
       
       let didHit = false;
@@ -108,8 +104,11 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
           } else {
             yVel = 0;
           }
-          el.object3D.position.copy(hitPos);
-          this.el.object3D.parent.worldToLocal(this.el.object3D.position);
+          tempVec.copy(hitPos);
+          this.origin.object3D.parent.worldToLocal(tempVec);
+          tempVec.sub(this.origin.object3D.position);
+          this.el.object3D.position.add(tempVec);
+          
           this.lastPosition.copy(hitPos);
           didHit = true;
           break;
