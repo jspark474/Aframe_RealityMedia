@@ -19,6 +19,9 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     },
     exclude: {
       default: ''
+    },
+    center: {
+      default: ''
     }
   },
   
@@ -36,6 +39,7 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
     } else {
       this.objects = els.map(el => el.object3D).concat(this.excludes.map(el => el.object3D));
     }
+    this.center = this.data.center ? this.el.querySelector(this.data.center) : this.el;
   },
 
   tick: (function () {
@@ -64,13 +68,13 @@ AFRAME.registerComponent('simple-navmesh-constraint', {
       if (this.lastPosition === null) {
         firstTry = true;
         this.lastPosition = new THREE.Vector3();
-        this.el.object3D.getWorldPosition(this.lastPosition);
+        this.center.object3D.getWorldPosition(this.lastPosition);
       }
       
       const el = this.el;
       if (this.objects.length === 0) return;
 
-      this.el.object3D.getWorldPosition(nextPosition);
+      this.center.object3D.getWorldPosition(nextPosition);
       if (nextPosition.distanceTo(this.lastPosition) === 0) return;
       
       let didHit = false;
