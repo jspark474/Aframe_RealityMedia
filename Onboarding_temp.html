@@ -1,0 +1,350 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-physics-system@3.0.0/dist/aframe-physics-system.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-animation-mixer/dist/aframe-animation-mixer.min.js"></script>
+
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/master/dist/aframe-physics-system.min.js"></script>
+
+    <script src="navigation.js"></script>
+
+  </head>
+
+  <body>
+    <a-scene id="scene1" cursor="rayOrigin: mouse" physics="debug: true">
+      
+      <a-entity
+        gltf-model=#book
+        position="0 0 -5"
+        animation-mixer
+      ></a-entity>
+
+      <!-- Camera and scene setup -->
+      <a-entity
+        id="cameraRig"
+        camera
+        look-controls
+        wasd-controls
+        position="0 1.6 0"
+        kinematic-body
+      ></a-entity>
+      <a-sky color="#ECECEC"></a-sky>
+
+      <a-entity
+        id="glbtest"
+        gltf-model="#onboarding"
+        position="-26.5 0 -9"
+        static-body
+      >
+      </a-entity>
+      <a-plane
+        src="#map"
+        position="-3.148 1.57594 -14"
+        height="1.5"
+        width="1.5"
+        rotation=""
+        material=""
+        geometry=""
+        scale="1.5 1.5 1.5"
+      ></a-plane>
+
+      <a-entity
+        text="value: Please Stand on the podium"
+        position="-2.28098 0.00601 -2.73361"
+        scale="3 3 3"
+        rotation="-90 -90 180"
+      ></a-entity
+      ><!--        <a-gltf-model id="book_gltf" src="#book" position="0 0 0" animation-mixer="clip: pCube1Action; loop: once;"></a-gltf-model> -->
+      <a-video
+        src="https://streamable.com/7viwer"
+        width="4"
+        height="3"
+        position="-3.49158 0.7164 -1.9809"
+        material=""
+        geometry=""
+        scale="0.25 0.19 0.3"
+        rotation="-73.286 90 0"
+      ></a-video>
+      <a-video
+        src="https://streamable.com/ji0lfj"
+        width="4"
+        height="3"
+        position="-3.49158 0.7164 -9.695"
+        material=""
+        geometry=""
+        scale="0.25 0.19 0.3"
+        rotation="-73.286 90 0"
+      ></a-video>
+      <a-video
+        src="https://streamable.com/mmfhhy"
+        width="4"
+        height="3"
+        position="2.99188 0.716 -6.90455"
+        material=""
+        geometry=""
+        scale="0.25 0.19 0.3"
+        rotation="73 90 0"
+      ></a-video>
+      <a-video
+        src="https://streamable.com/ji0lfj"
+        width="4"
+        height="3"
+        position="-3.49158 0.7164 -9.695"
+        material=""
+        geometry=""
+        scale="0.25 0.19 0.3"
+        rotation="-73.286 90 0"
+      ></a-video>
+      <a-video
+        src="https://streamable.com/62riac"
+        width="4"
+        height="3"
+        position="-0.29874 0.7164 -5.62118"
+        material=""
+        geometry=""
+        scale="0.25 0.19 0.3"
+        rotation="-73.286 0 0"
+      ></a-video>
+
+      <a-plane
+        src="#placeholder"
+        position="-4.79101 1.67253 -2.07421"
+        height="1.5"
+        width="1.5"
+        rotation="0 90 0"
+        material=""
+        geometry=""
+        scale="1.7 1.7 1.7"
+      ></a-plane>
+      <a-plane
+        src="#placeholder"
+        position="-4.79101 1.67253 -5.834"
+        height="1.5"
+        width="1.5"
+        rotation="0 90 0"
+        material=""
+        geometry=""
+        scale="1.7 1.7 1.7"
+      ></a-plane>
+      <a-plane
+        src="#placeholder"
+        position="-4.79101 1.67253 -9.534"
+        height="1.5"
+        width="1.5"
+        rotation="0 90 0"
+        material=""
+        geometry=""
+        scale="1.7 1.7 1.7"
+      ></a-plane>
+
+      <a-plane
+        src="#placeholder"
+        position="4.19107 1.67253 -2.07421"
+        height="1.5"
+        width="1.5"
+        rotation="0 -90 0"
+        material=""
+        geometry=""
+        scale="1.7 1.7 1.7"
+      ></a-plane>
+      <a-plane
+        src="#placeholder"
+        position="4.19107 1.67253 -6.75022"
+        height="1.5"
+        width="1.5"
+        rotation="0 -90 0"
+        material=""
+        geometry=""
+        scale="1.7 1.7 1.7"
+      ></a-plane>
+      <a-plane
+        src="#placeholder"
+        position="4.19107 1.67253 -11.253"
+        height="1.5"
+        width="1.5"
+        rotation="0 -90 0"
+        material=""
+        geometry=""
+        scale="1.7 1.7 1.7"
+      ></a-plane>
+
+      <a-plane
+        src="#placeholder"
+        position="2.1196 1.673 -14.19439"
+        height="1.5"
+        width="1.5"
+        rotation=""
+        material=""
+        geometry=""
+        scale="1.7 1.7 1.7"
+      ></a-plane>
+      <a-plane
+        src="#placeholder"
+        position="4.19107 1.67253 -11.253"
+        height="1.5"
+        width="1.5"
+        rotation="0 -90 0"
+        material=""
+        geometry=""
+        scale="1.7 1.7 1.7"
+      ></a-plane>
+      <a-plane
+        src="#placeholder"
+        position="-0.39433 1.4955 -14.19439"
+        height="1.5"
+        width="1.5"
+        rotation=""
+        material=""
+        geometry=""
+        scale="1.42 2.01 1.42"
+      ></a-plane>
+
+      <!--Rotunda -->
+      <a-video
+        src="https://streamable.com/knhfra"
+        width="4"
+        height="3"
+        position="49.70848 2.85295 -6.7798"
+        material=""
+        geometry=""
+        scale="0.25 0.19 0.3"
+        rotation="-67.83361928112843 119.72010425038066 0.002864788975654116"
+      ></a-video>
+
+      <a-entity
+        text="value: What are Reality Media"
+        position="51.26906 5.68128 -0.10998"
+        scale="5 5 3"
+        rotation="0 -135.19 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_01"
+        position="52.24816 7.30385 -1.1335"
+        height="1.5"
+        width="1.5"
+        rotation="0 -135.11 0"
+        material=""
+        geometry=""
+        scale="2.06 1.49 1.7"
+      ></a-plane>
+
+      <a-entity
+        text="value: History of Reality Media"
+        position="43.70118 5.681 1.87193"
+        scale="5 5 3"
+        rotation="0 -179.82 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_02"
+        position="45.00667 7.304 1.763"
+        height="1.5"
+        width="1.5"
+        rotation="0 180.11597 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+      ></a-plane>
+
+      <a-entity
+        text="value: 3D Graphics, Sensing and Tracking"
+        position="37.07446 5.681 -1.51295"
+        scale="5 5 3"
+        rotation="0 -221.33 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_03"
+        position="37.72781 7.3185 -0.96857"
+        height="1.5"
+        width="1.5"
+        rotation="0 138.11261 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Presence and Aura"
+        position="35.22043 5.77896 -10.04976"
+        scale="5 5 5"
+        rotation="0 92.68910139169866 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_04"
+        position="35.24395 7.3185 -8.41931"
+        height="1.5"
+        width="1.5"
+        rotation="0 90.21965329468482 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Genres of AR and VR"
+        position="38.8509 5.77896 -16.72246"
+        scale="5 5 5"
+        rotation="0 43.11564704138958 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_05"
+        position="37.71063 7.3185 -15.66791"
+        height="1.5"
+        width="1.5"
+        rotation="0 45.33127483516047 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Privacy and Public Spaces"
+        position="46.18268 5.779 -18.48227"
+        scale="5 5 5"
+        rotation="0 -1.633502673917977 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_06"
+        position="44.98239 7.3185 -18.52612"
+        height="1.5"
+        width="1.5"
+        rotation="0 -0.10255944532841735 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Future of AR and VR"
+        position="53.41052 5.69947 -14.69041"
+        scale="5 5 5"
+        rotation="0 -43.713242021711025 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_07"
+        position="52.31446 7.24449 -15.68288"
+        height="1.5"
+        width="1.5"
+        rotation="0 -43.996283172505656 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+    </a-scene>
+
+    <script>
+      // Continuous position check
+      setInterval(function () {
+        var userPosition = document
+          .getElementById("cameraRig")
+          .getAttribute("position");
+        if (userPosition.z <= -13) {
+          // Move the user to a new position
+          document
+            .getElementById("cameraRig")
+            .setAttribute("position", "52.320 3 -8.300");
+          document.getElementById("cameraRig").setAttribute("rotation", "0 90 0");
+        }
+      }, 100);
+    </script>
+  </body>
+</html>
+

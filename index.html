@@ -1,12 +1,13 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <script>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!--#region AFrame library and 3rd party components  -->
+   <!-- <script>
     // WebXR requires https: to work so ensure redirected if needed.
     if (location.hostname !== 'localhost' && window.location.protocol === 'http:') window.location.protocol = 'https:';
-  </script>
-
-  <!-- the AFrame library and 3rd party components -->
+  </script> -->
   <script src="https://cdn.jsdelivr.net/npm/aframe@1.5.0/dist/aframe-master.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/aframe-environment-component@1.3.4/dist/aframe-environment-component.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/components/sphere-collider.min.js"></script>
@@ -16,22 +17,22 @@
   <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.10/build/handy-controls.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.10/build/magnet-helpers.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/aframe-htmlmesh@2.2.0/build/aframe-html.min.js"></script>
+
   <script src="ar-shadow-helper.js"></script>
   <script src="ar-cursor.js"></script>
   <script src="simple-navmesh-constraint.js"></script>
   <script src="model-utils.js"></script>
+  <!--#endregion -->
   
+  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+  <script src="navigation.js"></script>
+  
+  <!-- Embed html -->
+  <script src="https://supereggbert.github.io/aframe-htmlembed-component/dist/build.js"></script>   
 
-  
-  <title>AFrame Handy Demo</title>
-  <meta property="og:title" content="AFrame Handy Work Demo" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@AdaRoseCannon" />
-  <meta name="twitter:creator" content="@AdaRoseCannon" />
-  <meta property="og:url" content="https://aframe-xr-starterkit.glitch.me/" />
-  <meta name="description" content="A sample scene for working with WebXR Hand Tracking" />
-  <meta property="og:description" content="A sample scene for working with WebXR Hand Tracking" />
-  <meta property="og:image" content="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/snapshot.png?v=1645201177438" />
+
+  <title>Reality Media - What are reality media</title>
+  <meta property="og:title" content="Reality Media" />
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -41,16 +42,18 @@
     webxr="overlayElement:#dom-overlay;"
     background="color:skyblue;"
     reflection="directionalLight:#dirlight;"
-    renderer="alpha:true;physicallyCorrectLights:true;colorManagement:true;exposure:2;toneMapping:ACESFilmic;"
+    renderer="alpha:true;physicallyCorrectLights:true;colorManagement:true;exposure:1;toneMapping:ACESFilmic;"
     ar-hit-test="target:#my-ar-objects;type:footprint;footprintDepth:0.2;"
     shadow="type: pcfsoft"
     gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/versioned/decoders/1.5.6/;"
-    ar-cursor raycaster="objects: #my-ar-objects a-sphere"
+    ar-cursor raycaster="objects: #my-ar-objects a-sphere .collidable"
     xr-mode-ui="XRMode:xr"
   >
+<!--#region preloading assets  -->
     <a-assets>
-      <a-asset-item id="building-glb" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/venue.glb?v=1644331843500"></a-asset-item>
-      <a-asset-item id="navmesh-glb" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/navmesh.glb?v=1644329586500"></a-asset-item>
+      
+      <a-asset-item id="building-glb" src="assets/Ch1-What-are/What-is-Reality-Media.glb"></a-asset-item>
+      <a-asset-item id="navmesh-glb" src="assets/Ch1-What-are/What-is-Reality-Media-navmesh.glb"></a-asset-item>
       <a-asset-item id="right-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-right-hand-webxr/model.gltf"></a-asset-item>
       <a-asset-item id="left-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-left-hand-webxr/model.gltf"></a-asset-item>
       <a-asset-item id="watch-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watch.glb?v=1645016979219"></a-asset-item>
@@ -64,22 +67,37 @@
       <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
       <a-mixin id="blink" blink-controls="rotateOnTeleport:false;cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"></a-mixin>
       <a-mixin id="handle-visual" geometry="width:0.05;height:0.05;depth:0.2"></a-mixin>
-    </a-assets>
 
+      <!-- videos -->
+      <video id="seeitnow_vid" loop="true" src="assets/Ch1-What-are/seeitnow.mp4"></video>
+
+      <!-- images -->
+      <img id="Ch1_map" src="assets/Ch1-What-are/Map_1.jpg"> 
+      <img id="Milgram_img" src="assets/Ch1-What-are/milgram.jpg"> 
+      <img src="assets/General/play.png" id="play" crossorigin="anonymous">
+      <img src="assets/General/pause.png" id="pause" crossorigin="anonymous">
+      <img src="assets/General/volume-normal.png" id="volume-normal" crossorigin="anonymous">
+      <img src="assets/General/volume-mute.png" id="volume-mute" crossorigin="anonymous">
+      <img src="assets/General/seek-back.png" id="seek-back" crossorigin="anonymous">
+       
+  
+    </a-assets>
+  <!--#endregion   -->
+
+      <!-- camera -->
     <a-entity
       id="cameraRig"
       simple-navmesh-constraint="navmesh:.navmesh;fall:0.5;height:0;exclude:.navmesh-hole;"
       movement-controls="speed:0.15;camera:#head;"
-      position="-1 0 1" rotation="0 45 0" origin-on-ar-start
-    >
-      <!-- camera -->
+      position="-1 0 1" rotation="0 45 0" origin-on-ar-start>
+      
       <a-entity id="head"
         camera="near:0.01;"
         look-controls="pointerLockEnabled: false"
-        position="0 1.65 0"
-      ></a-entity>
+        position="0 1.65 0"></a-entity>
       
-      <a-entity xr-follow>
+    <!--#region Camera relevant  -->
+      <!-- <a-entity xr-follow>
         <a-gltf-model
           id="sword" src="#sword-gltf" shadow="receive:false;"
           data-pick-up class="magnet-left magnet-right"
@@ -100,16 +118,17 @@
         >
           <a-entity id="watergun-slider-magnet" rotation="-74 0 0" attach-to-model="Slider"></a-entity>
         </a-gltf-model>
-      </a-entity>
+      </a-entity> -->
       
       <!-- Hand tracking -->
-      <a-entity handy-controls="right:#right-gltf;materialOverride:right;" material="color:gold;metalness:1;roughness:0;">
+      <!--<a-entity handy-controls="right:#right-gltf;materialOverride:right;" material="color:gold;metalness:1;roughness:0;"> -->
         
+     
         <!-- For screen space inputs like mobile AR -->
         <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:blue" data-none="screen-0"></a-torus>
         <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:green" data-none="screen-1"></a-torus>
         <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:red" data-none="screen-2"></a-torus>
-        
+    
         <!-- Put an exit button on the wrist for handtracking -->
         <a-gltf-model src="#watch-gltf" data-left="wrist" position="-1000 0 0">
           <a-sphere radius="0.02" position="0 0.02 0" sphere-collider="radius:0.02;objects:[data-right$=-tip];" exit-on="hitend" visible="false"></a-sphere>
@@ -119,17 +138,17 @@
         <a-entity data-left="ring-finger-phalanx-proximal">
           <a-torus position="0 0 -0.03" radius="0.008" radius-tubular="0.001" scale="1 1 1.5" material="color:gold;metalness:1;roughness:0;"></a-torus>
         </a-entity>
-        
+            
         <!-- Use the finger tips for teleporting when the user points -->
         <a-entity data-right="index-finger-tip" mixin="blink" blink-controls="snapTurn:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;cancelEvents:pose_cancel_point;"></a-entity>
         <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="snapTurn:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;cancelEvents:pose_cancel_point;"></a-entity>
 
         <!-- The direction hands are facing, we will also attach labels to show the currently detected pose or controller button -->
         <!-- These also do teleportaion for Blink controls in VR -->
-        <a-entity data-right="ray" mixin="blink" cursor="" raycaster="objects:[html];far:0.3;showLine:false;lineColor:black;">
+        <a-entity data-right="ray" mixin="blink" cursor="" raycaster="objects:[html],  .collidable;far:0.3;showLine:false;lineColor:black;">
           <a-entity position="0 0 -0.22" visible="false" class="pose-label" text="value: Hello World; align: center;"></a-entity>
         </a-entity>
-        <a-entity data-left="ray" mixin="blink" cursor="" raycaster="objects:[html];far:0.3;showLine:false;lineColor:black;">
+        <a-entity data-left="ray" mixin="blink" cursor="" raycaster="objects:[html],  .collidable;far:0.3;showLine:false;lineColor:black;">
           <a-entity position="0 0 -0.22" visible="false" class="pose-label" text="value: Hello World; align: center;"></a-entity>
         </a-entity>
         
@@ -154,88 +173,150 @@
         <a-sphere data-left="ring-finger-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
         <a-sphere data-left="pinky-finger-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
         <a-sphere data-left="thumb-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
-      </a-entity>
+    <!--#endregion -->
+   
     </a-entity>
-    
-    <a-entity id="my-ar-objects" position="-6 0 1">
-      <!-- "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
-      <a-gltf-model id="piano" rotation="0 100 0" shadow="receive:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118">
-        <a-plane rotation="-90 0 0" width="1.5" height="0.6" class="navmesh-hole" visible="false"></a-plane>
-      </a-gltf-model>
-    </a-entity>
-
-    <!-- This plane is only visible in AR and follows the given target to provide it with shadows.-->
-    <a-light id="dirlight" shadow-camera-automatic="[ar-shadow-helper],#table,#ladder" intensity="0.8" light="castShadow:true;type:directional" position="0 3 -6"></a-light>
-    <a-entity ar-shadow-helper="target:#my-ar-objects;light:#dirlight;" visible="false">
-      <a-plane rotation="-90 0 0" shadow="cast:false;receive:true;" position="0 0.01 0" material="shader:shadow; depthWrite:false; opacity:0.9;"></a-plane>
-    </a-entity>
-
-    <a-entity hide-on-enter-ar position="0 -0.2 0" environment="lighting:none;shadow:true;preset: osiris;"></a-entity>
-    <a-entity rotation="0 -50 0" position="0 0 0" hide-on-enter-ar>
-      <a-box 
-        position="-5.148 -0.1 -0.355"
-        visible="false"
-        geometry="width:33.67;height:0.2;depth:19.06"
-        physx-body="type: static;"
-        physx-restitution="1.5">
-      </a-box>
-      <a-gltf-model id="pot" toggle-physics shadow="receive:false;" src="#stew-gltf" position="-2 1.2 0.8" physx-body-from-model="type:dynamic;mass:2;">
-        <a-entity id="stew-handle-1" data-magnet-range="0.2,0.1,360,180" data-pick-up="parent" class="magnet-left magnet-right" position="0 0.35 -0.35" rotation="0 90 0"></a-entity>
-        <a-entity id="stew-handle-2" data-magnet-range="0.2,0.1,360,180" data-pick-up="parent" class="magnet-left magnet-right" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
-      </a-gltf-model>
-      <a-gltf-model id="table" shadow="receive:true;" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0" scale="1.5 1.5 1.5" physx-body-from-model="type: static;">
-        <a-plane rotation="-90 0 0" width="1.2" height="0.6" class="navmesh-hole" visible="false"></a-plane>
-      </a-gltf-model>
-      
-      <!-- Button test -->
-      <a-box position="-1.657 0.893 0.421" width="0.2" height="0.2" depth="0.2" color="grey"
-          animation__press="startEvents:press;property:components.material.material.color;type:color;to:green;dur:100;"
-          animation__release="startEvents:release;property:components.material.material.color;type:color;to:grey;dur:100;"
-      >
-        <a-entity position="0 0.12 0" linear-constraint="target:[data-no-magnet];axis:0 1 0;min:0;max:0.18;radius:0.1;useFixedValueIfOutOfRange:true;valueIfOutOfRange:0.18;downEventName:press;downEventThreshold:0;upEventName:release;upEventThreshold:0.18;">
-          <a-cylinder radius="0.09" height="0.2" position="0 -0.1 0" color="hotpink"></a-cylinder>
-        </a-entity>
-      </a-box>
-  
-      <a-gltf-model id="ladder" ladder="grabbables:#ladder-left-hand,#ladder-right-hand;cameraRig:#cameraRig;" shadow src="#ladder-gltf" position="-4.98177 -0.01925 -2.97802" rotation="-4.9623 -62.929 0.6165" physx-body-from-model="type: static;">
-        <a-plane rotation="-90 0 0" width="1.2" height="0.6" class="navmesh-hole" visible="false"></a-plane>
-        <a-entity position="-0.25 0.07 0" linear-constraint="target:#left-no-magnet;axis:0 1 0;min:0;max:2.4;step:0.2;">
-          <a-entity id="ladder-left-hand" data-magnet-range="0.2,0.15,360,300" class="magnet-left" rotation="0 90 0" linear-constraint="target:#left-no-magnet;axis:1 0 0;max:0.5;"></a-entity>
-        </a-entity>
-        <a-entity position="-0.25 0.07 0" linear-constraint="target:#right-no-magnet;axis:0 1 0;max:2.5;step:0.2;">
-          <a-entity id="ladder-right-hand" data-magnet-range="0.2,0.15,360,300" class="magnet-right" rotation="0 -90 0" linear-constraint="target:#right-no-magnet;axis:1 0 0;max:0.5;"></a-entity>
-        </a-entity>
-      </a-gltf-model>
-      
-      <a-gltf-model id="clock" shadow="receive:true;" src="#clock-gltf" position="-5 0 1.8" rotation="0 51 0" physx-body-from-model="type:dynamic;mass:15;"></a-gltf-model>
-      <a-gltf-model class="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>
+     
+    <!-- ####################   -->
+    <!-- ####################   -->
+    <!--ADDING 3D OBJECTS TO THE SCENE  -->
+      <a-gltf-model class="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model> 
       <a-gltf-model src="#building-glb"
         id="building"
-        lightmap="src:#bake;intensity: 1.5; filter:Window,Ceiling,floor;"
-        depthwrite="true"
-        window-replace="Glass"
-        no-tonemapping="Light"
-        shadow="cast:false;receive:true;"
+        
       ></a-gltf-model>
-    </a-entity>
+    </a-entity> 
 
     <a-sphere color="black" radius="0.005" id="cursor" material="shader:flat" visible="false"></a-sphere>
 
+
+    <!-- ####################   -->
+    <!-- ###### TEXTS #######   -->
+    <!-- ####################   -->
+
+    <a-image src="#Ch1_map" material="" position="-2.34185 1.6042 4.86586" rotation="0 180 0"></a-image>
+    
+    <a-entity id="Chain_diagram" position="-4.448 1.07521 0.694" rotation="0 90 0" htmlembed style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+      <div class="squareoff"><span style="fontWeight:700;">VR</span> closely resembles <span style="fontWeight:700;">film</span> in that you make the decision to step outside your daily life for a period of time and into a fashioned reality. 
+        <br><br><span style="fontWeight:700;">AR</span> functions like <span style="fontWeight:700;">television</span> in that they both are consumed casually and provide hybrid experiences.</div>
+  </a-entity>
+
+  <a-entity id="ARVR_table" position="-4.448 1.24919 3.5398" rotation="0 90 0" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+    <div class="squareoff">
+      Film, television, VR and AR each remediate reality according to their characteristics and genres: offering a view of our world or a fictive world, in the present or past, and with or without user interaction.
+      </div>
+</a-entity>
+
+<a-entity id="History_map" position="-4.448 2.0 -6.30321" rotation="0 90 0" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+  <div class="squareoff">
+    Our everyday experience 
+   of the world is filled with all sorts of media, and it is almost unavoidable for 
+   us to think of each medium, new and old, in relation to all the others that surround us. 
+   <br><br>You can explore the<span style="font-weight: 900"> history of reality media </span>by going through the portal.
+     </div>
+</a-entity>
+
+<a-entity id="TV_seeit" position="-2.59546 2 -9.96264" rotation="" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+  <div class="squareoff">
+    <h2 class="title">Television</h2>
+    <br>
+  Television created imagined realities, like film, but it also offered views into our current world, particularly through news and sportscasts. Television's special claim to reality is that, unlike film, these views could be live, experienced in what we now call "real time." 
+   </div>
+</a-entity>
+
+<a-entity position="1.512 2 -9.96264">
+  <a-video  id="video-src" src="#seeitnow_vid" width="4" height="3" ></a-video>
+
+  <!-- VIDEO CONTROLS -->
+  
+  <a-image id="control-back" position="0 -3 1" width="0.4" height="0.4" src="#seek-back"  visible="true" scale="0.85 0.85 0.85" ></a-image>
+  <a-image id="control-play" position="2 -3 1" width="0.4" height="0.4" src="#play" ></a-image>
+  <a-image id="control-volume" position="3 -3 1" width="0.4" height="0.4" src="#volume-normal" visible="true" scale="0.75 0.75 0.75"></a-image>
+  <!-- END CONTROLS -->
+</a-entity>
+
+ 
+<a-entity id="button_ent" class="collidable" position="1.512 2 -9.193"    htmlembed >
+  <button id="button"  class="collidable" onclick="console.log('leave button is clicked')">Leave</button>
+</a-entity>
+
+
+
+
+<a-entity id="Lumiere" position="4.495 1.59607 0.01368" rotation="0 -90 0" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+  <div class="squareoff">
+    As film historian Tom Gunning argues, the audience probably did not believe in the reality of the train. They were astonished, not fooled, because they had never seen a medium so real. Yet they still new they were experiencing a medium. This knowing astonishment is what we call the La Ciotat effect, and it is the effect  that each reality medium has. Each reality medium mediates and remediates. It offers a new representation of the world that we implicitly compare  to our experience of the world in itself, but also through other media.
+   </div>
+</a-entity>
+
+<a-entity id="Laciotat_portal" position="4.49536 1.73016 -5.83742" rotation="0 -90 0" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+  <div class="narrow">
+    Step through this portal to enter the Salon Indien du Grand Café and experience the La Ciotat effect for yourself. 
+   </div>
+</a-entity>
+
+<a-entity id="Lanier" position="-4.70985 1.89959 -8.65342" rotation="0 -90 0" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+  <div class="narrow">
+    <h2 class="title">"Jaron Lanier, Pioneer of VR"</h2> 
+    In 1984, Jaron Lanier founded VPL Research, one of the first companies to build and market VR systems. VPL Research pioneered systems and techniques. The VPL’s Eyephone headset presented a polished version of the technology that was well-suited to Hollywood’s notion of VR as a sci-fi technology in the Star Wars decade. Comparing the Eyephone to Ivan Sutherland’s Sword of Damocles, we see not only how far the technology had progressed since the late 1960s, but also how it was becoming oriented to a world of entertainment and popular consumption.
+  </div>
+</a-entity>
+
+<a-entity id="Oculus" position="-6.77892 1.89959 4.89747" rotation="0 180 0" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+  <div class="narrow">
+    For decades enthusiasts promised that VR would become the next mass medium. Although consumer products began to show up in the 1990s and some game emporiums were offering customers the chance to put on a crude headset for a few minutes of play, VR remained a novelty. The breakthrough came with the Oculus headset in the 2010s. Now relatively inexpensive headsets are available for VR gaming and other applications, permitting VR to claim a significant place in our media economy. 
+  </div>
+</a-entity>
+
+
+<a-entity id="Sutherland" position="-4.71662 1.9 0.25841" rotation="0 -90 0" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+  <div class="narrow">
+    <h2 class="title">Sword of Damocles</h2>
+    In the 1990s, when both VR and AR were still laboratory technologies, two researchers, Paul Milgram and Fumio Kishino, diagrammed what they called the virtuality continuum, a spectrum with the real environment (the physical world) at one end and the complete virtual environment (VR) at the other (Milgram and Kishino 1994; Milgram et al. 1995). They placed augmented reality and augmented virtuality as intermediate points between these endpoints.  </div>
+</a-entity>
+
+<a-entity id="Milgram" position="-13.69746 1.9 -0.82656" rotation="0 90 0" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+  <div class="squareoff">
+    In the 1990s, when both VR and AR were still laboratory technologies, two researchers, Paul Milgram and Fumio Kishino, diagrammed what they called the virtuality continuum, a spectrum with the real environment (the physical world) at one end and the complete virtual environment (VR) at the other (Milgram and Kishino 1994; Milgram et al. 1995). They placed augmented reality and augmented virtuality as intermediate points between these endpoints.
+  </div> 
+  </a-entity>
+
+  <a-image src="#Milgram_img" position="-13.65142 1.61842 2.08473" rotation="0 90 0" material="" geometry="height: 0.5; width: 2.5"></a-image>
+
+  <a-entity id="AR_portal" position="-13.697 1.9 -8.37069" rotation="0 90 0" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+    <div class="narrow">
+      This AR portal demonstrates all four points on the Milgram and Kishino continuum, the "real environment", augmented reality, augmented virtuality, and virtual reality (created by @nedd on YouTube). If you are on the street side, you are in augmented reality, where most of the scene is the physical world. Walk through the portal and you are in a virtual world. Look back through the portal and you get a view of the physical world embedded in that virtual world: this would be augmented virtuality.
+    </div>
+</a-entity>
+
+<a-sphere color="black" radius="0.005" id="cursor" material="shader:flat" visible="false"></a-sphere>
+
+
+<a-image src="#Ch1_map"  position="-10.75962 1.61036 -9.94964"></a-image>
+
   </a-scene>
+
+
+
+  <!-- ####################   -->
+  <!-- ####### UI #########   -->
+  <!-- ####################   -->
 
   <div id="dom-overlay">
     <h1>
-      Hello World
+      What are Reality Media?
     </h1>
     <div class="overlay-footer">
       <section style="display: inline-block; background: lavenderblush; color: #333333; border-radius: 1em; padding: 1em; margin:0; accent-color: hotpink;" id="my-interface">
         <h2>Settings</h2>
-        <fieldset style="border:none;">
-          <legend>Thumbstick Behaviour</legend>
-          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-teleport" name="thumbstick" value="teleport" checked><label for="thumbstick-teleport"> Teleport</label>
-          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-move" name="thumbstick" value="move"><label for="thumbstick-move"> Move</label>
-        </fieldset>
-        <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button>
+          
+        <!-- <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button> -->
+
+
+        <button onclick="console.log('hello')" style="display: block;" class="collapsible_test">View Map</button>
+        <div class="collapsible_content">
+          <p>Lorem ipsum...</p>
+        </div>
       </section>
       
       <!-- HTML form logic -->
@@ -258,18 +339,82 @@
         const sceneEl = document.querySelector("a-scene");
         sceneEl.addEventListener("enter-vr", function() {
           if (movementType === 'teleport') {
-            cameraRig.setAttribute('movement-controls', 'enabled', false);
+            // cameraRig.setAttribute('movement-controls', 'enabled', false);
           }
         });
         sceneEl.addEventListener("exit-vr", function() {
           cameraRig.setAttribute('movement-controls', 'enabled', true);
         });
+/* global AFRAME */
+AFRAME.registerComponent('play-on-click', {
+  init: function () {
+    this.onClick = this.onClick.bind(this);
+  },
+  play: function () {
+    window.addEventListener('click', this.onClick);
+  },
+  pause: function () {
+    window.removeEventListener('click', this.onClick);
+  },
+  onClick: function (evt) {
+    var videoEl = this.el.getAttribute('material').src;
+    if (!videoEl) { return; }
+    this.el.object3D.visible = true;
+    if (videoEl.paused) {
+      videoEl.play();
+    } else {
+      videoEl.pause();
+    }
+   
+  }
+});
+
+let scene = document.querySelector('a-scene');
+      var cursor = document.querySelector('a-cursor');
+
+      /**
+      * CINEMA MODE
+      */
+      scene.lightOff = function() {
+        scene.islightOn = true;
+        scene.removeAttribute('animation__fogback');
+        scene.setAttribute('animation__fog', "property: fog.color; to: #0c192a; dur: 800; easing: easeInQuad;");
+      }
+      scene.lightOn = function() {
+        scene.islightOn = false;
+        scene.removeAttribute('animation__fog');
+        scene.setAttribute('animation__fogback', "property: fog.color; to: #dbdedb; dur: 800");
+      }
+// Play button action
+document.querySelector('#control-play').addEventListener('click', function () {
+        if (videoPlayer.paused) {
+          scene.lightOn()
+        } else {
+          scene.lightOff();
+          hideCursor();
+        }
+      });
+
+      //   AFRAME.registerComponent('play-on-click', {
+      //   init: function () {
+      //     var videoEl = document.querySelector('#seeitnow_vid');
+      //     this.el.addEventListener('click', function () {
+      //       if (videoEl.paused) {
+      //         videoEl.play();
+      //       }
+      //       console.log("clicked");
+      //     });
+      //   }
+      // });
+      
       </script>
       <div id="dom-overlay-message">Enter AR or VR to start.</div>
     </div>
   </div>
-  
-  <div class="glitchButton" style="position: absolute; top: 1em; right: 1em;"></div><script src="https://button.glitch.me/button.js"></script>
+  <a href="https://sites.gatech.edu/augmentedenvironments/" target="_blank">
+    <img src="assets/General/AEL_logo.png" class="AEL_Logo"></img>
+  </a>
+
 </body>
 
 </html>

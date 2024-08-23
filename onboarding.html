@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!--#region AFrame library and 3rd party components  -->
+   <!-- <script>
+    // WebXR requires https: to work so ensure redirected if needed.
+    if (location.hostname !== 'localhost' && window.location.protocol === 'http:') window.location.protocol = 'https:';
+  </script> -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.5.0/dist/aframe-master.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-environment-component@1.3.4/dist/aframe-environment-component.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/components/sphere-collider.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/physx@v0.1.0/dist/physx.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls@0.4.3/dist/aframe-blink-controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.10/build/handy-controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handy-work@3.1.10/build/magnet-helpers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-htmlmesh@2.2.0/build/aframe-html.min.js"></script>
+  <script src="ar-shadow-helper.js"></script>
+  <script src="ar-cursor.js"></script>
+  <script src="simple-navmesh-constraint.js"></script>
+  <script src="model-utils.js"></script>
+  <!--#endregion -->
+  
+  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+  <script src="navigation.js"></script>
+  
+  <!-- Embed html -->
+  <script src="https://supereggbert.github.io/aframe-htmlembed-component/dist/build.js"></script>   
+
+
+  <title>Reality Media - Onboarding</title>
+  <meta property="og:title" content="Reality Media - Onboarding" />
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <a-scene
+    physx="autoLoad: true; delay: 1000; wasmUrl: https://cdn.jsdelivr.net/gh/c-frame/physx@v0.1.0/wasm/physx.release.wasm; useDefaultScene: false;"
+    webxr="overlayElement:#dom-overlay;"
+    background="color:skyblue;"
+    reflection="directionalLight:#dirlight;"
+    renderer="alpha:true;physicallyCorrectLights:true;colorManagement:true;exposure:1;toneMapping:ACESFilmic;"
+    ar-hit-test="target:#my-ar-objects;type:footprint;footprintDepth:0.2;"
+    shadow="type: pcfsoft"
+    gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/versioned/decoders/1.5.6/;"
+    ar-cursor raycaster="objects: #my-ar-objects a-sphere .collidable"
+    xr-mode-ui="XRMode:xr"
+  >
+<!--#region preloading assets  -->
+    <a-assets>
+        <a-asset-item id="onboarding" src="assets/Onboarding/onboarding.glb"></a-asset-item>
+        <a-asset-item id="book" src="assets/Onboarding/book_anim.glb"></a-asset-item>
+        <image id="map" src="assets/Onboarding/Map_arrival.png">
+        <image id="placeholder"src="assets/Onboarding/placeholder.jpg">
+
+        <!-- Rotunda Chapter images -->
+        <image id="chap_01"src="assets/Onboarding/image_01.jpg">
+        <image id="chap_02"src="assets/Onboarding/image_02.jpg">
+        <image id="chap_03"src="assets/Onboarding/image_03.jpg">
+        <image id="chap_04"src="assets/Onboarding/image_04.jpg">
+        <image id="chap_05"src="assets/Onboarding/image_05.jpg">
+        <image id="chap_06"src="assets/Onboarding/image_06.jpg">
+        <image id="chap_07"src="assets/Onboarding/image_07.jpg">
+
+      <a-asset-item id="right-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-right-hand-webxr/model.gltf"></a-asset-item>
+      <a-asset-item id="left-gltf" src="https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/skeleton-left-hand-webxr/model.gltf"></a-asset-item>
+      <a-asset-item id="watch-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watch.glb?v=1645016979219"></a-asset-item>
+      <a-asset-item id="sword-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/katana.glb?v=1648465043810"></a-asset-item>
+      <a-asset-item id="watergun-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/watergun.glb?v=1646916260646"></a-asset-item>
+      <a-asset-item id="stew-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/model.gltf?v=1690887932932"></a-asset-item>
+      <a-asset-item id="table-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/small_wooden_table_01_1k-v1.glb?v=1647263187998"></a-asset-item>
+      <a-asset-item id="clock-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/vintage_grandfather_clock_01_1k-v2.glb?v=1647265174189"></a-asset-item>
+      <a-asset-item id="ladder-gltf" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/ladder.glb?v=1648465045608"></a-asset-item>
+      <img id="bake" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/Bake(3).webp?v=1644331344700" crossorigin="anonymous">
+      <a-mixin id="animations" animation__click="property: components.material.material.color; type: color; to: blue; startEvents: click; dur: 500;"></a-mixin>
+      <a-mixin id="blink" blink-controls="rotateOnTeleport:false;cameraRig: #cameraRig; teleportOrigin: #head; collisionEntities:.navmesh;"></a-mixin>
+      <a-mixin id="handle-visual" geometry="width:0.05;height:0.05;depth:0.2"></a-mixin>
+
+      <!-- videos -->
+      <video id="seeitnow_vid" loop="true" src="assets/Ch1-What-are/seeitnow.mp4"></video>
+
+     
+    </a-assets>
+  <!--#endregion   -->
+
+      <!-- camera -->
+    <a-entity
+      id="cameraRig"
+      simple-navmesh-constraint="navmesh:.navmesh;fall:0.5;height:0;exclude:.navmesh-hole;"
+      movement-controls="speed:0.15;camera:#head;"
+      position="0 0 0" origin-on-ar-start>
+      
+      <a-entity id="head"
+        camera="near:0.01;"
+        look-controls="pointerLockEnabled: false"
+        position="0 1.65 0"></a-entity>
+      
+    <!--#region Camera relevant  -->
+      <!-- <a-entity xr-follow>
+        <a-gltf-model
+          id="sword" src="#sword-gltf" shadow="receive:false;"
+          data-pick-up class="magnet-left magnet-right"
+          position="-0.2 -0.4 0" rotation="-30 180 0" scale="0.6,0.6,1"
+          animation__restore_position="startEvents:putdown;pauseEvents:pickup;property:position;to:-0.2 -0.4 0;easing:easeOutBack;"
+          animation__restore_rotation="startEvents:putdown;pauseEvents:pickup;property:rotation;to:-30 180 0;easing:easeOutBack;"
+        >
+          <a-box physx-body="type: kinematic;" width="0.03" height="0.03" depth="0.790" rotation="-16 0 0" position="0 -0.062 -0.331" visible="false"></a-box>
+        </a-gltf-model>
+        <a-gltf-model 
+          shadow="receive:false;" id="watergun" src="#watergun-gltf"
+          physx-body-from-model="type: kinematic;"
+          class="magnet-left magnet-right" data-pick-up 
+          position="0.2 -0.4 0" rotation="30 180 0"
+          linear-constraint="axis:0 1 0;min:-0.15;max:0;part:Slider;"
+          animation__restore_position="startEvents:putdown;pauseEvents:pickup;property:position;to:0.2 -0.4 0;easing:easeOutBack;"
+          animation__restore_rotation="startEvents:putdown;pauseEvents:pickup;property:rotation;to:30 180 0;easing:easeOutBack;"
+        >
+          <a-entity id="watergun-slider-magnet" rotation="-74 0 0" attach-to-model="Slider"></a-entity>
+        </a-gltf-model>
+      </a-entity> -->
+      
+      <!-- Hand tracking -->
+      <!--<a-entity handy-controls="right:#right-gltf;materialOverride:right;" material="color:gold;metalness:1;roughness:0;"> -->
+        
+     
+        <!-- For screen space inputs like mobile AR -->
+        <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:blue" data-none="screen-0"></a-torus>
+        <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:green" data-none="screen-1"></a-torus>
+        <a-torus radius="0.008" radius-tubular="0.001" material="shader:flat;color:red" data-none="screen-2"></a-torus>
+    
+        <!-- Put an exit button on the wrist for handtracking -->
+        <a-gltf-model src="#watch-gltf" data-left="wrist" position="-1000 0 0">
+          <a-sphere radius="0.02" position="0 0.02 0" sphere-collider="radius:0.02;objects:[data-right$=-tip];" exit-on="hitend" visible="false"></a-sphere>
+        </a-gltf-model>
+        
+        <!-- Add a golden ring on the finger -->
+        <a-entity data-left="ring-finger-phalanx-proximal">
+          <a-torus position="0 0 -0.03" radius="0.008" radius-tubular="0.001" scale="1 1 1.5" material="color:gold;metalness:1;roughness:0;"></a-torus>
+        </a-entity>
+            
+        <!-- Use the finger tips for teleporting when the user points -->
+        <a-entity data-right="index-finger-tip" mixin="blink" blink-controls="snapTurn:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;cancelEvents:pose_cancel_point;"></a-entity>
+        <a-entity data-left="index-finger-tip"  mixin="blink" blink-controls="snapTurn:false;startEvents:pose_point_fuseShort;endEvents:pose_point_fuseLong;cancelEvents:pose_cancel_point;"></a-entity>
+
+        <!-- The direction hands are facing, we will also attach labels to show the currently detected pose or controller button -->
+        <!-- These also do teleportaion for Blink controls in VR -->
+        <a-entity data-right="ray" mixin="blink" cursor="" raycaster="objects:[html],  .collidable;far:0.3;showLine:false;lineColor:black;">
+          <a-entity position="0 0 -0.22" visible="false" class="pose-label" text="value: Hello World; align: center;"></a-entity>
+        </a-entity>
+        <a-entity data-left="ray" mixin="blink" cursor="" raycaster="objects:[html],  .collidable;far:0.3;showLine:false;lineColor:black;">
+          <a-entity position="0 0 -0.22" visible="false" class="pose-label" text="value: Hello World; align: center;"></a-entity>
+        </a-entity>
+        
+        <!-- These get drawn towards grabable objects, moving the whole hand and the attached elements-->
+        <a-entity id="left-magnet" data-left="grip"  data-magnet="magnet-left"  grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;noMagnetEl:#left-no-magnet;"></a-entity>
+        <a-entity id="right-magnet" data-right="grip" data-magnet="magnet-right" grab-magnet-target="startEvents:squeezestart,pose_fist;stopEvents:pose_flat_fuseShort,squeezeend;noMagnetEl:#right-no-magnet;"></a-entity>
+    
+        <!-- markers to let us know the real location of the hands, you probably want to make them visible="false" or just make them empty <a-entities> -->
+        <a-entity id="left-no-magnet" data-left="grip" data-no-magnet>
+          <a-entity html="html:#my-interface;cursor:#cursor" position="-0.142 -0.0166 -0.02928" rotation="-80 90 0" scale="0.7 0.7 0.7"></a-entity>
+        </a-entity>
+        <a-entity id="right-no-magnet" data-right="grip" data-no-magnet></a-entity>
+        
+        <!-- Invisible objects at the tips of each finger for physics or intersections -->
+        <a-sphere data-right="index-finger-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
+        <a-sphere data-right="middle-finger-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
+        <a-sphere data-right="ring-finger-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
+        <a-sphere data-right="pinky-finger-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
+        <a-sphere data-right="thumb-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
+        <a-sphere data-left="index-finger-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
+        <a-sphere data-left="middle-finger-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
+        <a-sphere data-left="ring-finger-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
+        <a-sphere data-left="pinky-finger-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
+        <a-sphere data-left="thumb-tip" radius="0.004" visible="false" physx-body="type: kinematic;"></a-sphere>
+    <!--#endregion -->
+   
+    </a-entity>
+     
+    <!-- ####################   -->
+    <!-- ####################   -->
+    <!--ADDING 3D OBJECTS TO THE SCENE  -->
+      <!-- <a-gltf-model class="navmesh" src="#navmesh-glb" visible="false"></a-gltf-model>  -->
+      <a-gltf-model src="#onboarding" id="onboarding"position="-26.5 0 -9"></a-gltf-model>
+    </a-entity> 
+
+    <a-sphere color="black" radius="0.005" id="cursor" material="shader:flat" visible="false"></a-sphere>
+
+
+    <!-- ####################   -->
+    <!-- ###### TEXTS #######   -->
+    <!-- ####################   -->
+
+    <a-plane
+        src="#map"
+        position="-3.148 1.57594 -14"
+        height="1.5"
+        width="1.5"
+        scale="1.5 1.5 1.5"
+      ></a-plane>
+
+      <a-entity
+        text="value: Please Stand on the podium"
+        position="-2.28098 0.00601 -2.73361"
+        scale="3 3 3"
+        rotation="-90 -90 180"
+      ></a-entity>
+
+
+      <a-entity id="Welcome" position="-4.79101 1.67253 -2.07421" rotation="0 90 0" htmlembed style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+        <div class="squareoff lightText">
+            <h2 class="title">Welcome to Reality Media!</h2>
+        <i>Reality Media</i> is a project encompassing three writing spaces, three technologies for representing ideas: print, the web, and immersive VR. The printed page is a writing space with a tradition dating back to the fifteenth century (in Europe, much earlier in China). Obviously the web has a far shorter tradition, beginning around 1990. But in the thirty year since Tim Berners-Lee launched the first web server, the web has grown to rival print for many kinds of communication. The technologies for creating 3D graphic spaces in VR (and AR) actually predate the web. But only in the past 10 years have AR and VR become widely available media. The goal of RealityMedia is to demonstrate the potential range of AR and VR as communicative forms.
+        </div>
+    </a-entity>
+
+    <a-entity id="Overview" position="-4.79101 1.67253 -5.834" rotation="0 90 0" htmlembed style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+        <div class="squareoff lightText">
+            Each gallery in this “immersive book” corresponds to one or more chapters in the printed book and illustrates the themes of the printed chapter(s). (See the map on the far wall for the names/themes of the galleries.) For example, the gallery entitled “Presence” illustrates both presence and the related concept of aura and how computer scientists as well as filmmakers and designers have tried to evoke these reactions in visitors to their immersive applications. </div>
+    </a-entity>
+
+    <a-entity id="MitPress" position="-4.791 1.605 -9.919" rotation="0 90 0" htmlembed="" style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+        <div style="float:left; margin-right:20px">      
+            <img src="assets/Onboarding/realityMediaBook.jpg" height="383">
+        </div>
+      
+        <div class="squareoff lightText">
+            <div style="margin-left:30px">Published by <a href="https://mitpress.mit.edu/books/reality-media" target="_blank">MIT Press.</a></div>
+            <br />
+      
+            <div style="font-style:italic;">By Jay David Bolter, Maria Engberg and Blair MacIntyre</div> 
+            <br>
+            <br>
+            How augmented reality and virtual reality are taking their places in contemporary media culture alongside film and television.
+      </div>
+    </a-entity>
+
+    <a-entity id="HubsPlatform" position="4.19107 1.67253 -1.160" rotation="0 -90 0" htmlembed style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+        <div class="squareoff lightText">
+            <h2 class="title">The Hubs Platform</h2>
+            <em>Realitymedia</em> is built on top of Mozilla's open-source platform. An extensive guide to using Mozilla Hubs is available <a href="https://hubs.mozilla.com/docs/intro-hubs.html" target="_blank">in the Hubs user documentation.</a></span><br><br>
+            Here are the highlights:
+            <br><br>
+          Before entering, you are in the room's lobby. From here, you can see and hear what's going on inside the room, but you can only interact with others using text chat. 
+          <br><br>
+          </div> 
+    </a-entity>
+
+    <a-entity id="HubsPlatform2" position="4.19107 1.67253 -4.734" rotation="0 -90 0" htmlembed style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+        <div class="squareoff lightText">
+            <div style="color:#78cfa8;font-weight: bold;">To enter the room:</div>
+            <br>
+            - On a desktop or mobile device, follow the prompts to select a name/avatar and enable the mic.
+            <br>
+            - On a VR headset, if you opened the URL on your desktop or smartphone, choose "Enter on Standalone VR" to create a code that makes it easy to open on your standalone headset. Open the browser in your VR headset, navigate to hubs.link and enter the code.
+            <br><br>
+        </div>
+    </a-entity>
+
+    <a-entity id="HubsPlatform3" position="4.19107 1.67253 -8.389" rotation="0 -90 0" htmlembed style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+        <div class="squareoff lightText">
+            <div style="color:#78cfa8;font-weight: bold;">To navigate in Hubs:</div>  
+            <br>
+            - On desktop use your WASD or arrow keys to move around. You can also press your right mouse button to teleport to a different location. Rotate your view using the Q and E keys, or hold down your left mouse button and drag.
+            <br/><br/>
+            -For Quest VR devices, <br/><br/>
+            <span style="padding-left:50px">
+               <img src="assets/Onboarding/controllers.jpg" height="250">
+            </span>
+            <br/>
+        </div>
+    </a-entity>
+    
+    <a-entity id="Sharing" position="4.19107 1.67253 -12.053" rotation="0 -90 0" htmlembed style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+        <div class="squareoff lightText">
+            <div style="color:#78cfa8;font-weight: bold;">Visit the exhibit with friends</div>
+              
+           <br />
+            Sharing the URL of the room you are currently in will allow others to join your experience.
+            <br />
+            <br />
+              <div style="color:#78cfa8;font-weight: bold;">Favorite your room</div>
+        
+           Set your room as a favorite under the 'more' menu. Then, you can easily revisit the room from the list in the 'favorite rooms'. <br/><br/>
+          </div> 
+
+          <img src="assets/Onboarding/favorite.png" height="300">
+    </a-entity>
+    
+    <a-entity id="Portals" position="2.4 1.4955 -14.19439" htmlembed style="display: none; position: absolute; top: 0px; left: 0px; overflow: hidden;">
+        <div class="squareoff lightText">
+            There are three kinds of portals:  <br/>
+            <img src="assets/Onboarding/portals.png" height="212" margin="0 auto"> <br/>
+            <span style="color:#4A90E2; fontWeight:700;">Blue</span> portals transport you instantly to nearby galleries.
+            <br/>
+            <span style="color:#D0021B; fontWeight:700;">Red</span> portals also transport you to other galleries, but require you to choose your avatar and join again.
+            <br/>
+            <span style="color:#7ED321; fontWeight:700;">Green</span> portals transport you to our 2D webpage.
+        </div>
+    </a-entity>
+
+      <a-plane
+        src="#placeholder"
+        position="-0.39433 1.4955 -14.19439"
+        height="1.5"
+        width="1.5"
+        rotation=""
+        material=""
+        geometry=""
+        scale="1.42 2.01 1.42"
+      ></a-plane>
+
+      <!--Rotunda -->
+      <a-video
+        src="https://streamable.com/knhfra"
+        width="4"
+        height="3"
+        position="49.70848 2.85295 -6.7798"
+        material=""
+        geometry=""
+        scale="0.25 0.19 0.3"
+        rotation="-67.83361928112843 119.72010425038066 0.002864788975654116"
+      ></a-video>
+
+      <a-entity
+        text="value: What are Reality Media"
+        position="51.26906 5.68128 -0.10998"
+        scale="5 5 3"
+        rotation="0 -135.19 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_01"
+        position="52.24816 7.30385 -1.1335"
+        height="1.5"
+        width="1.5"
+        rotation="0 -135.11 0"
+        material=""
+        geometry=""
+        scale="2.06 1.49 1.7"
+      ></a-plane>
+
+      <a-entity
+        text="value: History of Reality Media"
+        position="43.70118 5.681 1.87193"
+        scale="5 5 3"
+        rotation="0 -179.82 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_02"
+        position="45.00667 7.304 1.763"
+        height="1.5"
+        width="1.5"
+        rotation="0 180.11597 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+      ></a-plane>
+
+      <a-entity
+        text="value: 3D Graphics, Sensing and Tracking"
+        position="37.07446 5.681 -1.51295"
+        scale="5 5 3"
+        rotation="0 -221.33 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_03"
+        position="37.72781 7.3185 -0.96857"
+        height="1.5"
+        width="1.5"
+        rotation="0 138.11261 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Presence and Aura"
+        position="35.22043 5.77896 -10.04976"
+        scale="5 5 5"
+        rotation="0 92.68910139169866 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_04"
+        position="35.24395 7.3185 -8.41931"
+        height="1.5"
+        width="1.5"
+        rotation="0 90.21965329468482 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Genres of AR and VR"
+        position="38.8509 5.77896 -16.72246"
+        scale="5 5 5"
+        rotation="0 43.11564704138958 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_05"
+        position="37.71063 7.3185 -15.66791"
+        height="1.5"
+        width="1.5"
+        rotation="0 45.33127483516047 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Privacy and Public Spaces"
+        position="46.18268 5.779 -18.48227"
+        scale="5 5 5"
+        rotation="0 -1.633502673917977 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_06"
+        position="44.98239 7.3185 -18.52612"
+        height="1.5"
+        width="1.5"
+        rotation="0 -0.10255944532841735 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+      <a-entity
+        text="value: Future of AR and VR"
+        position="53.41052 5.69947 -14.69041"
+        scale="5 5 5"
+        rotation="0 -43.713242021711025 0"
+      ></a-entity>
+      <a-plane
+        src="#chap_07"
+        position="52.31446 7.24449 -15.68288"
+        height="1.5"
+        width="1.5"
+        rotation="0 -43.996283172505656 0"
+        geometry=""
+        scale="2.06 1.49 1.7"
+        material=""
+      ></a-plane>
+
+
+<a-image src="#Ch1_map"  position="-10.75962 1.61036 -9.94964"></a-image>
+
+  </a-scene>
+
+
+
+  <!-- ####################   -->
+  <!-- ####### UI #########   -->
+  <!-- ####################   -->
+
+  <div id="dom-overlay">
+    <h1 id="Room_title">
+      Onboarding Room
+    </h1>
+    <div class="overlay-footer">
+      <section style="display: inline-block; background: lavenderblush; color: #333333; border-radius: 1em; padding: 1em; margin:0; accent-color: hotpink;" id="my-interface">
+        <h2>Settings</h2>
+        <fieldset style="border:none;">
+          <legend>Thumbstick Behaviour</legend>
+          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-teleport" name="thumbstick" value="teleport" checked><label for="thumbstick-teleport"> Teleport</label>
+          <input onclick="toggleThumbstick(this)" type="radio" id="thumbstick-move" name="thumbstick" value="move"><label for="thumbstick-move"> Move</label>
+          <legend><a href="onboarding.html">Navigate to onboarding</a></legend> 
+        </fieldset>
+        <button onclick="AFRAME.scenes[0].exitVR()" style="display: block;">Exit Immersive</button>
+      </section>
+      
+      <!-- HTML form logic -->
+      <script>
+        let movementType = 'teleport';
+        function toggleThumbstick(detail) {
+          const rayPointers = ['[data-right="ray"]', '[data-left="ray"]'].map(s => document.querySelector(s));
+          const type = detail.value;
+          movementType = type;
+          if (type === 'move') {
+            cameraRig.setAttribute('movement-controls', 'enabled', true);
+            for (const p of rayPointers) p.removeAttribute('mixin');
+          }
+          if (type === 'teleport') {
+            cameraRig.setAttribute('movement-controls', 'enabled', false);
+            for (const p of rayPointers) p.setAttribute('mixin', 'blink');
+          }
+        }
+        // If the user is teleporting disable movement-controls in XR
+        const sceneEl = document.querySelector("a-scene");
+        sceneEl.addEventListener("enter-vr", function() {
+          if (movementType === 'teleport') {
+            // cameraRig.setAttribute('movement-controls', 'enabled', false);
+          }
+        });
+        sceneEl.addEventListener("exit-vr", function() {
+          cameraRig.setAttribute('movement-controls', 'enabled', true);
+        });
+/* global AFRAME */
+AFRAME.registerComponent('play-on-click', {
+  init: function () {
+    this.onClick = this.onClick.bind(this);
+  },
+  play: function () {
+    window.addEventListener('click', this.onClick);
+  },
+  pause: function () {
+    window.removeEventListener('click', this.onClick);
+  },
+  onClick: function (evt) {
+    var videoEl = this.el.getAttribute('material').src;
+    if (!videoEl) { return; }
+    this.el.object3D.visible = true;
+    if (videoEl.paused) {
+      videoEl.play();
+    } else {
+      videoEl.pause();
+    }
+   
+  }
+});
+
+ // Continuous position check
+ setInterval(function () {
+        var userPosition = document
+          .getElementById("cameraRig")
+          .getAttribute("position");
+         
+        if (userPosition.z <= -13) {
+          // Move the user to a new position
+          document
+            .getElementById("cameraRig")
+            .setAttribute("position", "52.320 3 -8.300");
+          document.getElementById("cameraRig").setAttribute("rotation", "0 90 0");
+          document.getElementById("Room_title").innerHTML = "Rotunda";
+        //   if (userPosition.z > 0)
+        //   {
+        //     window.location.href = 'index.html'
+        //   }
+         
+        }
+      }, 100);
+
+      //   AFRAME.registerComponent('play-on-click', {
+      //   init: function () {
+      //     var videoEl = document.querySelector('#seeitnow_vid');
+      //     this.el.addEventListener('click', function () {
+      //       if (videoEl.paused) {
+      //         videoEl.play();
+      //       }
+      //       console.log("clicked");
+      //     });
+      //   }
+      // });
+      
+      </script>
+      <div id="dom-overlay-message">Enter AR or VR to start.</div>
+    </div>
+  </div>
+  
+  <div class="glitchButton" style="position: absolute; top: 1em; right: 1em;"></div><script src="https://button.glitch.me/button.js"></script>
+</body>
+
+</html>

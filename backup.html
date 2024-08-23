@@ -1,0 +1,90 @@
+
+
+             
+    <!--#region Unused Models  -->
+      <!-- <a-entity id="my-ar-objects" position="-6 0 1">
+        "Dusty Piano" (https://skfb.ly/66EPx) by Vincent074 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). -->
+        <!-- <a-gltf-model id="piano" rotation="0 100 0" shadow="receive:false;cast:true;" src="https://cdn.glitch.global/d29f98b4-ddd1-4589-8b66-e2446690e697/piano.glb?v=1644414775118">
+          <a-plane rotation="-90 0 0" width="1.5" height="0.6" class="navmesh-hole" visible="false"></a-plane>
+        </a-gltf-model> 
+      </a-entity>-->
+    <!-- <a-entity hide-on-enter-ar position="0 -0.2 0" environment="lighting:none;shadow:true;preset: osiris;"></a-entity> -->
+    <!-- <a-entity rotation="0 -50 0" position="0 0 0" hide-on-enter-ar>
+      <a-box 
+        position="-5.148 -0.1 -0.355"
+        visible="false"
+        geometry="width:33.67;height:0.2;depth:19.06"
+        physx-body="type: static;"
+        physx-restitution="1.5">
+      </a-box>
+      <a-gltf-model id="pot" toggle-physics shadow="receive:false;" src="#stew-gltf" position="-2 1.2 0.8" physx-body-from-model="type:dynamic;mass:2;">
+        <a-entity id="stew-handle-1" data-magnet-range="0.2,0.1,360,180" data-pick-up="parent" class="magnet-left magnet-right" position="0 0.35 -0.35" rotation="0 90 0"></a-entity>
+        <a-entity id="stew-handle-2" data-magnet-range="0.2,0.1,360,180" data-pick-up="parent" class="magnet-left magnet-right" position="0 0.35 0.35" rotation="0 90 0"></a-entity>
+      </a-gltf-model>
+      <a-gltf-model id="table" shadow="receive:true;" src="#table-gltf" position="-2 0 0.8" rotation="0 51 0" scale="1.5 1.5 1.5" physx-body-from-model="type: static;">
+        <a-plane rotation="-90 0 0" width="1.2" height="0.6" class="navmesh-hole" visible="false"></a-plane>
+      </a-gltf-model>
+      
+      Button test -->
+      
+      <!-- <a-box position="-1.657 0.893 0.421" width="0.2" height="0.2" depth="0.2" color="grey"
+          animation__press="startEvents:press;property:components.material.material.color;type:color;to:green;dur:100;"
+          animation__release="startEvents:release;property:components.material.material.color;type:color;to:grey;dur:100;"
+      >
+        <a-entity position="0 0.12 0" linear-constraint="target:[data-no-magnet];axis:0 1 0;min:0;max:0.18;radius:0.1;useFixedValueIfOutOfRange:true;valueIfOutOfRange:0.18;downEventName:press;downEventThreshold:0;upEventName:release;upEventThreshold:0.18;">
+          <a-cylinder radius="0.09" height="0.2" position="0 -0.1 0" color="hotpink"></a-cylinder>
+        </a-entity>
+      </a-box> -->
+  
+      <!-- <a-gltf-model id="ladder" ladder="grabbables:#ladder-left-hand,#ladder-right-hand;cameraRig:#cameraRig;" shadow src="#ladder-gltf" position="-4.98177 -0.01925 -2.97802" rotation="-4.9623 -62.929 0.6165" physx-body-from-model="type: static;">
+        <a-plane rotation="-90 0 0" width="1.2" height="0.6" class="navmesh-hole" visible="false"></a-plane>
+        <a-entity position="-0.25 0.07 0" linear-constraint="target:#left-no-magnet;axis:0 1 0;min:0;max:2.4;step:0.2;">
+          <a-entity id="ladder-left-hand" data-magnet-range="0.2,0.15,360,300" class="magnet-left" rotation="0 90 0" linear-constraint="target:#left-no-magnet;axis:1 0 0;max:0.5;"></a-entity>
+        </a-entity>
+        <a-entity position="-0.25 0.07 0" linear-constraint="target:#right-no-magnet;axis:0 1 0;max:2.5;step:0.2;">
+          <a-entity id="ladder-right-hand" data-magnet-range="0.2,0.15,360,300" class="magnet-right" rotation="0 -90 0" linear-constraint="target:#right-no-magnet;axis:1 0 0;max:0.5;"></a-entity>
+        </a-entity>
+      </a-gltf-model>
+      
+      <a-gltf-model id="clock" shadow="receive:true;" src="#clock-gltf" position="-5 0 1.8" rotation="0 51 0" physx-body-from-model="type:dynamic;mass:15;"></a-gltf-model>-->
+   
+  <!--#endregion -->
+    
+
+  <a-entity  position="-4.448 2.81272 0.69389" rotation="0 90 0" htmlembed>
+    <button id="button"  onclick="console.log('leave button is clicked')">Leave</button>
+    <div class="content"><span style="fontWeight:700;">VR</span> closely resembles <span style="fontWeight:700;">film</span> in that you make the decision to step outside your daily life for a period of time and into a fashioned reality. 
+      <br/><br/><span style="fontWeight:700;">AR</span> functions like <span style="fontWeight:700;">television</span> in that they both are consumed casually and provide hybrid experiences.</div>
+</a-entity>
+
+
+    <!--#region UNUSED TEXTS -->
+    
+    <!-- billboard (always faces the camera) -->
+    <!-- <a-entity  position="0 1.6 -1" htmlembed look-at="[camera]">
+      <button id="button"  onclick="console.log('leave button is clicked')">Leave</button>
+    </a-entity>
+     <a-entity position="0 0 0"  wasd-controls>    
+      <a-entity  camera  position="0 2 0" look-controls  cursor="rayOrigin: mouse"></a-entity>
+    </a-entity> -->
+
+    <!-- aframe texts with background color -->
+    <!-- <a-entity position="-4.448 2.51272 0.69389" rotation="0 90 0" 
+    geometry="primitive: plane; width: 0; height: 0"
+    material="color: blue"
+    text="width: 2.46; color: black; value: [LEFT ANCHOR] Lorem ipsum dolor sit amet, consectetur adipiscing elit. enim ad minim veniam; wrapCount: 29.38; baseline:top" scale="" material="color: #333" > 
+    </a-entity> -->
+
+    <!-- aframe text with no background color -->
+    <!-- <a-entity position="-4.448 2.81272 0.69389" rotation="0 90 0" 
+    material="color: blue"
+    text="width: 2.46; color: black; 
+    value: VR closely resembles film in that you make the decision to step outside your daily life for a period of time and into a fashioned reality. 
+   
+    AR functions like television in that they both are consumed casually and provide hybrid experiences.; 
+    wrapCount: 35; baseline:top" scale="" material="color: #333" >
+    </a-entity> -->
+
+    <!-- endregion -->
+  
+   
